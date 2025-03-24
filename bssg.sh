@@ -27,7 +27,7 @@ ${BLUE}Commands${RESET}
 
 # Make structure.
 make_directory() {
-  local folders=("resouces" "posts" "tags" "posts-published" "posts-draft" "posts-new" "assets" "assets/images" "assets/fonts" "assets/css" "assets/js" "assets/etc")
+  local folders=("resouces" "posts" "tags" "write" "assets" "assets/images" "assets/fonts" "assets/css" "assets/js" "assets/etc")
 
   for folder in "${folders[@]}"; do
       if [ ! -d "$folder" ]; then

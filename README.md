@@ -8,6 +8,8 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 - [ ] make config
 - [ ] make default html, css
 - [ ] make md to html converter
+- [ ] make front matter
+- [ ] make last mod time txt
 - [x] make command
 - [ ] error handling
 - [ ] make doc
@@ -16,6 +18,8 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 ## Commands
 
 `./bssg.sh` = help
+
+`./bssg.sh help` = help
 
 `./bssg.sh build` = build new posts
 
@@ -37,15 +41,14 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 - tags.html
 - style.css
 - feed.rss
+- last_mod_time.txt
 
 - posts/
 - tags/
 
 ### Generated: User
 
-- posts-published/
-- posts-draft/
-- posts-new/
+- write/
 - assets/
 - - images/
 - - fonts/
@@ -59,25 +62,24 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 
 1. Clone this repo
 2. Open *bb.sh* file and edit config
-3. `./bb.sh` -> Generate directories, and show howto
 
 ### New post
 
-1. Create new markdown file in *posts-new/*
+1. Create new markdown file in *write/*
 2. `./bb.sh build`
 
 ### New post drafted
 
-1. Create new markdown file in *posts-draft/*
+1. Create new markdown file in *write/*
+2. New markdown file name should starts with `draft-`
 
-If you want to post drafted file, then just move markdown file in *posts-draft/* to *posts-new/*
+If you want to post drafted file, just remove the name `dratt-` in drafted file.
 
 ### Edit post
 
-1. Move markdown file in *posts-published* to *posts-new/* or *posts-draft/*
-2. Edit markdown file
-3. `./bb.sh build`
+1. Edit markdown file in *write/*
+2. `./bb.sh build`
 
 ### Delete post
 
-1. Remove markdown file in *posts-published/*
+1. Remove markdown file in *write/*
