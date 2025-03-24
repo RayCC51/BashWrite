@@ -6,12 +6,24 @@ config() {
   author_name="name"
   base_url="localhost:8080/"
 
-  echo -e "\033[0;34m*\033[0m Load config"
+  echo -e "$BLUE*$RESET Load config"
 }
 
 
 # If you don't know what you're doing,
 # do not touch the code below.
+
+# Command line help text
+show_help() {
+  echo -e "${GREEN}bash static site generator$RESET
+${BLUE}version${RESET}: 0.2
+
+${BLUE}Commands${RESET}
+  ${YELLOW}./bssg.sh help${RESET}    Show this text.
+  ${YELLOW}./bssg.sh build${RESET}   Build new markdown posts to html files. If you have completed the blog setup and only want to ${BLUE}publish new posts${RESET}, use this command.
+  ${YELLOW}./bssg.sh rebuild${RESET} Rebuild site. If you ${BLUE}change anything other than posts${RESET}, such as settings or styles, you must rebuild for the changes to take effect.
+"
+}
 
 # Make structure.
 make_directory() {
@@ -23,7 +35,7 @@ make_directory() {
       fi
   done
 
-  echo -e "\033[0;34m*\033[0m Create directories"
+  echo -e "$BLUE*$RESET Create directories"
 }
 
 # Make head.html
@@ -58,30 +70,37 @@ make_resource() {
     [ -e "header.html" ] || make_header_html
     [ -e "footer.html" ] || make_footer_html
     [ -e "style.css" ] || make_style_css
-    echo -e "\033[0;34m*\033[0m Build resources"
+    echo -e "$BLUE*$RESET Build resources"
   elif [ "$1" == "rebuild" ]; then
     # Rebuild everything. 
     make_head_html
     make_header_html
     make_footer_html
     make_style_css
-    echo -e "\033[0;34m*\033[0m Rebuild resources"
+    echo -e "$BLUE*$RESET Rebuild resources"
   else
     :
   fi
 }
 
+# echo colors
+RED='\e[31m'
+GREEN='\e[32m'
+YELLOW='\e[33m'
+BLUE='\e[34m'
+RESET='\e[0m'
+
 # Main code
-if [ "$#" -eq 0 ]; then
+if [[ "$#" -eq 0 || "$1" == "help" ]]; then
   show_help
 elif [[ "$1" == "build" || "$1" == "rebuild" ]]; then
   config
   make_directory
   make_resource "$1"
 else
-  echo -e "\033[0;31m! Invaild parameter\033[0m"
-  echo -e "\033[0;34m! Valid Commands\033[0m"
-  echo "  ./bssg.sh"
-  echo "  ./bssg.sh build"
-  echo "  ./bssg.sh rebuild"
+  echo -e "$RED! Invaild parameter$RESET
+$BLUE* Valid Commands$RESET
+  ${YELLOW}./bssg.sh help${RESET}
+  ${YELLOW}./bssg.sh build${RESET}
+  ${YELLOW}./bssg.sh rebuild${RESET}"
 fi
