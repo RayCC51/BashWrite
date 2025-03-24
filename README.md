@@ -4,11 +4,12 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 
 ## TODO
 
-- [ ] make directory
+- [x] make directory
 - [ ] make config
 - [ ] make default html, css
 - [ ] make md to html converter
-- [ ] make command
+- [x] make command
+- [ ] error handling
 - [ ] make doc
 
 
@@ -18,7 +19,7 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 
 `./bssg.sh build` = build new posts
 
-`./bssg.sh rebuild` = build everything
+`./bssg.sh rebuild` = rebuild everything
 
 
 ## Directory
