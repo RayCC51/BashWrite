@@ -9,13 +9,13 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 - [ ] make default html, css
 - [ ] make md to html converter
 - [ ] make front matter
-- [ ] make last mod time txt
-- [x] make command
+- [ ] make file list
+- [x] make arguments
 - [ ] error handling
 - [ ] make doc
 
 
-## Commands
+## Arguments
 
 `./bssg.sh` = help
 
@@ -30,18 +30,18 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 
 ### Clone from repo
 
-- bb.sh
+- bssg.sh
 - readme.md
 - .github/
 
 ### Generated: Do not edit
 
 - index.html
-- posts.html
-- tags.html
+- posts.html - Contain every posts.
+- tags.html - Contain every tags. 
 - style.css
 - feed.rss
-- last_mod_time.txt
+- file_list.txt - Contain list of posts, and modified time. 
 
 - posts/
 - tags/
@@ -61,12 +61,12 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 ### Install
 
 1. Clone this repo
-2. Open *bb.sh* file and edit config
+2. Open *bssg.sh* file and edit config
 
 ### New post
 
 1. Create new markdown file in *write/*
-2. `./bb.sh build`
+2. `./bssg.sh build`
 
 ### New post drafted
 
@@ -78,7 +78,7 @@ If you want to post drafted file, just remove the name `dratt-` in drafted file.
 ### Edit post
 
 1. Edit markdown file in *write/*
-2. `./bb.sh build`
+2. `./bssg.sh build`
 
 ### Delete post
 
