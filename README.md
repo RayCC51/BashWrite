@@ -6,13 +6,14 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 
 - [x] make directory
 - [ ] make config
-- [ ] make default html, css
+- [x] make default html, css
 - [ ] make md to html converter
 - [ ] make front matter
 - [ ] make file list
 - [x] make arguments
 - [ ] error handling
 - [ ] make doc
+- [ ] make rss, sitemap, robots
 
 
 ## Arguments
@@ -40,6 +41,8 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 - posts.html - Contain every posts.
 - tags.html - Contain every tags. 
 - style.css
+- sitemap.xml
+- robots.txt
 - feed.rss
 - file_list.txt - Contain list of posts, and modified time. 
 

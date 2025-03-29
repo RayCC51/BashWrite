@@ -1,32 +1,36 @@
 #!/bin/bash
 
 ### Edit these settings.
-config() {
-  blog_name="bssg blog"
-  author_name="name"
-  base_url="localhost:8080/"
+BLOG_NAME="bssg blog"
+AUTHOR_NAME="name"
+BASE_URL="localhost:8080/"
 
-  language="en"
+LANG="en"
 
-  echo -e "$BLUE*$RESET Load config"
+# script info
+_SCRIPT_NAME="Bash static site generator"
+_SCRIPT_VERSION="0.2"
+_SCRIPT_FILE_NAME="bssg.sh"
 
-  _script_name="Bash static site generator"
-  _script_version="0.2"
-  _script_file_name="bssg.sh"
-}
+# echo colors
+RED='\e[31m'
+GREEN='\e[32m'
+YELLOW='\e[33m'
+BLUE='\e[34m'
+RESET='\e[0m'
 
 # If you don't know what you're doing,
 # do not touch the code below.
 
 # Command line help text
 show_help() {
-  echo -e "$GREEN$_script_name$RESET
-${BLUE}version${RESET}: $_script_version
+  echo -e "$GREEN$_SCRIPT_NAME$RESET
+${BLUE}version${RESET}: $_SCRIPT_VERSION
 
 ${BLUE}Arguments${RESET}
-  ${YELLOW}./$_script_file_name help${RESET}    Show this text.
-  ${YELLOW}./$_script_file_name build${RESET}   Build new markdown posts to html files. If you have completed the blog setup and only want to ${BLUE}publish new posts${RESET}, use this command.
-  ${YELLOW}./$_script_file_name rebuild${RESET} Rebuild site. If you ${BLUE}change anything other than posts${RESET}, such as settings or styles, you must rebuild for the changes to take effect.
+  ${YELLOW}./${_SCRIPT_FILE_NAME} help${RESET}    Show this text.
+  ${YELLOW}./${_SCRIPT_FILE_NAME} build${RESET}   Build new markdown posts to html files. If you have completed the blog setup and only want to ${BLUE}publish new posts${RESET}, use this command.
+  ${YELLOW}./${_SCRIPT_FILE_NAME} rebuild${RESET} Rebuild site. If you ${BLUE}change anything other than posts${RESET}, such as settings or styles, you must rebuild for the changes to take effect.
 "
 }
 
@@ -46,11 +50,11 @@ make_directory() {
 # Make head.html
 make_head_html() {
   echo "<!DOCTYPE html>
-<html lang=$language>
+<html lang=$LANG>
 <head>
   <meta charset=\"UTF-8\">
   <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
-  <title>$blog_name</title>
+  <title>$BLOG_NAME</title>
   <link rel=\"stylesheet\" href=\"styles.css\">
 </head>" > head.html
   echo -e "  $BLUE-$RESET Make ${YELLOW}head.html$RESET"
@@ -59,7 +63,7 @@ make_head_html() {
 # Make header.html
 make_header_html() {
   echo "<header>
-  <h1>$blog_name</h1>
+  <h1>$BLOG_NAME</h1>
 </header>" > header.html
   echo -e "  $BLUE-$RESET Make ${YELLOW}header.html$RESET"
 }
@@ -68,7 +72,7 @@ make_header_html() {
 make_footer_html() {
   echo "<footer>
   <p>
-    Generated with $_script_name
+    Generated with $_SCRIPT_NAME
   </p>
 </footer>" > footer.html
   echo -e "  $BLUE-$RESET Make ${YELLOW}footer.html$RESET"
@@ -104,24 +108,16 @@ make_resource() {
   fi
 }
 
-# echo colors
-RED='\e[31m'
-GREEN='\e[32m'
-YELLOW='\e[33m'
-BLUE='\e[34m'
-RESET='\e[0m'
-
 # Main code
 if [[ "$#" -eq 0 || "$1" == "help" ]]; then
   show_help
 elif [[ "$1" == "build" || "$1" == "rebuild" ]]; then
-  config
   make_directory
   make_resource "$1"
 else
   echo -e "$RED! Invaild argument$RESET
 $BLUE* Valid Arguments$RESET
-  ${YELLOW}./$_script_file_name help${RESET}
-  ${YELLOW}./$_script_file_name build${RESET}
-  ${YELLOW}./$_script_file_name rebuild${RESET}"
+  ${YELLOW}./$_SCRIPT_FILE_NAME help${RESET}
+  ${YELLOW}./$_SCRIPT_FILE_NAME build${RESET}
+  ${YELLOW}./$_SCRIPT_FILE_NAME rebuild${RESET}"
 fi
