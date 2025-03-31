@@ -15,7 +15,6 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 - [ ] make doc
 - [ ] make rss, sitemap, robots
 
-
 ## Arguments
 
 `./bssg.sh` = help
@@ -25,7 +24,6 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 `./bssg.sh build` = build new posts
 
 `./bssg.sh rebuild` = rebuild everything
-
 
 ## Directory
 
@@ -39,12 +37,12 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 
 - index.html
 - posts.html - Contain every posts.
-- tags.html - Contain every tags. 
+- tags.html - Contain every tags.
 - style.css
 - sitemap.xml
 - robots.txt
 - feed.rss
-- file_list.txt - Contain list of posts, and modified time. 
+- file_list.txt - Contain list of posts, and modified time.
 
 - posts/
 - tags/
@@ -53,11 +51,11 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 
 - write/
 - assets/
-- - images/
-- - fonts/
-- - css/
-- - js/
-- - etc/
+  - images/
+  - fonts/
+  - css/
+  - js/
+  - etc/
 
 ## Workflow
 
