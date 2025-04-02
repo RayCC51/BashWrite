@@ -1,9 +1,32 @@
 #!/bin/bash
 
-FILE="test1.md"
+FILE="syntax.md"
+# FILE="frontmatter.md"
+# FILE="test.md"
 
 ORIGIN_MD=""
 NEW_HTML=""
+
+# this stack contain status of markdown line
+# ex) ("p" "strong")
+STATUS=()
+
+# add new status
+# $1: string new item
+add_status() {
+  STATUS+=("$1")
+}
+
+# get last element in status
+# return: string last element
+current_status() {
+  echo "${STATUS[-1]}"
+}
+
+# remove last element
+remove_status() {
+  unset 'STATUS[-1]'
+}
 
 # markdown line -> html tag
 # $1: markdown line
@@ -16,23 +39,39 @@ wrap_with_tag() {
   echo "<$tag>$line</$tag>"
 }
 
-# strap
-# strap side whitespace
+# get indent level
+# strap front whitespace
 # 4 space = 1 tab = 1 indent level
 # $1: markdown line
 # return: indent level, strapped line
-strap() {
+get_indent_level() {
   local line=$1
   local level="0"
-
-  local leading_spaces=$(echo -n "$line" | grep -o ' ' | wc -l)
+  
+  local leading_spaces=$(echo -n "$line" | grep -o ' ' | head -n 1 | wc -c)
+  
   level=$(( leading_spaces / 4 ))
 
-# FIXME
-# escape: \\ \. \| \# \! \* \+ \- \_ \( \{ \[ \< \`
-# this line level is 3
+# FIXME: $line is already strapped
   
   echo "$level" "$line"
+}
+
+# find markdown tag to html tag
+# $1: single letter of markdown
+# return: html tag
+find_tag() {
+  local md=$1
+  local tag=""
+
+  if [ "$md" = "#" ]; then
+    echo "h1"
+  elif [ "$md" = ">" ]; then
+    echo "blockquote"
+  else
+    echo "p"
+  fi
+  # TODO
 }
 
 # parser
@@ -42,7 +81,12 @@ strap() {
 parser() {
   local line=$1
   local tag="p"
-  # TODO
+
+  local first_letter=${line:0:1}
+  local remain_line=${line:1}
+
+  tag=$(find_tag "$first_letter")
+  
   echo $tag
 }
 
@@ -56,8 +100,8 @@ convert() {
   local tag=""
   local indent=""
 
-  read -r indent strapped_line < <(strap "$line")
-  
+  read -r indent strapped_line < <(get_indent_level "$line")
+
   tag=$(parser "$strapped_line")
   html_line=$(wrap_with_tag "$strapped_line" $tag)
 
