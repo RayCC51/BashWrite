@@ -39,21 +39,16 @@ ___
 horiziontal lines hr
 
 - unordered ul
-
 - list li
-
     - indented
     
     text indent
 
 1. ordered ol
-
 2. list li
-
     1. indented
 
 - [ ] checked box ul li
-
 - [x] input type="checkbox" checked  disabled
 
 > block quote
@@ -66,23 +61,24 @@ horiziontal lines hr
 
 <https://example.com>
 
+![img](https://place-hold.it/100x100)
+
 ![img alt](https://place-hold.it/100x100 "title")
 
 |t|a|b|l|
 |---|:--|:-:|--:|
 |.|l|c|r|
 
+
+```
+plain code block
+```
+
 inline `code`
 
 ```python
-print("pre code")
+print("pre code python")
 ```
-
-````
-```python
-print("hello world")
-```
-````
 
 ---
 
