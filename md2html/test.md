@@ -1,13 +1,7 @@
----
+[Link a](https://example.com)
 
-```
-plain text
-```
+<https://example.com>
 
----
+![img](https://place-hold.it/100x100)
 
-```python
-python cod
-```
-
----
+![img alt](https://place-hold.it/100x100 "title")

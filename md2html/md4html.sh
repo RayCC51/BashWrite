@@ -2,12 +2,18 @@
 
 # input
 FILE="syntax.md"
-# FILE="test.md"
+FILE="test.md"
 MOD=$(cat "$FILE")
 
 
 # replace markdown tag to html tag with regexpression
 
+# escape < > &
+MOD=$(echo "$MOD" | sed -E '
+  s/&/\&amp;/g
+  s/</\&lt;/g
+  s/>/\&gt;/g
+')
 
 # codeblock
 # escape markdown symbols temparely
@@ -34,9 +40,11 @@ MOD=$(echo "$MOD" | sed -E '
     s/\}/\\\}/g
     s/\[/\\\[/g
     s/\]/\\\]/g
-    s/</\\</g
-    s/>/\\>/g
     s/`/\\`/g
+    
+    s/&lt;/\\</g
+    s/&gt;/\\>/g
+    s/&amp;/&/g
   }
 ')
 
@@ -67,6 +75,16 @@ MOD=$(echo "$MOD" | sed -E '
   s/`(.*)`/<code>\1<\/code>/g
 ')
 
+
+# img a
+MOD=$(echo "$MOD" | sed -E '
+  s/!\[(.*)\]\((.*) "(.*)"\)/<img src="\2" alt="\1" title="\3"\/>/g
+  s/!\[(.*)\]\((.*)\)/<img src="\2" alt="\1"\/>/g
+
+  s/&lt;(.*)&gt;/<a href="\1">\1<\/a>/g
+  s/\[(.*)\]\((.*)\)/<a href="\2">\1<\/a>/g
+')
+
 # escape keys
 MOD=$(echo "$MOD" | sed -E '
   s/\\\\/\\/g
@@ -83,9 +101,9 @@ MOD=$(echo "$MOD" | sed -E '
   s/\\\}/\}/g
   s/\\\[/\[/g
   s/\\\]/\]/g
+  s/\\`/`/g
   s/\\</</g
   s/\\>/>/g
-  s/\\`/`/g
 ')
 
 
