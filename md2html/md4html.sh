@@ -2,11 +2,9 @@
 
 # input
 FILE="syntax.md"
-# FILE="test.md"
+FILE="test.md"
 MOD=$(cat "$FILE")
 
-
-# replace markdown tag to html tag with regexpression
 
 # escape < > &
 MOD=$(echo "$MOD" | sed -E '
@@ -85,6 +83,41 @@ MOD=$(echo "$MOD" | sed -E '
 
   s/&lt;(.*)&gt;/<a href="\1">\1<\/a>/g
   s/\[(.*)\]\((.*)\)/<a href="\2">\1<\/a>/g
+')
+
+# ul li
+MOD=$(echo "$MOD" | sed -E '
+  s/^( {4}*)- (.*)/\1<li>\2<\/li>/
+  s/^( {4}*)\* (.*)/\1<li>\2<\/li>/
+  s/^( {4}*)\+ (.*)/\1<li>\2<\/li>/
+')
+
+# indented ul
+MOD=$(echo "$MOD" | sed -E '
+  /^( {4}+)<li>/ {
+    :a
+    N
+    /^( {4}+)<li>/!b
+    s/^/<li><ul>\n/
+    s/$/<\/ul><\/li>/
+  }
+')
+
+echo "$MOD"
+echo
+echo
+
+# fixme
+
+# ul
+MOD=$(echo "$MOD" | sed -E '
+  /^( {4}*)<li>/ {
+    :a
+    N
+    /^( {4}*)<li>/!b
+    s/^/<ul    >\n/
+    s/$/\n<\/ul    >/
+  }
 ')
 
 # escape keys

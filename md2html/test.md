@@ -1,7 +1,13 @@
-[Link a](https://example.com)
+- unordered ul
+- list li
+    - indented
 
-<https://example.com>
+    text indent
 
-![img](https://place-hold.it/100x100)
+1. ordered ol
+2. list li
+    1. indented
 
-![img alt](https://place-hold.it/100x100 "title")
+- [ ] checked box ul li
+- [x] input type="checkbox" checked
+disabled
