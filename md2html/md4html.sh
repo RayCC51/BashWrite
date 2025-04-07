@@ -2,7 +2,7 @@
 
 # input
 FILE="syntax.md"
-FILE="test.md"
+# FILE="test.md"
 MOD=$(cat "$FILE")
 
 
@@ -72,7 +72,9 @@ MOD=$(echo "$MOD" | sed -E '
   s/\*\*(.*)\*\*/<strong>\1<\/strong>/g
   s/\*(.*)\*/<em>\1<\/em>/g
   s/~~(.*)~~/<del>\1<\/del>/g
-  s/`(.*)`/<code>\1<\/code>/g
+  
+  s/``(.*)``/\\`\1\\`/g
+  s/([^\\])`(.*)([^\\])`/<code>\2<\/code>/g
 ')
 
 

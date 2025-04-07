@@ -81,8 +81,16 @@ print("pre code python")
 
 ```
 keep these char incode block
-\ . | # ! * + - _ ( ) { } [ ] < > `
+\ . | # ! * + - _ ( ) { } [ ] < > ` `
 ```
+
+---
+
+````
+```python
+wrap codeblock with 4 backtick
+```
+````
 
 ---
 
