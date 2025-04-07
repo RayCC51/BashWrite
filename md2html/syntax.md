@@ -69,15 +69,19 @@ horiziontal lines hr
 |---|:--|:-:|--:|
 |.|l|c|r|
 
+inline `code`
 
 ```
 plain code block
 ```
 
-inline `code`
-
 ```python
 print("pre code python")
+```
+
+```
+keep these char incode block
+\ . | # ! * + - _ ( ) { } [ ] < > `
 ```
 
 ---

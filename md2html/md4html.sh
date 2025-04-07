@@ -2,6 +2,7 @@
 
 # input
 FILE="syntax.md"
+# FILE="test.md"
 MOD=$(cat "$FILE")
 
 
@@ -9,21 +10,39 @@ MOD=$(cat "$FILE")
 
 
 # codeblock
-# fixme: can not seperate first ``` and last ```
+# escape markdown symbols temparely
 MOD=$(echo "$MOD" | sed -E '
-  /```/ {
+  /^```/ {
     :a
     N
-    /```/!ba
+    /```$/!ba
     s/```([a-zA-Z0-9_]+)?\n/<pre><code class="\1">\n/
     s/```/<\/code><\/pre>/
     s/ class=""//
+
+    s/\\/\\\\/g
+    s/\./\\\./g
+    s/\|/\\\|/g
+    s/#/\\#/g
+    s/!/\\!/g
+    s/\*/\\\*/g
+    s/\+/\\\+/g
+    s/-/\\-/g
+    s/\(/\\\(/g
+    s/\)/\\\)/g
+    s/\{/\\\{/g
+    s/\}/\\\}/g
+    s/\[/\\\[/g
+    s/\]/\\\]/g
+    s/</\\</g
+    s/>/\\>/g
+    s/`/\\`/g
   }
 ')
 
 # h1 ~ h6
 MOD=$(echo "$MOD" | sed -E '
-  s/^# (.*[^# ])$/<h1>\1<\/h1>/g;
+  s/^# (.*[^# ])$/<h1>\1<\/h1>/g
   s/^## (.*[^# ])$/<h2>\1<\/h2>/g
   s/^### (.*[^# ])$/<h3>\1<\/h3>/g
   s/^#### (.*[^# ])$/<h4>\1<\/h4>/g
@@ -33,20 +52,41 @@ MOD=$(echo "$MOD" | sed -E '
 
 # hr
 MOD=$(echo "$MOD" | sed -E '
-  s/^-{3,}$/<hr\/>/g;
-  s/^\*{3,}$/<hr\/>/g;
+  s/^-{3,}$/<hr\/>/g
+  s/^\*{3,}$/<hr\/>/g
   s/^_{3,}$/<hr\/>/g
 ')
 
 
-# bold italic del
+# bold italic del code
 MOD=$(echo "$MOD" | sed -E '
-  s/\*\*\*(.*)\*\*\*/<strong><em>\1<\/em><\/strong>/g;
-  s/\*\*(.*)\*\*/<strong>\1<\/strong>/g;
-  s/\*(.*)\*/<em>\1<\/em>/g;
-  s/~~(.*)~~/<del>\1<\/del>/g;
+  s/\*\*\*(.*)\*\*\*/<strong><em>\1<\/em><\/strong>/g
+  s/\*\*(.*)\*\*/<strong>\1<\/strong>/g
+  s/\*(.*)\*/<em>\1<\/em>/g
+  s/~~(.*)~~/<del>\1<\/del>/g
+  s/`(.*)`/<code>\1<\/code>/g
 ')
 
+# escape keys
+MOD=$(echo "$MOD" | sed -E '
+  s/\\\\/\\/g
+  s/\\\./\./g
+  s/\\\|/\|/g
+  s/\\#/#/g
+  s/\\!/!/g
+  s/\\\*/\*/g
+  s/\\\+/\+/g
+  s/\\-/-/g
+  s/\\\(/\(/g
+  s/\\\)/\)/g
+  s/\\\{/\{/g
+  s/\\\}/\}/g
+  s/\\\[/\[/g
+  s/\\\]/\]/g
+  s/\\</</g
+  s/\\>/>/g
+  s/\\`/`/g
+')
 
 
 # output
