@@ -3,7 +3,6 @@
 
 # fixme: can not handle more then 2 level indented list
 # fixme: more then 4 backtick not working
-# fixme: indented blockquote with more then 2 lines, not working
 # fixme: table can not align
 
 
@@ -85,6 +84,12 @@ MOD=$(echo "$MOD" | sed -E '
   
   s/``(.*)``/\\`\1\\`/g
   s/([^\\])`(.*)([^\\])`/<code>\2<\/code>/g
+')
+
+# footnote
+# todo
+MOD=$(echo "$MOD" | sed -E '
+  s/\[\^(.*)\]/<a class="footnote" id="fn-\1" href="footnote-\1">\1<\/a>/g
 ')
 
 # mark, sup, sub
@@ -178,14 +183,17 @@ MOD=$(echo "$MOD" | sed -E '
 BLOCKQUOTE() {
 MOD=$(echo "$MOD" | sed -E '
   s/^&gt; (.*)/<blockquote>\n\1\n<\/blockquote>/
-  /^&gt;$/d
+  /^&gt; *$/d
 ')
 
 MOD=$(echo "$MOD" | sed -E '
   /^<\/blockquote>$/ {
     N
     /^<\/blockquote>\n<blockquote>$/ {
-      s/<\/blockquote>\n<blockquote>/<br>/
+      /<\/blockquote>\n<blockquote>/d
+    }
+    /^<\/blockquote>\n\n<blockquote>$/ {
+    /^<\/blockquote>\n\n<blockquote>$/d
     }
   }
 ')

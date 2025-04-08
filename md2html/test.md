@@ -1,13 +1,10 @@
-|t|a|b|l|
-|---|:--|:-:|--:|
-|.|l|c|r|
-|.|l|c|r|
-|.|l|c|r|
-|.|l|c|r|
+foot[^1] note[^note] sup a
 
-|p|l|a|i|n|
-|---|---|---|---|---|
-|1|2|3|4|5|
-|1|2|3|4|5|
-|1|2|3|4|5|
+[^1]: first foot note
+
+[^note]: long
+
+    note
+
+    with 4 spaces
 
