@@ -2,11 +2,12 @@
 
 
 # fixme: can not handle combination of ul and ol
+# fixme: more then 4 backtick not working
 
 
 # input
 FILE="syntax.md"
-FILE="test.md"
+# FILE="test.md"
 MOD=$(cat "$FILE")
 
 
@@ -79,6 +80,12 @@ MOD=$(echo "$MOD" | sed -E '
   s/([^\\])`(.*)([^\\])`/<code>\2<\/code>/g
 ')
 
+# mark, sup, sub
+MOD=$(echo "$MOD" | sed -E '
+  s/==(.*)==/<mark>\1<\/mark>/g
+  s/~(.*)~/<sub>\1<\/sub>/g
+  s/\^(.*)\^/<sup>\1<\/sup>/g
+')
 
 # img a
 MOD=$(echo "$MOD" | sed -E '
