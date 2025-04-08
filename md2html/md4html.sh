@@ -62,9 +62,9 @@ MOD=$(echo "$MOD" | sed -E '
 
 # hr
 MOD=$(echo "$MOD" | sed -E '
-  s/^-{3,}$/<hr\/>/g
-  s/^\*{3,}$/<hr\/>/g
-  s/^_{3,}$/<hr\/>/g
+  s/^-{3,}$/<hr>/g
+  s/^\*{3,}$/<hr>/g
+  s/^_{3,}$/<hr>/g
 ')
 
 
@@ -82,8 +82,8 @@ MOD=$(echo "$MOD" | sed -E '
 
 # img a
 MOD=$(echo "$MOD" | sed -E '
-  s/!\[(.*)\]\((.*) "(.*)"\)/<img src="\2" alt="\1" title="\3"\/>/g
-  s/!\[(.*)\]\((.*)\)/<img src="\2" alt="\1"\/>/g
+  s/!\[(.*)\]\((.*) "(.*)"\)/<img src="\2" alt="\1" title="\3">/g
+  s/!\[(.*)\]\((.*)\)/<img src="\2" alt="\1">/g
 
   s/&lt;(.*)&gt;/<a href="\1">\1<\/a>/g
   s/\[(.*)\]\((.*)\)/<a href="\2">\1<\/a>/g
@@ -177,6 +177,29 @@ MOD=$(echo "$MOD" | sed -E '
   s/^<li>\[ \]/<li><input type="checkbox" disabled>/
   s/^<li>\[x\]/<li><input type="checkbox" checked disabled>/
 ')
+
+# blockquote
+BLOCKQUOTE() {
+MOD=$(echo "$MOD" | sed -E '
+  s/^&gt; (.*)/<blockquote>\n\1\n<\/blockquote>/
+  /^&gt;$/d
+')
+
+MOD=$(echo "$MOD" | sed -E '
+  /^<\/blockquote>$/ {
+    N
+    /^<\/blockquote>\n<blockquote>$/ {
+      s/<\/blockquote>\n<blockquote>/<br>/
+    }
+  }
+')
+}
+
+# indented blockquote
+while echo "$MOD" | grep -q '^&gt;'; do
+  BLOCKQUOTE
+done
+
 
 # escape keys
 MOD=$(echo "$MOD" | sed -E '
