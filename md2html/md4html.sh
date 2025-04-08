@@ -1,5 +1,9 @@
 #!/bin/bash
 
+
+# fixme: can not handle combination of ul and ol
+
+
 # input
 FILE="syntax.md"
 FILE="test.md"
@@ -85,11 +89,14 @@ MOD=$(echo "$MOD" | sed -E '
   s/\[(.*)\]\((.*)\)/<a href="\2">\1<\/a>/g
 ')
 
-# ul li
+# li
+# for seperate ul and ol, ul use li and ol use il
 MOD=$(echo "$MOD" | sed -E '
   s/^( {4}*)- (.*)/\1<li>\2<\/li>/
   s/^( {4}*)\* (.*)/\1<li>\2<\/li>/
   s/^( {4}*)\+ (.*)/\1<li>\2<\/li>/
+
+  s/^( {4}*)[0-9]+\. (.*)/\1<il>\2<\/il>/
 ')
 
 # indented ul
@@ -103,21 +110,72 @@ MOD=$(echo "$MOD" | sed -E '
   }
 ')
 
-echo "$MOD"
-echo
-echo
-
-# fixme
-
-# ul
+# indented ol
 MOD=$(echo "$MOD" | sed -E '
-  /^( {4}*)<li>/ {
+  /^( {4}+)<il>/ {
     :a
     N
-    /^( {4}*)<li>/!b
-    s/^/<ul    >\n/
-    s/$/\n<\/ul    >/
+    /^( {4}+)<il>/!b
+    s/^/<il><ol>\n/
+    s/$/<\/ol><\/il>/
   }
+')
+
+# ul open tag
+MOD=$(echo "$MOD" | sed -E '
+  /^<li>/ {
+    :a
+    N
+    /^<li>/!b
+    s/^/<ul>\n/
+  }
+')
+
+# ul close tag
+MOD=$(echo "$MOD" | sed -E '
+  /<\/li>$/ {
+    :a
+    N
+    /<\/li>$/!b
+    s/$/\n<\/ul>/
+  }
+')
+
+# ol open tag
+MOD=$(echo "$MOD" | sed -E '
+  /^<il>/ {
+    :a
+    N
+    /^<il>/!b
+    s/^/<ol>\n/
+  }
+')
+
+# ol close tag
+MOD=$(echo "$MOD" | sed -E '
+  /<\/il>$/ {
+    :a
+    N
+    /<\/il>$/!b
+    s/$/\n<\/ol>/
+  }
+')
+
+# restore il to li
+MOD=$(echo "$MOD" | sed -E '
+  s/il>/li>/
+')
+
+# fixing ul ol
+MOD=$(echo "$MOD" | sed -E '
+  /<\/ul>/ {N; /<ul>/d;}
+  /<\/ol>/ {N; /<ol>/d;}
+')
+
+# checkbox
+MOD=$(echo "$MOD" | sed -E '
+  s/^<li>\[ \]/<li><input type="checkbox" disabled>/
+  s/^<li>\[x\]/<li><input type="checkbox" checked disabled>/
 ')
 
 # escape keys

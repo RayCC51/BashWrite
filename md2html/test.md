@@ -9,5 +9,4 @@
     1. indented
 
 - [ ] checked box ul li
-- [x] input type="checkbox" checked
-disabled
+- [x] input type="checkbox" checked disabled
