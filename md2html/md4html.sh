@@ -207,6 +207,16 @@ while echo "$MOD" | grep -q '^&gt;'; do
   BLOCKQUOTE
 done
 
+# table
+MOD=$(echo "$MOD" | sed -E '
+  /^|.*|$/,/^$/ { 
+    1s/^/<table>\n/ 
+    $a\</table>
+  }
+')
+
+# todo table
+
 
 # escape keys
 MOD=$(echo "$MOD" | sed -E '
