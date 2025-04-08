@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-# fixme: can not handle combination of ul and ol
+# fixme: can not handle more then 2 level indented list
 # fixme: more then 4 backtick not working
 
 
@@ -97,86 +97,68 @@ MOD=$(echo "$MOD" | sed -E '
 ')
 
 # li
-# for seperate ul and ol, ul use li and ol use il
+# for seperate ul and ol, use il tag for ol
 MOD=$(echo "$MOD" | sed -E '
-  s/^( {4}*)- (.*)/\1<li>\2<\/li>/
-  s/^( {4}*)\* (.*)/\1<li>\2<\/li>/
-  s/^( {4}*)\+ (.*)/\1<li>\2<\/li>/
-
-  s/^( {4}*)[0-9]+\. (.*)/\1<il>\2<\/il>/
+  s/^( {4}*)- (.*)/<ul>\n\1<li>\2<\/li>\n<\/ul>/
+  s/^( {4}*)\* (.*)/<ul>\n\1<li>\2<\/li>\n<\/ul>/
+  s/^( {4}*)\+ (.*)/<ul>\n\1<li>\2<\/li>\n<\/ul>/
+  
+  s/^( {4}*)[0-9]+\. (.*)/<ol>\n\1<il>\2<\/il>\n<\/ol>/
 ')
 
-# indented ul
+# clean duplicated ul ol
 MOD=$(echo "$MOD" | sed -E '
-  /^( {4}+)<li>/ {
-    :a
+  /^<\/ul>$/ {
     N
-    /^( {4}+)<li>/!b
-    s/^/<li><ul>\n/
-    s/$/<\/ul><\/li>/
+    /^<\/ul>\n<ul>$/ {
+      /<\/ul>\n<ul>/d
+    }
+
+    /^<\/ul>\n<ol>$/ {
+      /<\/ul>\n<ol>/d
+    }
   }
-')
-
-# indented ol
-MOD=$(echo "$MOD" | sed -E '
-  /^( {4}+)<il>/ {
-    :a
+  
+  /^<\/ol>$/ {
     N
-    /^( {4}+)<il>/!b
-    s/^/<il><ol>\n/
-    s/$/<\/ol><\/il>/
+    /^<\/ol>\n<ol>$/ {
+      /<\/ol>\n<ol>/d
+    }
+    
+    /^<\/ol>\n<ul>$/ {
+      /<\/ol>\n<ul>/d
+    }
   }
+  
 ')
 
-# ul open tag
+# indented ul ol
 MOD=$(echo "$MOD" | sed -E '
-  /^<li>/ {
-    :a
+  s/^( {4}+)(<li>.*)$/\1<li><ul>\n\1\2\n\1<\/ul><\/li>/
+  
+  s/^( {4}+)(<il>.*)$/\1<il><ol>\n\1\2\n\1<\/ol><\/il>/
+')
+
+# clean indented ul ol
+MOD=$(echo "$MOD" | sed -E '
+  /^( {4}+)<\/ul><\/li>$/ {
     N
-    /^<li>/!b
-    s/^/<ul>\n/
+    /^( {4}+)<\/ul><\/li>\n\1<li><ul>$/ {
+      /^( {4}+)<\/ul><\/li>\n\1<li><ul>$/d
+    }
   }
-')
-
-# ul close tag
-MOD=$(echo "$MOD" | sed -E '
-  /<\/li>$/ {
-    :a
+  
+  /^( {4}+)<\/ol><\/il>$/ {
     N
-    /<\/li>$/!b
-    s/$/\n<\/ul>/
-  }
-')
-
-# ol open tag
-MOD=$(echo "$MOD" | sed -E '
-  /^<il>/ {
-    :a
-    N
-    /^<il>/!b
-    s/^/<ol>\n/
-  }
-')
-
-# ol close tag
-MOD=$(echo "$MOD" | sed -E '
-  /<\/il>$/ {
-    :a
-    N
-    /<\/il>$/!b
-    s/$/\n<\/ol>/
+    /^( {4}+)<\/ol><\/il>\n\1<il><ol>$/ {
+      /^( {4}+)<\/ol><\/il>\n\1<il><ol>$/d
+    }
   }
 ')
 
 # restore il to li
 MOD=$(echo "$MOD" | sed -E '
   s/il>/li>/
-')
-
-# fixing ul ol
-MOD=$(echo "$MOD" | sed -E '
-  /<\/ul>/ {N; /<ul>/d;}
-  /<\/ol>/ {N; /<ol>/d;}
 ')
 
 # checkbox
@@ -209,9 +191,12 @@ done
 
 # table
 MOD=$(echo "$MOD" | sed -E '
-  /^|.*|$/,/^$/ { 
-    1s/^/<table>\n/ 
-    $a\</table>
+  /^\|.*\|$/ {
+    :a
+    N
+    /^\|.*\|$/!ba
+    s/^/<table>\n/ 
+    s/$/\n<\/table>/
   }
 ')
 
