@@ -3,6 +3,8 @@
 
 # fixme: can not handle more then 2 level indented list
 # fixme: more then 4 backtick not working
+# fixme: indented blockquote with more then 2 lines, not working
+# fixme: table can not align
 
 
 # input
@@ -139,7 +141,7 @@ MOD=$(echo "$MOD" | sed -E '
   s/^( {4}+)(<il>.*)$/\1<il><ol>\n\1\2\n\1<\/ol><\/il>/
 ')
 
-# clean indented ul ol
+# clean duplicated indented ul ol
 MOD=$(echo "$MOD" | sed -E '
   /^( {4}+)<\/ul><\/li>$/ {
     N
@@ -189,18 +191,49 @@ while echo "$MOD" | grep -q '^&gt;'; do
   BLOCKQUOTE
 done
 
-# table
+# table tr
 MOD=$(echo "$MOD" | sed -E '
-  /^\|.*\|$/ {
-    :a
-    N
-    /^\|.*\|$/!ba
-    s/^/<table>\n/ 
-    s/$/\n<\/table>/
+  /^\|(.*\|)+$/ {
+    s/^/<table>\n<tr>/ 
+    s/$/<\/tr>\n<\/table>/
   }
 ')
 
-# todo table
+# clean duplicated table
+MOD=$(echo "$MOD" | sed -E '
+  /^<\/table>$/ {
+    N
+    /^<\/table>\n<table>$/ {
+      /^<\/table>\n<table>$/d
+    }
+  }
+')
+
+# thead tbody seperator
+MOD=$(echo "$MOD" | sed -E '
+  s/^<tr>[|:-]+<\/tr>$/<\/thead>\n<tbody>/
+')
+
+# td
+MOD=$(echo "$MOD" | sed -E '
+  /^<tr>/ {
+    s/^<tr>\|/<tr>\n    <td>/
+    s/\|<\/tr>$/<\/td>\n<\/tr>/
+    s/\|/<\/td>\n    <td>/g
+  }
+')
+
+# thead tbody
+MOD=$(echo "$MOD" | sed -E '
+  s/^<table>$/<table>\n<thead>/
+  s/^<\/table>$/<\/tbody>\n<\/table>/
+')
+
+# td -> th
+MOD=$(echo "$MOD" | sed -E '
+  /<thead>/,/<\/thead>/s/td>/th>/g
+')
+
 
 
 # escape keys
