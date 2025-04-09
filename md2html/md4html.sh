@@ -149,9 +149,9 @@ MOD=$(echo "$MOD" | sed -E '
 
 # indented ul ol
 MOD=$(echo "$MOD" | sed -E '
-  s/^( {4}+)(<li>.*)$/<li><ul>\n\2\n<\/ul><\/li>/
+  s/^( {4}+)(<li>.*)$/\1<li><ul>\n\1\2\n\1<\/ul><\/li>/
   
-  s/^( {4}+)(<il>.*)$/<il><ol>\n\2\n<\/ol><\/il>/
+  s/^( {4}+)(<il>.*)$/\1<il><ol>\n\1\2\n\1<\/ol><\/il>/
 ')
 
 # clean duplicated indented ul ol
@@ -238,9 +238,9 @@ MOD=$(echo "$MOD" | sed -E '
 # td
 MOD=$(echo "$MOD" | sed -E '
   /^<tr>/ {
-    s/^<tr>\|/<tr>\n<td>/
+    s/^<tr>\|/<tr>\n    <td>/
     s/\|<\/tr>$/<\/td>\n<\/tr>/
-    s/\|/<\/td>\n<td>/g
+    s/\|/<\/td>\n    <td>/g
   }
 ')
 
@@ -258,7 +258,7 @@ MOD=$(echo "$MOD" | sed -E '
 # p
 MOD=$(echo "$MOD" | sed -E '
   s/  $/\n/
-  s/^([^<].*)$/<p>\1<\/p>/
+  s/^ *([^< ].*)$/<p>\1<\/p>/
   s/^(.*[^>])$/<p>\1<\/p>/
   /<p> *<\/p>/d
 ')
