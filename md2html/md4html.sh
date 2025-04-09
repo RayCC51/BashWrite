@@ -10,7 +10,7 @@
 
 # input
 FILE="syntax.md"
-# FILE="test.md"
+FILE="test.md"
 MOD=$(cat "$FILE")
 
 
@@ -123,57 +123,32 @@ MOD=$(echo "$MOD" | sed -E '
 
 # clean duplicated ul ol
 MOD=$(echo "$MOD" | sed -E '
-  /^<\/ul>$/ {
+  /^<\/[uo]l>$/ {
     N
-    /^<\/ul>\n<ul>$/ {
-      /<\/ul>\n<ul>/d
-    }
-
-    /^<\/ul>\n<ol>$/ {
-      /<\/ul>\n<ol>/d
+    /^<\/[uo]l>\n<[uo]l>$/ {
+      /<\/[uo]l>\n<[uo]l>/d
     }
   }
-  
-  /^<\/ol>$/ {
-    N
-    /^<\/ol>\n<ol>$/ {
-      /<\/ol>\n<ol>/d
-    }
-    
-    /^<\/ol>\n<ul>$/ {
-      /<\/ol>\n<ul>/d
-    }
-  }
-  
 ')
 
 # indented ul ol
 MOD=$(echo "$MOD" | sed -E '
-  s/^( {4}+)(<li>.*)$/\1<li><ul>\n\1\2\n\1<\/ul><\/li>/
+  s/^    ( {4}*)(<li>.*)$/\1<li><ul>\n    \1\2\n\1<\/ul><\/li>/
   
-  s/^( {4}+)(<il>.*)$/\1<il><ol>\n\1\2\n\1<\/ol><\/il>/
+  s/^    ( {4}*)(<il>.*)$/\1<il><ol>\n    \1\2\n\1<\/ol><\/il>/
 ')
 
 # clean duplicated indented ul ol
 MOD=$(echo "$MOD" | sed -E '
-  /^( {4}+)<\/ul><\/li>$/ {
+  /^( {4}*)<\/[uo]l><\/[il]{2}>$/ {
     N
-    /^( {4}+)<\/ul><\/li>\n\1<li><ul>$/ {
-      /^( {4}+)<\/ul><\/li>\n\1<li><ul>$/d
-    }
-  }
-  
-  /^( {4}+)<\/ol><\/il>$/ {
-    N
-    /^( {4}+)<\/ol><\/il>\n\1<il><ol>$/ {
-      /^( {4}+)<\/ol><\/il>\n\1<il><ol>$/d
-    }
+    /^( {4}*)<\/[uo]l><\/[il]{2}>\n\1<[il]{2}><[uo]l>$/d
   }
 ')
 
 # restore il to li
 MOD=$(echo "$MOD" | sed -E '
-  s/il>/li>/
+  s/il>/li>/g
 ')
 
 # checkbox
