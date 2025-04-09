@@ -1,18 +1,7 @@
 #!/bin/bash
 
-
-# fixme: can not handle more then 2 level indented list
-# fixme: more then 4 backtick not working
-# fixme: table can not align
-# fixme: footnote with blank does not working
-# fixme: footnote - note with several lines not working
-
-
 # input
-FILE="syntax.md"
-FILE="test.md"
-MOD=$(cat "$FILE")
-
+MOD=$(cat "$1")
 
 # escape < > &
 MOD=$(echo "$MOD" | sed -E '
@@ -72,7 +61,7 @@ MOD=$(echo "$MOD" | sed -E '
   s/^###### (.*)$/<h6>\1<\/h6>/
 ')
 
-# headling with id
+# heading with id
 MOD=$(echo "$MOD" | sed -E '
   s/^<h([0-9]+)>(.*) \{#(.*)\}<\/h\1>$/<h\1 id="\3">\2<\/h\1>/
 ')
@@ -84,7 +73,6 @@ MOD=$(echo "$MOD" | sed -E '
   s/^_{3,}$/<hr>/g
 ')
 
-
 # bold italic del code
 MOD=$(echo "$MOD" | sed -E '
   s/\*\*\*(.*)\*\*\*/<strong><em>\1<\/em><\/strong>/g
@@ -93,12 +81,12 @@ MOD=$(echo "$MOD" | sed -E '
   s/~~(.*)~~/<del>\1<\/del>/g
   
   s/``(.*)``/\\`\1\\`/g
-  s/([^\\])`(.*)([^\\])`/<code>\2<\/code>/g
+  s/([^\\]+)`(.*[^\\]+)`/\1<code>\2<\/code>/g
 ')
 
 # footnote
 MOD=$(echo "$MOD" | sed -E '
-  s/^\[\^(.*)\]: /<a class="footnote" id="footnote-\1" href="#fn-\1">\1<\/a>\n/
+  s/^\[\^(.*)\]: /<a class="footnote" id="footnote-\1" href="#fn-\1">\1<\/a>: /
   
   s/\[\^([^]]+)\]/<sup><a class="footnote" id="fn-\1" href="#footnote-\1">\1<\/a><\/sup>/g
 ')
@@ -248,7 +236,7 @@ MOD=$(echo "$MOD" | sed -E '
   s/^<p> {4}+(.*)/<p class="indented-p">\1/
 ')
 
-# clean duplicated p
+# p clean empty line, combine continuous p in single p
 MOD=$(echo "$MOD" | sed -E '
   /^<p>/ {
     N
@@ -287,7 +275,6 @@ MOD=$(echo "$MOD" | sed -E '
   s/\\</</g
   s/\\>/>/g
 ')
-
 
 # output
 echo "$MOD"
