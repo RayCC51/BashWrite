@@ -54,6 +54,14 @@ MOD=$(echo "$MOD" | sed -E '
   }
 ')
 
+# fixing codeblock for p
+MOD=$(echo "$MOD" | sed -E '
+  /^<pre>/,/<\/pre>$/ {
+    s/^/</
+    s/$/>/
+  }
+')
+
 # h1 ~ h6
 MOD=$(echo "$MOD" | sed -E '
   s/^# (.*)$/<h1>\1<\/h1>/
@@ -233,9 +241,11 @@ MOD=$(echo "$MOD" | sed -E '
 # p
 MOD=$(echo "$MOD" | sed -E '
   s/  $/\n/
-  s/^ *([^< ].*)$/<p>\1<\/p>/
+  s/^( *)([^< ].*)$/<p>\1\2<\/p>/
   s/^(.*[^>])$/<p>\1<\/p>/
+  
   /<p> *<\/p>/d
+  s/^<p> {4}+(.*)/<p class="indented-p">\1/
 ')
 
 # clean duplicated p
@@ -249,6 +259,13 @@ MOD=$(echo "$MOD" | sed -E '
   }
 ')
 
+# fixing codeblock for p
+MOD=$(echo "$MOD" | sed -E '
+  /^<<pre>/,/<\/pre>>$/ {
+    s/^<//
+    s/>$//
+  }
+')
 
 # escape keys
 MOD=$(echo "$MOD" | sed -E '

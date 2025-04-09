@@ -9,8 +9,17 @@
     3. 2
 + 1
 
-- q
-- q
-    - w
-    - w
-- q
+
+```
+plain 
+code 
+block
+```
+
+```python
+print("pre code python")
+```
+
+```
+keep these char incode block \ . | # ! * + - _ ( ) { } [ ] < > ` `
+```
