@@ -1,10 +1,8 @@
-foot[^1] note[^note] sup a
+111
+qqq
 
-[^1]: first foot note
+333333 
+eeeeee 
 
-[^note]: long
-
-    note
-
-    with 4 spaces
-
+5555  
+tttt

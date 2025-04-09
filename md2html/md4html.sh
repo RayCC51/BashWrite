@@ -4,6 +4,8 @@
 # fixme: can not handle more then 2 level indented list
 # fixme: more then 4 backtick not working
 # fixme: table can not align
+# fixme: footnote with blank does not working
+# fixme: footnote - note with several lines not working
 
 
 # input
@@ -87,9 +89,10 @@ MOD=$(echo "$MOD" | sed -E '
 ')
 
 # footnote
-# todo
 MOD=$(echo "$MOD" | sed -E '
-  s/\[\^(.*)\]/<a class="footnote" id="fn-\1" href="footnote-\1">\1<\/a>/g
+  s/^\[\^(.*)\]: /<a class="footnote" id="footnote-\1" href="#fn-\1">\1<\/a>\n/
+  
+  s/\[\^([^]]+)\]/<sup><a class="footnote" id="fn-\1" href="#footnote-\1">\1<\/a><\/sup>/g
 ')
 
 # mark, sup, sub
@@ -99,7 +102,7 @@ MOD=$(echo "$MOD" | sed -E '
   s/\^(.*)\^/<sup>\1<\/sup>/g
 ')
 
-# img a
+# img, a
 MOD=$(echo "$MOD" | sed -E '
   s/!\[(.*)\]\((.*) "(.*)"\)/<img src="\2" alt="\1" title="\3">/g
   s/!\[(.*)\]\((.*)\)/<img src="\2" alt="\1">/g
@@ -146,9 +149,9 @@ MOD=$(echo "$MOD" | sed -E '
 
 # indented ul ol
 MOD=$(echo "$MOD" | sed -E '
-  s/^( {4}+)(<li>.*)$/\1<li><ul>\n\1\2\n\1<\/ul><\/li>/
+  s/^( {4}+)(<li>.*)$/<li><ul>\n\2\n<\/ul><\/li>/
   
-  s/^( {4}+)(<il>.*)$/\1<il><ol>\n\1\2\n\1<\/ol><\/il>/
+  s/^( {4}+)(<il>.*)$/<il><ol>\n\2\n<\/ol><\/il>/
 ')
 
 # clean duplicated indented ul ol
@@ -183,7 +186,7 @@ MOD=$(echo "$MOD" | sed -E '
 BLOCKQUOTE() {
 MOD=$(echo "$MOD" | sed -E '
   s/^&gt; (.*)/<blockquote>\n\1\n<\/blockquote>/
-  /^&gt; *$/d
+  s/^&gt; *$//
 ')
 
 MOD=$(echo "$MOD" | sed -E '
@@ -191,9 +194,14 @@ MOD=$(echo "$MOD" | sed -E '
     N
     /^<\/blockquote>\n<blockquote>$/ {
       /<\/blockquote>\n<blockquote>/d
+      N
     }
-    /^<\/blockquote>\n\n<blockquote>$/ {
-    /^<\/blockquote>\n\n<blockquote>$/d
+    
+    /^<\/blockquote>\n$/ {
+      N
+      /^<\/blockquote>\n\n<blockquote>$/ {
+        s/<\/blockquote>\n\n<blockquote>//
+      }
     }
   }
 ')
@@ -230,9 +238,9 @@ MOD=$(echo "$MOD" | sed -E '
 # td
 MOD=$(echo "$MOD" | sed -E '
   /^<tr>/ {
-    s/^<tr>\|/<tr>\n    <td>/
+    s/^<tr>\|/<tr>\n<td>/
     s/\|<\/tr>$/<\/td>\n<\/tr>/
-    s/\|/<\/td>\n    <td>/g
+    s/\|/<\/td>\n<td>/g
   }
 ')
 
@@ -247,6 +255,24 @@ MOD=$(echo "$MOD" | sed -E '
   /<thead>/,/<\/thead>/s/td>/th>/g
 ')
 
+# p
+MOD=$(echo "$MOD" | sed -E '
+  s/  $/\n/
+  s/^([^<].*)$/<p>\1<\/p>/
+  s/^(.*[^>])$/<p>\1<\/p>/
+  /<p> *<\/p>/d
+')
+
+# clean duplicated p
+MOD=$(echo "$MOD" | sed -E '
+  /^<p>/ {
+    N
+    /^<p>.*\n<p>.*$/ {
+      s/<\/p>\n<p>/\n/
+    }
+    /^<p> *$\n<\/p>$/d
+  }
+')
 
 
 # escape keys
