@@ -51,6 +51,26 @@ MOD=$(echo "$MOD" | sed -E '
   }
 ')
 
+# blockquote
+BLOCKQUOTE() {
+MOD=$(echo "$MOD" | sed -E '
+  s/^&gt; (.*)/<blockquote>\n\1\n<\/blockquote>/
+  /^&gt; *$/d
+')
+
+MOD=$(echo "$MOD" | sed -E '
+  /^<\/blockquote>$/ {
+    N
+    /<\/blockquote>\n<blockquote>/d
+  }
+')
+}
+
+# indented blockquote
+while echo "$MOD" | grep -q '^&gt;'; do
+  BLOCKQUOTE
+done
+
 # h1 ~ h6
 MOD=$(echo "$MOD" | sed -E '
   s/^# (.*)$/<h1>\1<\/h1>/
@@ -73,17 +93,6 @@ MOD=$(echo "$MOD" | sed -E '
   s/^_{3,}$/<hr>/g
 ')
 
-# bold italic del code
-MOD=$(echo "$MOD" | sed -E '
-  s/\*\*\*(.*)\*\*\*/<strong><em>\1<\/em><\/strong>/g
-  s/\*\*(.*)\*\*/<strong>\1<\/strong>/g
-  s/\*(.*)\*/<em>\1<\/em>/g
-  s/~~(.*)~~/<del>\1<\/del>/g
-  
-  s/``(.*)``/\\`\1\\`/g
-  s/([^\\]+)`(.*[^\\]+)`/\1<code>\2<\/code>/g
-')
-
 # footnote
 MOD=$(echo "$MOD" | sed -E '
   s/^\[\^(.*)\]: /<a class="footnote" id="footnote-\1" href="#fn-\1">\1<\/a>: /
@@ -91,8 +100,19 @@ MOD=$(echo "$MOD" | sed -E '
   s/\[\^([^]]+)\]/<sup><a class="footnote" id="fn-\1" href="#footnote-\1">\1<\/a><\/sup>/g
 ')
 
-# mark, sup, sub
+# bold italic code
 MOD=$(echo "$MOD" | sed -E '
+  s/\*\*\*(.*)\*\*\*/<strong><em>\1<\/em><\/strong>/g
+  s/\*\*(.*)\*\*/<strong>\1<\/strong>/g
+  s/\*(.*)\*/<em>\1<\/em>/g
+  
+  s/``(.*)``/\\`\1\\`/g
+  s/([^\\]+)`(.*[^\\]+)`/\1<code>\2<\/code>/g
+')
+
+# del, mark, sup, sub
+MOD=$(echo "$MOD" | sed -E '
+  s/~~(.*)~~/<del>\1<\/del>/g
   s/==(.*)==/<mark>\1<\/mark>/g
   s/~(.*)~/<sub>\1<\/sub>/g
   s/\^(.*)\^/<sup>\1<\/sup>/g
@@ -104,15 +124,14 @@ MOD=$(echo "$MOD" | sed -E '
   s/!\[(.*)\]\((.*)\)/<img src="\2" alt="\1">/g
 
   s/&lt;(.*)&gt;/<a href="\1">\1<\/a>/g
+  s/\[(.*)\]\((.*) "(.*)"\)/<a href="\2" title="\3">\1<\/a>/g
   s/\[(.*)\]\((.*)\)/<a href="\2">\1<\/a>/g
 ')
 
 # li
 # for seperate ul and ol, use il tag for ol
 MOD=$(echo "$MOD" | sed -E '
-  s/^( {4}*)- (.*)/<ul>\n\1<li>\2<\/li>\n<\/ul>/
-  s/^( {4}*)\* (.*)/<ul>\n\1<li>\2<\/li>\n<\/ul>/
-  s/^( {4}*)\+ (.*)/<ul>\n\1<li>\2<\/li>\n<\/ul>/
+  s/^( {4}*)[-*+] (.*)/<ul>\n\1<li>\2<\/li>\n<\/ul>/
   
   s/^( {4}*)[0-9]+\. (.*)/<ol>\n\1<il>\2<\/il>\n<\/ol>/
 ')
@@ -121,9 +140,7 @@ MOD=$(echo "$MOD" | sed -E '
 MOD=$(echo "$MOD" | sed -E '
   /^<\/[uo]l>$/ {
     N
-    /^<\/[uo]l>\n<[uo]l>$/ {
-      /<\/[uo]l>\n<[uo]l>/d
-    }
+    /<\/[uo]l>\n<[uo]l>/d
   }
 ')
 
@@ -153,36 +170,6 @@ MOD=$(echo "$MOD" | sed -E '
   s/^<li>\[x\]/<li><input type="checkbox" checked disabled>/
 ')
 
-# blockquote
-BLOCKQUOTE() {
-MOD=$(echo "$MOD" | sed -E '
-  s/^&gt; (.*)/<blockquote>\n\1\n<\/blockquote>/
-  s/^&gt; *$//
-')
-
-MOD=$(echo "$MOD" | sed -E '
-  /^<\/blockquote>$/ {
-    N
-    /^<\/blockquote>\n<blockquote>$/ {
-      /<\/blockquote>\n<blockquote>/d
-      N
-    }
-    
-    /^<\/blockquote>\n$/ {
-      N
-      /^<\/blockquote>\n\n<blockquote>$/ {
-        s/<\/blockquote>\n\n<blockquote>//
-      }
-    }
-  }
-')
-}
-
-# indented blockquote
-while echo "$MOD" | grep -q '^&gt;'; do
-  BLOCKQUOTE
-done
-
 # table tr
 MOD=$(echo "$MOD" | sed -E '
   /^\|(.*\|)+$/ {
@@ -195,9 +182,7 @@ MOD=$(echo "$MOD" | sed -E '
 MOD=$(echo "$MOD" | sed -E '
   /^<\/table>$/ {
     N
-    /^<\/table>\n<table>$/ {
-      /^<\/table>\n<table>$/d
-    }
+    /^<\/table>\n<table>$/d
   }
 ')
 
@@ -234,6 +219,16 @@ MOD=$(echo "$MOD" | sed -E '
   
   /<p> *<\/p>/d
   s/^<p> {4}+(.*)/<p class="indented-p">\1/
+')
+
+# fixing p in blockquote
+MOD=$(echo "$MOD" | sed -E '
+  /^<blockquote>$/,/^<\/blockquote>$/ {
+    /^<p>/ {
+      N
+      s/<\/p>\n<p>/<\/p>\n\n<p>/
+    }
+  }
 ')
 
 # p clean empty line, combine continuous p in single p
