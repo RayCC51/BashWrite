@@ -34,7 +34,7 @@
 ###### h6
 ```
 
-hello  
+hello 
 world
 
 ```md
@@ -193,18 +193,13 @@ inline `code`
 
 ```
 plain code block
-\ . | # ! * + - _ ( ) { } [ ] < > ` `
+\ . | # ! * + - _ ( ) { } [ ] < > ''
 ```
 
 ```python
 print("python")
 ```
 
-````
-```python
-wrap codeblock with 4 backtick
-```
-````
 
 # Extended markdown
 

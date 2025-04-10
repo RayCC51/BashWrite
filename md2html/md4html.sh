@@ -37,6 +37,10 @@ MOD=$(echo "$MOD" | sed -E '
     s/\]/\\\]/g
     s/`/\\`/g
     
+    s/~/\\~/g
+    s/=/\\=/g
+    s/\^/\\^/g
+    
     s/&lt;/\\</g
     s/&gt;/\\>/g
     s/&amp;/&/g
@@ -83,19 +87,17 @@ MOD=$(echo "$MOD" | sed -E '
 
 # heading with id
 MOD=$(echo "$MOD" | sed -E '
-  s/^<h([0-9]+)>(.*) \{#(.*)\}<\/h\1>$/<h\1 id="\3">\2<\/h\1>/
+  s/^<h([1-6])>(.*) \{# ?(.*)\}<\/h\1>$/<h\1 id="\3">\2<\/h\1>/
 ')
 
 # hr
 MOD=$(echo "$MOD" | sed -E '
-  s/^-{3,}$/<hr>/g
-  s/^\*{3,}$/<hr>/g
-  s/^_{3,}$/<hr>/g
+  s/^[-*_]{3,}$/<hr>/
 ')
 
 # footnote
 MOD=$(echo "$MOD" | sed -E '
-  s/^\[\^(.*)\]: /<a class="footnote" id="footnote-\1" href="#fn-\1">\1<\/a>: /
+  s/^\[\^(.*)\]: /[<a class="footnote" id="footnote-\1" href="#fn-\1">\1<\/a>]: /
   
   s/\[\^([^]]+)\]/<sup><a class="footnote" id="fn-\1" href="#footnote-\1">\1<\/a><\/sup>/g
 ')
@@ -104,18 +106,22 @@ MOD=$(echo "$MOD" | sed -E '
 MOD=$(echo "$MOD" | sed -E '
   s/\*\*\*(.*)\*\*\*/<strong><em>\1<\/em><\/strong>/g
   s/\*\*(.*)\*\*/<strong>\1<\/strong>/g
-  s/\*(.*)\*/<em>\1<\/em>/g
+   s/([^\\]?)\*(.*[^\\])\*/\1<em>\2<\/em>/g
   
   s/``(.*)``/\\`\1\\`/g
-  s/([^\\]+)`(.*[^\\]+)`/\1<code>\2<\/code>/g
+  s/([^\\]?)`(.*[^\\])`/\1<code>\2<\/code>/g
 ')
 
+  # s/~(.*)~/<sub>\1<\/sub>/g
+  # s/\^(.*)\^/<sup>\1<\/sup>/g
 # del, mark, sup, sub
 MOD=$(echo "$MOD" | sed -E '
   s/~~(.*)~~/<del>\1<\/del>/g
   s/==(.*)==/<mark>\1<\/mark>/g
-  s/~(.*)~/<sub>\1<\/sub>/g
-  s/\^(.*)\^/<sup>\1<\/sup>/g
+  
+
+  s/([^\\]?)~(.*[^\\])~/\1<sub>\2<\/sub>/g
+  s/([^\\]?)\^(.*[^\\])\^/\1<sup>\2<\/sup>/g
 ')
 
 # img, a
@@ -269,6 +275,10 @@ MOD=$(echo "$MOD" | sed -E '
   s/\\`/`/g
   s/\\</</g
   s/\\>/>/g
+
+  s/\\~/~/g
+  s/\\=/=/g
+  s/\\\^/^/g
 ')
 
 # output
