@@ -12,7 +12,7 @@ LANG="en"
 
 # script info
 _SCRIPT_NAME="Bash static site generator"
-_SCRIPT_VERSION="0.3"
+_SCRIPT_VERSION="0.5"
 _SCRIPT_FILE_NAME="bssg.sh"
 
 # echo colors
@@ -24,6 +24,14 @@ RESET='\e[0m'
 
 # Some variables for scripting
 LASTBUILD=""
+CONTENTS=""
+FRONTMATTER=""
+TITLE=""
+DESCRIPTION=""
+DATE=""
+LASTMOD=""
+TAGS=""
+DRAFT=""
 
 # Command line help text
 show_help() {
@@ -42,6 +50,7 @@ ${BLUE}Arguments${RESET}
 md2html() {
 # input
 MOD=$(cat "$1")
+# MOD="$1"
 
 # escape < > &
 MOD=$(echo "$MOD" | sed -E '
@@ -409,6 +418,30 @@ make_list() {
   find ./write/ -type f -name "*.md" -exec sh -c 'for file; do echo "$file $(date -d @"$(stat --format="%Y" "$file")" +%y%m%d)"; done' sh {} + >> filelist.txt
 }
 
+# find frontmatter and get data
+frontmatter() {
+  local FILE_PATH="$1"
+
+  FRONTMATTER=$(awk '
+    BEGIN { part=0 }
+    /^---/{ part++ }
+    part==1 { print }
+  ' "$FILE_PATH")
+
+  CONTENTS=$(awk '
+    BEGIN { part=0 }
+    /^---/{ part++ }
+    part==2 { print }
+    part>2 { print }
+  ' "$FILE_PATH")
+
+  TITLE=$(echo "$FRONTMATTER" | awk -F': ' '/^title:/{print $2}')
+  DESCRIPTION=$(echo "$FRONTMATTER" | awk -F': ' '/^description:/{print $2}')
+  DATE=$(echo "$FRONTMATTER" | awk -F': ' '/^date:/{print $2}')
+  LASTMOD=$(echo "$FRONTMATTER" | awk -F': ' '/^lastmod:/{print $2}')
+  DRAFT=$(echo "$FRONTMATTER" | awk -F': ' '/^draft:/{print $2}')
+}
+
 # Converting markdown files
 #
 # $1: file name with directory
@@ -423,6 +456,8 @@ converting() {
     NEW_PATH=${NEW_PATH/.md/.html}
     mkdir -p "$(dirname "$NEW_PATH")"
 
+    # "$CONTENTS"=$(md2html "$CONTENTS")
+    # echo "$CONTENTS"
     md2html "$FILE_PATH" > "$NEW_PATH"
     echo -e "  $BLUE+$RESET $NEW_PATH"
   fi
@@ -437,10 +472,12 @@ elif [[ "$1" == "build" || "$1" == "b" ]]; then
   read LASTBUILD < filelist.txt
   make_list
 
+  echo -e "$BLUE*$RESET Converting..."
   {
     read
-    while IFS= read -r line; do
-      converting $line
+    while IFS=' ' read -r FILE_PATH UPDATED; do
+      frontmatter $FILE_PATH
+      converting $FILE_PATH $UPDATED
     done 
   } < "filelist.txt"
 else
