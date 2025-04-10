@@ -8,11 +8,11 @@ BASE_URL="localhost:8080/"
 LANG="en"
 
 # If you don't know what you're doing,
-# do not touch the code below.
+# do not edit the code below.
 
 # script info
 _SCRIPT_NAME="Bash static site generator"
-_SCRIPT_VERSION="0.2"
+_SCRIPT_VERSION="0.3"
 _SCRIPT_FILE_NAME="bssg.sh"
 
 # echo colors
@@ -33,9 +33,10 @@ ${BLUE}version${RESET}: $_SCRIPT_VERSION
 ${BLUE}Arguments${RESET}
   ${YELLOW}./${_SCRIPT_FILE_NAME} help${RESET}    Show this text.
   ${YELLOW}./${_SCRIPT_FILE_NAME} build${RESET}   Build new markdown posts to html files. If you have completed the blog setup and only want to ${BLUE}publish new posts${RESET}, use this command.
-  ${YELLOW}./${_SCRIPT_FILE_NAME} rebuild${RESET} Rebuild site. If you ${BLUE}change anything other than posts${RESET}, such as settings or styles, you must rebuild for the changes to take effect.
 "
 }
+
+
 
 # Markdown to HTML converter
 md2html() {
@@ -342,6 +343,8 @@ MOD=$(echo "$MOD" | sed -E '
 echo "$MOD"
 }
 
+
+
 # Make structure.
 make_directory() {
   local folders=("resouces" "posts" "tags" "write" "assets" "assets/images" "assets/fonts" "assets/css" "assets/js" "assets/etc")
@@ -411,21 +414,31 @@ make_list() {
 # $1: file name with directory
 # $2: updated date
 converting() {
-  local NAME="$1"
+  local FILE_PATH="$1"
   local UPDATED="$2"
+  local NEW_PATH=""
+
+  if [[ "$UPDATED" -ge "$LASTBUILD" ]]; then
+    NEW_PATH=${FILE_PATH/write/posts}
+    NEW_PATH=${NEW_PATH/.md/.html}
+    mkdir -p "$(dirname "$NEW_PATH")"
+
+    md2html "$FILE_PATH" > "$NEW_PATH"
+    echo -e "  $BLUE+$RESET $NEW_PATH"
+  fi
 }
 
 # Main code
 if [[ "$#" -eq 0 || "$1" == "help" ]]; then
   show_help
-elif [[ "$1" == "build" ]]; then
+elif [[ "$1" == "build" || "$1" == "b" ]]; then
   make_directory
   make_resource
+  read LASTBUILD < filelist.txt
   make_list
 
-  # Do every files in filelist.txt
   {
-    read LASTBUILD
+    read
     while IFS= read -r line; do
       converting $line
     done 
@@ -434,6 +447,5 @@ else
   echo -e "$RED! Invaild argument$RESET
 $BLUE* Valid Arguments$RESET
   ${YELLOW}./$_SCRIPT_FILE_NAME help${RESET}
-  ${YELLOW}./$_SCRIPT_FILE_NAME build${RESET}
-  ${YELLOW}./$_SCRIPT_FILE_NAME rebuild${RESET}"
+  ${YELLOW}./$_SCRIPT_FILE_NAME build${RESET}"
 fi
