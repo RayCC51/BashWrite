@@ -196,9 +196,22 @@ plain code block
 \ . | # ! * + - _ ( ) { } [ ] < > ''
 ```
 
+````md
+```
+plain code block
+\ . | # ! * + - _ ( ) { } [ ] < > ''
+```
+````
+
 ```python
 print("python")
 ```
+
+````md
+```python
+print("python")
+```
+````
 
 
 # Extended markdown
@@ -228,13 +241,11 @@ highlight ==mark==
 ```
 
 - [ ] checked box ul li
-- [x] input type="checkbox" checked
-disabled
+- [x] input type="checkbox" checked disabled
 
 ```md
 - [ ] checked box ul li
-- [x] input type="checkbox" checked
-disabled
+- [x] input type="checkbox" checked disabled
 ```
 
 ### headling with id {#extened}

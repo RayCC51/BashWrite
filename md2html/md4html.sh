@@ -10,6 +10,18 @@ MOD=$(echo "$MOD" | sed -E '
   s/>/\&gt;/g
 ')
 
+# 4 backtick codeblock
+MOD=$(echo "$MOD" | sed -E '
+  /^````/ {
+    N
+    s/````(.*)\n```/```\1\n\\`\\`\\`/
+  }
+  /^```$/ {
+    N
+    s/```\n````/\\`\\`\\`\n```/
+  }
+')
+
 # codeblock
 # escape markdown symbols temparely
 MOD=$(echo "$MOD" | sed -E '
@@ -278,9 +290,10 @@ MOD=$(echo "$MOD" | sed -E '
   s/\\\[/\[/g
   s/\\\]/\]/g
   s/\\`/`/g
-  s/\\</</g
-  s/\\>/>/g
+  s/\\</\&lt;/g
+  s/\\>/\&gt;/g
 
+  s/\\`/`/g
   s/\\~/~/g
   s/\\=/=/g
   s/\\\^/^/g

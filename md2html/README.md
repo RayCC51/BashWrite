@@ -26,19 +26,17 @@ it support extended markdown [mattcone/markdown-guide](https://github.com/mattco
 - can not use html tags
 - diffrent (-*+) in the same ul is supported
 - does not detect url link automatically
+- more then 5 backtick codeblock not working
 
 
 ## bugs
 
 - list
     - can not handle more then 2 level indented list
-- backtick
-    - more then 4 backtick not working
 - table
     - table can not align
 - footnote
     - footnote name with space does not working
-- footnote
     - note with several lines not working
 - p
     - currently p tag detect the line starts with < and ends with >. that means can not wrap some lines like "<em>a</em>"
