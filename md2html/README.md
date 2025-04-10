@@ -43,4 +43,3 @@ it support extended markdown [mattcone/markdown-guide](https://github.com/mattco
 - p
     - currently p tag detect the line starts with < and ends with >. that means can not wrap some lines like "<em>a</em>"
 
-- p: line break everthing

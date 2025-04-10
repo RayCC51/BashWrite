@@ -17,9 +17,9 @@ MOD=$(echo "$MOD" | sed -E '
     :a
     N
     /```$/!ba
-    s/```([a-zA-Z0-9_]+)?\n/<pre><code class="\1">\n/
+    s/```([a-zA-Z0-9_]+)?\n/<pre><code class="language-\1">\n/
     s/```/<\/code><\/pre>/
-    s/ class=""//
+    s/ class="language-"//
 
     s/\\/\\\\/g
     s/\./\\\./g
@@ -219,12 +219,12 @@ MOD=$(echo "$MOD" | sed -E '
 
 # p
 MOD=$(echo "$MOD" | sed -E '
-  s/  $/\n/
   s/^( *)([^< ].*)$/<p>\1\2<\/p>/
   s/^(.*[^>])$/<p>\1<\/p>/
   
   /<p> *<\/p>/d
   s/^<p> {4}+(.*)/<p class="indented-p">\1/
+  s/  <\/p>$/<\/p>\n/
 ')
 
 # fixing p in blockquote
@@ -241,10 +241,15 @@ MOD=$(echo "$MOD" | sed -E '
 MOD=$(echo "$MOD" | sed -E '
   /^<p>/ {
     N
-    /^<p>.*\n<p>.*$/ {
+    /^<p> *$\n<\/p>$/d
+  }
+  /^<p>.*<\/p>$/ {
+    :a
+    N
+    /^<p>.*<\/p>\n<p>.*<\/p>$/ {
       s/<\/p>\n<p>/\n/
     }
-    /^<p> *$\n<\/p>$/d
+    ba
   }
 ')
 
