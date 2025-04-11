@@ -70,7 +70,7 @@ make_before() {
 
   <meta property=\"og:title\" content=\"$TITLE\">
   <meta property=\"og:description\" content=\"$DESCRIPTION\">
-  <meta property=\"og:url\" content=\"$BASE_URL${NEW_PATH:2}\">
+  <meta property=\"og:url\" content=\"$BASE_URL${NEW_PATH:1}\">
   <meta name=\"twitter:card\" content=\"summary\">
   <meta name=\"twitter:title\" content=\"$TITLE\">
   <meta name=\"twitter:description\" content=\"$DESCRIPTION\">
