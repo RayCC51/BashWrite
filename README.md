@@ -7,10 +7,11 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 - [x] make directory
 - [ ] make config
 - [x] make default html, css
-- [ ] make md to html converter
+- [x] make md to html converter
 - [ ] make front matter
-- [ ] make file list
+- [x] make file list
 - [x] make arguments
+- [ ] make posts, tags page
 - [ ] error handling
 - [ ] make doc
 - [ ] make rss, sitemap, robots
@@ -22,8 +23,6 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 `./bssg.sh help` = help
 
 `./bssg.sh build` = build new posts
-
-`./bssg.sh rebuild` = rebuild everything
 
 ## Directory
 
@@ -42,7 +41,7 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 - sitemap.xml
 - robots.txt
 - feed.rss
-- file_list.txt - Contain list of posts, and modified time.
+- filelist.txt - Contain list of posts, and modified date.
 
 - posts/
 - tags/
@@ -68,13 +67,6 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 
 1. Create new markdown file in *write/*
 2. `./bssg.sh build`
-
-### New post drafted
-
-1. Create new markdown file in *write/*
-2. New markdown file name should starts with `draft-`
-
-If you want to post drafted file, just remove the name `dratt-` in drafted file.
 
 ### Edit post
 

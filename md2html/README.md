@@ -18,7 +18,7 @@ it support extended markdown [mattcone/markdown-guide](https://github.com/mattco
     - angle brackets(<, >), underscore(_)
     - dot(.) after number inside unordered list. ex) - 1. this is ul
 - does not support 
-    - underscore(_) for bold, itallic. ex) "_em_" is not itallic
+    - underscore(_) for bold, itallic. ex) "\_em\_" is not itallic
     - other elements inside list
     - definition list (dl dt dd)
     - emoji shortcode like (:smile:). just use 😀 directly
@@ -39,5 +39,5 @@ it support extended markdown [mattcone/markdown-guide](https://github.com/mattco
     - footnote name with space does not working
     - note with several lines not working
 - p
-    - currently p tag detect the line starts with < and ends with >. that means can not wrap some lines like "<em>a</em>"
+    - currently p tag detect the line starts with < and ends with >. that means can not wrap some lines like "\<em\>a\</em\>"
 

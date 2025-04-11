@@ -1,4 +1,5 @@
 #!/bin/bash
+start_time=$(date +%s%N)
 
 ### Edit these settings.
 BLOG_NAME="bssg blog"
@@ -40,7 +41,7 @@ ${BLUE}version${RESET}: $_SCRIPT_VERSION
 
 ${BLUE}Arguments${RESET}
   ${YELLOW}./${_SCRIPT_FILE_NAME} help${RESET}    Show this text.
-  ${YELLOW}./${_SCRIPT_FILE_NAME} build${RESET}   Build new markdown posts to html files. If you have completed the blog setup and only want to ${BLUE}publish new posts${RESET}, use this command.
+  ${YELLOW}./${_SCRIPT_FILE_NAME} build${RESET}   Build website. 
 "
 }
 
@@ -464,7 +465,7 @@ converting() {
 }
 
 # Main code
-if [[ "$#" -eq 0 || "$1" == "help" ]]; then
+if [[ "$#" -eq 0 || "$1" == "help" || "$1" == "h" ]]; then
   show_help
 elif [[ "$1" == "build" || "$1" == "b" ]]; then
   make_directory
@@ -480,9 +481,12 @@ elif [[ "$1" == "build" || "$1" == "b" ]]; then
       converting $FILE_PATH $UPDATED
     done 
   } < "filelist.txt"
+  
+  echo -e "$GREEN...$RESET Done in $YELLOW$(( ($(date +%s%N) - start_time) / 1000000 ))${RESET}ms!"
 else
   echo -e "$RED! Invaild argument$RESET
 $BLUE* Valid Arguments$RESET
   ${YELLOW}./$_SCRIPT_FILE_NAME help${RESET}
   ${YELLOW}./$_SCRIPT_FILE_NAME build${RESET}"
 fi
+
