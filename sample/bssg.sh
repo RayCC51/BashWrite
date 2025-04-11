@@ -13,8 +13,9 @@ LANG="en"
 
 # script info
 _SCRIPT_NAME="Bash static site generator"
-_SCRIPT_VERSION="0.5"
+_SCRIPT_VERSION="0.6"
 _SCRIPT_FILE_NAME="bssg.sh"
+_SCRIPT_SITE="https://github.com/raycc51/bssg"
 
 # echo colors
 RED='\e[31m'
@@ -26,7 +27,8 @@ RESET='\e[0m'
 # Some variables for scripting
 LASTBUILD=""
 CONTENTS=""
-FRONTMATTER=""
+RESULTS=""
+NEW_PATH=""
 TITLE=""
 DESCRIPTION=""
 DATE=""
@@ -34,24 +36,94 @@ LASTMOD=""
 TAGS=""
 DRAFT=""
 
-# Command line help text
-show_help() {
-  echo -e "$GREEN$_SCRIPT_NAME$RESET
-${BLUE}version${RESET}: $_SCRIPT_VERSION
-
-${BLUE}Arguments${RESET}
-  ${YELLOW}./${_SCRIPT_FILE_NAME} help${RESET}    Show this text.
-  ${YELLOW}./${_SCRIPT_FILE_NAME} build${RESET}   Build website. 
-"
+reset_var() {
+  CONTENTS=""
+  RESULTS=""
+  NEW_PATH=""
+  TITLE=""
+  DESCRIPTION=""
+  DATE=""
+  LASTMOD=""
+  TAGS=""
+  DRAFT=""
 }
 
+# Make style.css
+make_style_css() {
+  echo 'html{padding:0;margin:0;}' > style.css
+}
+
+# Make html that comes Before the CONTENS
+make_before() {
+  # Remove slash in BASE_URL
+  if [[ "$BASE_URL" == */ ]]; then
+    BASE_URL="${BASE_URL%/}"
+  fi
+
+  local OUTPUT="<!DOCTYPE html>
+<html lang=$LANG>
+<head>
+  <meta charset=\"UTF-8\">
+  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
+  <meta name=\"author\" content=\"$AUTHOR_NAME\">
+  <meta name=\"description\" content=\"$DESCRIPTION\">
+
+  <meta property=\"og:title\" content=\"$TITLE\">
+  <meta property=\"og:description\" content=\"$DESCRIPTION\">
+  <meta property=\"og:url\" content=\"$BASE_URL${NEW_PATH:2}\">
+  <meta name=\"twitter:card\" content=\"summary\">
+  <meta name=\"twitter:title\" content=\"$TITLE\">
+  <meta name=\"twitter:description\" content=\"$DESCRIPTION\">
+  
+  <title>$TITLE</title>
+  <link rel=\"stylesheet\" href=\"/styles.css\">
+</head>
+<body>
+  <header>
+    <h3><a href=\"$BASE_URL\">$BLOG_NAME</a></h3>
+    <nav>
+      <ul>
+        <li><a href=\"$BASE_URL/posts/\">Posts</a></li>
+        <li><a href=\"$BASE_URL/tags/\">Tags</a></li>
+      </ul>
+    </nav>
+  </header>
+  <article>
+    <header>
+      <h1>$TITLE</h1>
+      <p>Written in $DATE</p>
+"
+
+  if [ -n "$LASTMOD" ]; then
+    OUTPUT+="      <p>Updated in $LASTMOD</p>"
+  fi
+  
+  if [ -n "$LASTMOD" ]; then
+    OUTPUT+="      <p>Tags: $TAGS</p>"
+  fi
+  
+  OUTPUT+="    </header>
+    <main>"
+
+  echo "$OUTPUT"
+}
+
+# Make html that comes After the CONTENTS
+make_after() {
+  echo "    </main>
+    <footer>
+      <p>Generated with $_SCRIPT_NAME</p>
+    </footer>
+  </article>
+</body>"
+}
 
 
 # Markdown to HTML converter
 md2html() {
 # input
-MOD=$(cat "$1")
-# MOD="$1"
+# MOD=$(cat "$1")
+MOD="$1"
 
 # escape < > &
 MOD=$(echo "$MOD" | sed -E '
@@ -368,39 +440,6 @@ make_directory() {
   echo -e "$BLUE*$RESET Create directories"
 }
 
-# Make head.html
-make_head_html() {
-  echo "<!DOCTYPE html>
-<html lang=$LANG>
-<head>
-  <meta charset=\"UTF-8\">
-  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
-  <title>$BLOG_NAME</title>
-  <link rel=\"stylesheet\" href=\"styles.css\">
-</head>"
-}
-
-# Make header.html
-make_header_html() {
-  echo "<header>
-  <h1>$BLOG_NAME</h1>
-</header>"
-}
-
-# Make footer.html
-make_footer_html() {
-  echo "<footer>
-  <p>
-    Generated with $_SCRIPT_NAME
-  </p>
-</footer>"
-}
-
-# Make style.css
-make_style_css() {
-  echo 'html{padding:0;margin:0;}' > style.css
-}
-
 # Make reusable resources.
 # Resource: style.css
 # If there is resources, then ignore.
@@ -411,8 +450,9 @@ make_resource() {
 
 # Make markdown file list
 # 
-# It contain: yymmdd last build date, string file name, yymmdd update date
-# seperated with a space
+# It contain: 
+# yymmdd last build date. in first line
+# string file path, yymmdd update date
 make_list() {
   date +%y%m%d > filelist.txt
   
@@ -423,7 +463,7 @@ make_list() {
 frontmatter() {
   local FILE_PATH="$1"
 
-  FRONTMATTER=$(awk '
+  local FRONTMATTER=$(awk '
     BEGIN { part=0 }
     /^---/{ part++ }
     part==1 { print }
@@ -434,13 +474,18 @@ frontmatter() {
     /^---/{ part++ }
     part==2 { print }
     part>2 { print }
-  ' "$FILE_PATH")
+  ' "$FILE_PATH" | sed '1d')
 
   TITLE=$(echo "$FRONTMATTER" | awk -F': ' '/^title:/{print $2}')
   DESCRIPTION=$(echo "$FRONTMATTER" | awk -F': ' '/^description:/{print $2}')
   DATE=$(echo "$FRONTMATTER" | awk -F': ' '/^date:/{print $2}')
   LASTMOD=$(echo "$FRONTMATTER" | awk -F': ' '/^lastmod:/{print $2}')
+  TAGS=$(echo "$FRONTMATTER" | awk -F': ' '/^tags:/{print $2}')
   DRAFT=$(echo "$FRONTMATTER" | awk -F': ' '/^draft:/{print $2}')
+
+  if [ -n DATE ]; then
+    DATE="20${UPDATED:0:2}-${UPDATED:2:2}-${UPDATED:4:2}"
+  fi
 }
 
 # Converting markdown files
@@ -450,18 +495,33 @@ frontmatter() {
 converting() {
   local FILE_PATH="$1"
   local UPDATED="$2"
-  local NEW_PATH=""
 
   if [[ "$UPDATED" -ge "$LASTBUILD" ]]; then
+    # Make directory
     NEW_PATH=${FILE_PATH/write/posts}
     NEW_PATH=${NEW_PATH/.md/.html}
     mkdir -p "$(dirname "$NEW_PATH")"
 
-    # "$CONTENTS"=$(md2html "$CONTENTS")
-    # echo "$CONTENTS"
-    md2html "$FILE_PATH" > "$NEW_PATH"
+    # Convert markdown to html text
+    RESULTS=$(md2html "$CONTENTS")
+
+    # Save html text in html file
+    make_before > $NEW_PATH
+    echo "$RESULTS" >> $NEW_PATH
+    make_after >> $NEW_PATH
+    
     echo -e "  $BLUE+$RESET $NEW_PATH"
   fi
+}
+
+# Command line help text
+show_help() {
+  echo -e "$GREEN$_SCRIPT_NAME$RESET
+${BLUE}version${RESET}: $_SCRIPT_VERSION
+
+${BLUE}Arguments${RESET}
+  ${YELLOW}./${_SCRIPT_FILE_NAME} help${RESET}    Show this text.
+  ${YELLOW}./${_SCRIPT_FILE_NAME} build${RESET}   Build website. "
 }
 
 # Main code
@@ -477,16 +537,19 @@ elif [[ "$1" == "build" || "$1" == "b" ]]; then
   {
     read
     while IFS=' ' read -r FILE_PATH UPDATED; do
+      reset_var
       frontmatter $FILE_PATH
-      converting $FILE_PATH $UPDATED
+      # If draft
+      if [ "$DRAFT" != "true" ] && [ "$DRAFT" != "True" ] && [ "$DRAFT" != "TRUE" ] && [ "$DRAFT" != "1" ]; then
+        converting $FILE_PATH $UPDATED
+      fi
     done 
   } < "filelist.txt"
   
-  echo -e "$GREEN...$RESET Done in $YELLOW$(( ($(date +%s%N) - start_time) / 1000000 ))${RESET}ms!"
+  echo -e "Done in $YELLOW$(( ($(date +%s%N) - start_time) / 1000000 ))${RESET}ms!"
 else
   echo -e "$RED! Invaild argument$RESET
 $BLUE* Valid Arguments$RESET
   ${YELLOW}./$_SCRIPT_FILE_NAME help${RESET}
   ${YELLOW}./$_SCRIPT_FILE_NAME build${RESET}"
 fi
-

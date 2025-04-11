@@ -1,8 +1,41 @@
-<hr>
-<p>title: My blog title
-description: This is discription
-date: 2025-01-01
-lastmod: 2025-12-31
-tags: tag1, tag2</p>
-<p>draft: true</p>
-<hr>
+<!DOCTYPE html>
+<html lang=en>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="name">
+  <meta name="description" content="This is discription">
+
+  <meta property="og:title" content="My blog title">
+  <meta property="og:description" content="This is discription">
+  <meta property="og:url" content="localhost:8080posts/fm/frontmatter.html">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="My blog title">
+  <meta name="twitter:description" content="This is discription">
+  
+  <title>My blog title</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header>
+    <h3><a href="localhost:8080">bssg blog</a></h3>
+    <nav>
+      <ul>
+        <li><a href="localhost:8080/posts/">Posts</a></li>
+        <li><a href="localhost:8080/tags/">Tags</a></li>
+      </ul>
+    </nav>
+  </header>
+  <article>
+    <header>
+      <h1>My blog title</h1>
+      <p>Written in 2025-04-11</p>
+      <p>Updated in 2025-12-31</p>      <p>Tags: tag1, tag2</p>    </header>
+    <main>
+
+    </main>
+    <footer>
+      <p>Generated with Bash static site generator</p>
+    </footer>
+  </article>
+</body>

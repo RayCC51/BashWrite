@@ -8,7 +8,7 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 - [ ] make config
 - [x] make default html, css
 - [x] make md to html converter
-- [ ] make front matter
+- [x] make front matter
 - [x] make file list
 - [x] make arguments
 - [ ] make posts, tags page
