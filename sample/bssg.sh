@@ -3,12 +3,12 @@ start_time=$(date +%s%N)
 
 #
 #
-Frontmatter has bug
-written in 2000-01-
-written in 2020-25-04
-like this. 
-and other front matter is not working
-maybe only title working
+# Frontmatter has bug
+# written in 2000-01-
+# written in 2020-25-04
+# like this. 
+# and other front matter is not working
+# maybe only title working
 #
 #
 
@@ -145,6 +145,14 @@ fix_config() {
   if [[ "$BASE_URL" != http* ]]; then
     BASE_URL="http://$BASE_URL"
   fi
+
+  # Fixing file/folder name with whitezspace
+  find . -depth -name "* *" | while IFS= read -r file; do
+    new_name=$(echo "$file" | tr ' ' '_')
+      
+    mv "$file" "$new_name"
+  done
+  
 }
 
 # Markdown to HTML converter
@@ -483,8 +491,7 @@ make_resource() {
 # string file path, yyyymmddhhmmss update date
 make_list() {  
   FILELIST=$(find ./write/ -type f -name "*.md" -exec sh -c 'for file; do
-    safe_file_name=$(echo "$file" | tr " " "_")
-    echo "$safe_file_name $(date -d @"$(stat --format="%Y" "$file")" +%Y%m%d%H%M%S)"; 
+    echo "$file $(date -d @"$(stat --format="%Y" "$file")" +%Y%m%d%H%M%S)"; 
    done' sh {} + | sort -k2,2r)
 }
 
