@@ -455,7 +455,7 @@ make_resource() {
 # It contain: 
 # string file path, yyyymmddhhmmss update date
 make_list() {  
-  FILELIST=$(find ./write/ -type f -name "*.md" -exec sh -c 'for file; do echo "$file $(date -d @"$(stat --format="%Y" "$file")" +%Y%m%d%H%M%S)"; done' sh {} +)
+  FILELIST=$(find ./write/ -type f -name "*.md" -exec sh -c 'for file; do echo "$file $(date -d @"$(stat --format="%Y" "$file")" +%Y%m%d%H%M%S)"; done' sh {} + | sort -k2,2r)
 }
 
 # Find new file
@@ -523,7 +523,7 @@ remove_file() {
 
   rm "$NEW_PATH"
 
-  echo -e "  $RED+[Remove]$RESET $NEW_PATH"
+  echo -e "  $RED-[Remove]$RESET $NEW_PATH"
 }
 
 # Find frontmatter and get data
