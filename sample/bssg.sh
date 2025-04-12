@@ -26,6 +26,8 @@ RESET='\e[0m'
 
 # Some variables for scripting
 LASTBUILD=""
+FILELIST=""
+FILESTATUS=""
 CONTENTS=""
 RESULTS=""
 NEW_PATH=""
@@ -37,6 +39,7 @@ TAGS=""
 DRAFT=""
 
 reset_var() {
+  FILESTATUS=""
   CONTENTS=""
   RESULTS=""
   NEW_PATH=""
@@ -451,15 +454,63 @@ make_resource() {
 # Make markdown file list
 # 
 # It contain: 
-# yymmdd last build date. in first line
-# string file path, yymmdd update date
-make_list() {
-  date +%y%m%d > filelist.txt
-  
-  find ./write/ -type f -name "*.md" -exec sh -c 'for file; do echo "$file $(date -d @"$(stat --format="%Y" "$file")" +%y%m%d)"; done' sh {} + >> filelist.txt
+# string file path, yyyymmddhhmmss update date
+make_list() {  
+  FILELIST=$(find ./write/ -type f -name "*.md" -exec sh -c 'for file; do echo "$file $(date -d @"$(stat --format="%Y" "$file")" +%Y%m%d%H%M%S)"; done' sh {} +)
 }
 
-# find frontmatter and get data
+# Find new file
+# 
+# Below function get_file_stat can not detect removed file
+# So compare filelist.txt and FILELIST, add new files lines in FILELIST tempareley
+find_new_files() {
+  local REMOVED_LINES=""
+  
+  while IFS=' ' read -r FILE_PATH UPDATED; do
+    if ! echo "$FILELIST" | grep -qF "$FILE_PATH"; then    
+      REMOVED_LINES="$(printf "%s\n%s 000" "$REMOVED_LINES" "$FILE_PATH")"
+    fi
+  done < "filelist.txt"
+
+  FILELIST+="$REMOVED_LINES"
+}
+
+# Update new file list
+#
+# Remove removed file lines ends with 000
+update_file_list() {
+  FILELIST=$(echo "$FILELIST" | grep -v ' 000$')
+  echo "$FILELIST" > "filelist.txt"
+}
+
+# File status
+#
+# Save file status in FILESTATUS
+# Did markdown files are changed or removed?
+# Status: "U"pdated, "N"ew, "R"emoved,  no "C"hange
+# FILELIST has lastest file list
+# filelist.txt has previous file list
+# 
+# $1: a file path from FILELIST
+# $2: lastest updated date
+get_file_stat() {
+  local NEW="$1"
+  local NEW_UPDATED="$2"
+  
+  local OLD_UPDATED=$(awk -v new="$NEW" -F' ' '$1 == new {print $2}' filelist.txt)
+
+  if [ -z "$OLD_UPDATED" ]; then
+    FILESTATUS="N"
+  elif [[ "$NEW_UPDATED" -gt "$OLD_UPDATED" ]]; then
+    FILESTATUS="U"
+  elif [ "$NEW_UPDATED" = "000" ]; then
+    FILESTATUS="R"
+  else
+    FILESTATUS="C"
+  fi
+}
+
+# Find frontmatter and get data
 frontmatter() {
   local FILE_PATH="$1"
 
@@ -494,24 +545,28 @@ frontmatter() {
 # $2: updated date
 converting() {
   local FILE_PATH="$1"
-  local UPDATED="$2"
+  local STATUS=""
 
-  if [[ "$UPDATED" -ge "$LASTBUILD" ]]; then
-    # Make directory
-    NEW_PATH=${FILE_PATH/write/posts}
-    NEW_PATH=${NEW_PATH/.md/.html}
-    mkdir -p "$(dirname "$NEW_PATH")"
+  # Make directory
+  NEW_PATH=${FILE_PATH/write/posts}
+  NEW_PATH=${NEW_PATH/.md/.html}
+  mkdir -p "$(dirname "$NEW_PATH")"
 
-    # Convert markdown to html text
-    RESULTS=$(md2html "$CONTENTS")
+  # Convert markdown to html text
+  RESULTS=$(md2html "$CONTENTS")
 
-    # Save html text in html file
-    make_before > $NEW_PATH
-    echo "$RESULTS" >> $NEW_PATH
-    make_after >> $NEW_PATH
-    
-    echo -e "  $BLUE+$RESET $NEW_PATH"
+  # Save html text in html file
+  make_before > $NEW_PATH
+  echo "$RESULTS" >> $NEW_PATH
+  make_after >> $NEW_PATH
+
+  if [ "$FILESTATUS" = "N" ]; then
+    STATUS="New"
+  elif [ "$FILESTATUS" = "U" ]; then
+    STATUS="Update"
   fi
+  
+  echo -e "  $BLUE+[$STATUS]$RESET $NEW_PATH"
 }
 
 # Command line help text
@@ -530,21 +585,28 @@ if [[ "$#" -eq 0 || "$1" == "help" || "$1" == "h" ]]; then
 elif [[ "$1" == "build" || "$1" == "b" ]]; then
   make_directory
   make_resource
-  read LASTBUILD < filelist.txt
   make_list
+  find_new_files
 
   echo -e "$BLUE*$RESET Converting..."
-  {
-    read
-    while IFS=' ' read -r FILE_PATH UPDATED; do
-      reset_var
+  while IFS=' ' read -r FILE_PATH UPDATED; do
+    reset_var
+    get_file_stat $FILE_PATH $UPDATED
+
+    if [[ "$FILESTATUS" = "U" || "$FILESTATUS" = "N" ]]; then
+      
       frontmatter $FILE_PATH
-      # If draft
+      # If not  draft
       if [ "$DRAFT" != "true" ] && [ "$DRAFT" != "True" ] && [ "$DRAFT" != "TRUE" ] && [ "$DRAFT" != "1" ]; then
-        converting $FILE_PATH $UPDATED
+        converting $FILE_PATH
       fi
-    done 
-  } < "filelist.txt"
+    elif [ "$FILESTATUS" = "R" ]; then
+      echo "delete-${FILE_PATH}"
+      # todo: remove file
+    fi
+  done <<< "$FILELIST"
+
+  update_file_list
   
   echo -e "Done in $YELLOW$(( ($(date +%s%N) - start_time) / 1000000 ))${RESET}ms!"
 else
