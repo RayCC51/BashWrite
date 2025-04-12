@@ -25,7 +25,6 @@ BLUE='\e[34m'
 RESET='\e[0m'
 
 # Some variables for scripting
-LASTBUILD=""
 FILELIST=""
 FILESTATUS=""
 CONTENTS=""
@@ -510,6 +509,23 @@ get_file_stat() {
   fi
 }
 
+# Remove file
+#
+# User remove markdown file, 
+# then script remove html file, ...
+#
+# $1: Removed file path
+remove_file() {
+  local FILE_PATH="$1"
+  
+  NEW_PATH=${FILE_PATH/write/posts}
+  NEW_PATH=${NEW_PATH/.md/.html}
+
+  rm "$NEW_PATH"
+
+  echo -e "  $RED+[Remove]$RESET $NEW_PATH"
+}
+
 # Find frontmatter and get data
 frontmatter() {
   local FILE_PATH="$1"
@@ -601,8 +617,7 @@ elif [[ "$1" == "build" || "$1" == "b" ]]; then
         converting $FILE_PATH
       fi
     elif [ "$FILESTATUS" = "R" ]; then
-      echo "delete-${FILE_PATH}"
-      # todo: remove file
+      remove_file "$FILE_PATH"
     fi
   done <<< "$FILELIST"
 
