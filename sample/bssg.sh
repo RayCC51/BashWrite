@@ -1,10 +1,21 @@
 #!/bin/bash
 start_time=$(date +%s%N)
 
+#
+#
+Frontmatter has bug
+written in 2000-01-
+written in 2020-25-04
+like this. 
+and other front matter is not working
+maybe only title working
+#
+#
+
 ### Edit these settings.
 BLOG_NAME="bssg blog"
 AUTHOR_NAME="name"
-BASE_URL="localhost:8080/"
+BASE_URL="localhost:8080/sample/"
 
 LANG="en"
 
@@ -57,11 +68,6 @@ make_style_css() {
 
 # Make html that comes Before the CONTENS
 make_before() {
-  # Remove slash in BASE_URL
-  if [[ "$BASE_URL" == */ ]]; then
-    BASE_URL="${BASE_URL%/}"
-  fi
-
   local OUTPUT="<!DOCTYPE html>
 <html lang=$LANG>
 <head>
@@ -85,26 +91,32 @@ make_before() {
     <h3><a href=\"$BASE_URL\">$BLOG_NAME</a></h3>
     <nav>
       <ul>
-        <li><a href=\"$BASE_URL/posts/\">Posts</a></li>
-        <li><a href=\"$BASE_URL/tags/\">Tags</a></li>
+        <li><a href=\"$BASE_URL/all-posts.html\">Posts</a></li>
+        <li><a href=\"$BASE_URL/all-tags.html\">Tags</a></li>
       </ul>
     </nav>
   </header>
   <article>
     <header>
-      <h1>$TITLE</h1>
-      <p>Written in $DATE</p>
-"
+      <h1>$TITLE</h1>"
 
   if [ -n "$LASTMOD" ]; then
-    OUTPUT+="      <p>Updated in $LASTMOD</p>"
+    OUTPUT+="
+      <p>Written in $DATE</p>"
+  fi
+
+  if [ -n "$LASTMOD" ]; then
+    OUTPUT+="
+      <p>Updated in $LASTMOD</p>"
   fi
   
   if [ -n "$LASTMOD" ]; then
-    OUTPUT+="      <p>Tags: $TAGS</p>"
+    OUTPUT+="
+      <p>Tags: $TAGS</p>"
   fi
   
-  OUTPUT+="    </header>
+  OUTPUT+="
+    </header>
     <main>"
 
   echo "$OUTPUT"
@@ -112,14 +124,28 @@ make_before() {
 
 # Make html that comes After the CONTENTS
 make_after() {
-  echo "    </main>
-    <footer>
-      <p>Generated with $_SCRIPT_NAME</p>
-    </footer>
+  echo "
+    </main>
   </article>
+  <footer>
+    <p>Generated with <a href=\"${_SCRIPT_SITE}\">${_SCRIPT_NAME}</a></p>
+  </footer>
 </body>"
 }
 
+
+# Fix config that user make mistake
+fix_config() {
+  # Remove slash in BASE_URL
+  if [[ "$BASE_URL" == */ ]]; then
+    BASE_URL="${BASE_URL%/}"
+  fi
+
+  # Add https in BASE_URL
+  if [[ "$BASE_URL" != http* ]]; then
+    BASE_URL="http://$BASE_URL"
+  fi
+}
 
 # Markdown to HTML converter
 md2html() {
@@ -429,9 +455,9 @@ echo "$MOD"
 
 
 
-# Make structure.
+# Make folder structure.
 make_directory() {
-  local folders=("resouces" "posts" "tags" "write" "assets" "assets/images" "assets/fonts" "assets/css" "assets/js" "assets/etc")
+  local folders=("resouces" "posts" "tags" "write" "assets")
 
   for folder in "${folders[@]}"; do
     if [ ! -d "$folder" ]; then
@@ -443,6 +469,7 @@ make_directory() {
 }
 
 # Make reusable resources.
+#
 # Resource: style.css
 # If there is resources, then ignore.
 make_resource() {
@@ -455,7 +482,10 @@ make_resource() {
 # It contain: 
 # string file path, yyyymmddhhmmss update date
 make_list() {  
-  FILELIST=$(find ./write/ -type f -name "*.md" -exec sh -c 'for file; do echo "$file $(date -d @"$(stat --format="%Y" "$file")" +%Y%m%d%H%M%S)"; done' sh {} + | sort -k2,2r)
+  FILELIST=$(find ./write/ -type f -name "*.md" -exec sh -c 'for file; do
+    safe_file_name=$(echo "$file" | tr " " "_")
+    echo "$safe_file_name $(date -d @"$(stat --format="%Y" "$file")" +%Y%m%d%H%M%S)"; 
+   done' sh {} + | sort -k2,2r)
 }
 
 # Find new file
@@ -550,8 +580,12 @@ frontmatter() {
   TAGS=$(echo "$FRONTMATTER" | awk -F': ' '/^tags:/{print $2}')
   DRAFT=$(echo "$FRONTMATTER" | awk -F': ' '/^draft:/{print $2}')
 
-  if [ -n DATE ]; then
-    DATE="20${UPDATED:0:2}-${UPDATED:2:2}-${UPDATED:4:2}"
+  if [ -z "$DATE" ]; then
+    DATE=$(date +"%Y-%m-%d")
+  fi
+  
+  if [ -z "$TITLE" ]; then
+    TITLE="New post $DATE"
   fi
 }
 
@@ -585,6 +619,72 @@ converting() {
   echo -e "  $BLUE+[$STATUS]$RESET $NEW_PATH"
 }
 
+# Make all-posts.html
+#
+# List of every posts link
+make_all_posts() {
+  local ALL_LINK=""
+
+  while IFS=' ' read -r FILE_PATH UPDATED; do
+    reset_var
+    frontmatter $FILE_PATH
+    NEW_PATH=${FILE_PATH/write/posts}
+    NEW_PATH=${NEW_PATH/.md/.html}
+
+    if [ "$DRAFT" != "true" ] && [ "$DRAFT" != "True" ] && [ "$DRAFT" != "TRUE" ] && [ "$DRAFT" != "1" ]; then
+      ALL_LINK+="$DATE $BASE_URL${NEW_PATH:1} $TITLE
+"
+    fi
+  done < filelist.txt
+
+  # Sort by reverse chronical
+  ALL_LINK=$(echo "$ALL_LINK" | grep -v '^$' | sort -k1,1r)
+
+  # Group the posts by year-month
+  local TEMP_DATE=""
+  local TEMP_ALL_LINK=""
+
+  while IFS= read -r -a line; do
+    DATE="${line[0]}"
+    URL="${line[1]}"
+    TITLE="${line[@]:2}"
+  
+    if [ -z "$TEMP_DATE" ]; then
+      TEMP_DATE="${DATE:0:7}"
+    elif [ "$TEMP_DATE" != "${DATE:0:7}" ]; then
+      TEMP_ALL_LINK+=$'\n'
+      TEMP_DATE="${DATE:0:7}"
+    fi
+    TEMP_ALL_LINK+="$DATE $URL $TITLE"$'\n'
+  done <<< "$ALL_LINK"
+  
+  # Wraping with html tag
+  ALL_LINK=$(echo "$TEMP_ALL_LINK" | sed -E '
+    s/^([0-9]{4}-[0-9]{2})(-[0-9]{2}) ([^ ]*) (.*)$/<li>\1<ul>\n<li>\1\2 <a href="\3">\4<\/a><\/li>\n<\/ul><\/li>/
+  ')
+  ALL_LINK=$(echo "$ALL_LINK" | sed -E '
+    /^<\/ul><\/li>$/ {
+      N
+      /<\/ul><\/li>\n<li>.*<ul>/d
+    }
+  ')
+  
+  reset_var
+  TITLE="All Posts"
+  DESCRIPTION="Every post links of $BLOG_NAME"
+  NEW_PATH="./all-posts.html"
+
+  make_before > all-posts.html
+  {
+    echo "<ul id=\"all-posts\">"
+    echo "$ALL_LINK"
+    echo "</ul>" 
+  } >> all-posts.html
+  make_after >> all-posts.html
+
+  echo -e "$BLUE*$RESET Make all-posts.html"
+}
+
 # Command line help text
 show_help() {
   echo -e "$GREEN$_SCRIPT_NAME$RESET
@@ -599,6 +699,7 @@ ${BLUE}Arguments${RESET}
 if [[ "$#" -eq 0 || "$1" == "help" || "$1" == "h" ]]; then
   show_help
 elif [[ "$1" == "build" || "$1" == "b" ]]; then
+  fix_config
   make_directory
   make_resource
   make_list
@@ -622,6 +723,7 @@ elif [[ "$1" == "build" || "$1" == "b" ]]; then
   done <<< "$FILELIST"
 
   update_file_list
+  make_all_posts
   
   echo -e "Done in $YELLOW$(( ($(date +%s%N) - start_time) / 1000000 ))${RESET}ms!"
 else
