@@ -7,10 +7,21 @@ BLOG_NAME="bssg blog"
 AUTHOR_NAME="name"
 BASE_URL="localhost:8080/sample/"
 
+### <html lang="$LANG">
 LANG="en"
 
+### Write your profile in html string
+### This string will be included in homepage of your blog
+PROFILE="<h1>Welcome to bssg blog</h1>
+<p>I am a banana!!</p>
+"
+
+#
+#
 # If you don't know what you're doing,
 # do not edit the code below.
+#
+#
 
 # script info
 _SCRIPT_NAME="Bash static site generator"
@@ -27,6 +38,7 @@ RESET='\e[0m'
 
 # Some variables for scripting
 FILELIST=""
+ALL_POSTS=""
 FILESTATUS=""
 CONTENTS=""
 RESULTS=""
@@ -59,7 +71,7 @@ make_style_css() {
 # Make html that comes Before the CONTENS
 make_before() {
   local OUTPUT="<!DOCTYPE html>
-<html lang=$LANG>
+<html lang=\"$LANG\">
 <head>
   <meta charset=\"UTF-8\">
   <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
@@ -545,9 +557,6 @@ get_file_stat() {
 remove_file() {
   local FILE_PATH="$1"
   
-  NEW_PATH=${FILE_PATH/write/posts}
-  NEW_PATH=${NEW_PATH/.md/.html}
-
   rm "$NEW_PATH"
 
   echo -e "  $RED-[Remove]$RESET $NEW_PATH"
@@ -595,8 +604,6 @@ converting() {
   local STATUS=""
 
   # Make directory
-  NEW_PATH=${FILE_PATH/write/posts}
-  NEW_PATH=${NEW_PATH/.md/.html}
   mkdir -p "$(dirname "$NEW_PATH")"
 
   # Convert markdown to html text
@@ -622,27 +629,14 @@ converting() {
 #
 # List of every posts link
 make_all_posts() {
-  local ALL_LINK=""
+  local TEMP_DATE=""
+  local TEMP_ALL_POSTS=""
+  local HTML_ALL_POSTS
 
-  while IFS=' ' read -r FILE_PATH UPDATED; do
-    reset_var
-    frontmatter $FILE_PATH
-    NEW_PATH=${FILE_PATH/write/posts}
-    NEW_PATH=${NEW_PATH/.md/.html}
-
-    if [ "$DRAFT" != "true" ] && [ "$DRAFT" != "True" ] && [ "$DRAFT" != "TRUE" ] && [ "$DRAFT" != "1" ]; then
-      ALL_LINK+="$DATE $BASE_URL${NEW_PATH:1} $TITLE
-"
-    fi
-  done < filelist.txt
-
-  # Sort by reverse chronical
-  ALL_LINK=$(echo "$ALL_LINK" | grep -v '^$' | sort -k1,1r)
+  # Sort All_POSTS by reverse chrononical
+  ALL_POSTS=$(echo "$ALL_POSTS" | grep -v '^$' | sort -k1,1r)
 
   # Group the posts by year-month
-  local TEMP_DATE=""
-  local TEMP_ALL_LINK=""
-
   while IFS= read -r -a line; do
     DATE="${line[0]}"
     URL="${line[1]}"
@@ -651,17 +645,17 @@ make_all_posts() {
     if [ -z "$TEMP_DATE" ]; then
       TEMP_DATE="${DATE:0:7}"
     elif [ "$TEMP_DATE" != "${DATE:0:7}" ]; then
-      TEMP_ALL_LINK+=$'\n'
+      TEMP_ALL_POSTS+=$'\n'
       TEMP_DATE="${DATE:0:7}"
     fi
-    TEMP_ALL_LINK+="$DATE $URL $TITLE"$'\n'
-  done <<< "$ALL_LINK"
+    TEMP_ALL_POSTS+="$DATE $URL $TITLE"$'\n'
+  done <<< "$ALL_POSTS"
   
   # Wraping with html tag
-  ALL_LINK=$(echo "$TEMP_ALL_LINK" | sed -E '
+  HTML_ALL_POSTS=$(echo "$TEMP_ALL_POSTS" | sed -E '
     s/^([0-9]{4}-[0-9]{2})(-[0-9]{2}) ([^ ]*) (.*)$/<li>\1<ul>\n<li>\1\2 <a href="\3">\4<\/a><\/li>\n<\/ul><\/li>/
   ')
-  ALL_LINK=$(echo "$ALL_LINK" | sed -E '
+  HTML_ALL_POSTS=$(echo "$HTML_ALL_POSTS" | sed -E '
     /^<\/ul><\/li>$/ {
       N
       /<\/ul><\/li>\n<li>.*<ul>/d
@@ -676,7 +670,7 @@ make_all_posts() {
   make_before > all-posts.html
   {
     echo "<ul id=\"all-posts\">"
-    echo "$ALL_LINK"
+    echo "$HTML_ALL_POSTS"
     echo "</ul>" 
   } >> all-posts.html
   make_after >> all-posts.html
@@ -711,15 +705,24 @@ elif [[ "$1" == b* || "$1" == r* ]]; then
     reset_var
     get_file_stat $FILE_PATH $UPDATED
 
-    if [[ "$FILESTATUS" = "U" || "$FILESTATUS" = "N" || ( "$FILESTATUS" = "C" && "$1" = r* ) ]]; then
-      
-      frontmatter $FILE_PATH
-      # If not  draft
-      if [ "$DRAFT" != "true" ] && [ "$DRAFT" != "True" ] && [ "$DRAFT" != "TRUE" ] && [ "$DRAFT" != "1" ]; then
-        converting $FILE_PATH
-      fi
-    elif [ "$FILESTATUS" = "R" ]; then
+    NEW_PATH=${FILE_PATH/write/posts}
+    NEW_PATH=${NEW_PATH/.md/.html}
+    
+    if [ "$FILESTATUS" = "R" ]; then
       remove_file "$FILE_PATH"
+    else
+      frontmatter $FILE_PATH
+
+      # Check is drafted
+      if [ "$DRAFT" != "true" ] && [ "$DRAFT" != "True" ] && [ "$DRAFT" != "TRUE" ] && [ "$DRAFT" != "1" ]; then
+        ALL_POSTS+="$DATE $BASE_URL${NEW_PATH:1} $TITLE"$'\n'
+        
+        # Build new updated posts
+        # Rebuild every posts
+        if [[ "$FILESTATUS" = "U" || "$FILESTATUS" = "N" || ( "$FILESTATUS" = "C" && "$1" = r* ) ]]; then
+          converting $FILE_PATH
+        fi
+      fi
     fi
   done <<< "$FILELIST"
 
