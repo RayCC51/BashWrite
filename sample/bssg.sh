@@ -10,12 +10,14 @@ BASE_URL="localhost:8080/sample/"
 ### <html lang="$LANG">
 LANG="en"
 
-### Write your profile in html string
-### This string will be included in homepage of your blog
+### Write your profile in html string.
+### This string will be included in homepage of your blog.
 PROFILE="<h1>Welcome to bssg blog</h1>
 <p>I am a banana!!</p>
 "
 
+### How many recent posts show in homepage
+RECENT_POSTS_COUNT=5
 #
 #
 # If you don't know what you're doing,
@@ -25,7 +27,7 @@ PROFILE="<h1>Welcome to bssg blog</h1>
 
 # script info
 _SCRIPT_NAME="Bash static site generator"
-_SCRIPT_VERSION="0.6"
+_SCRIPT_VERSION="0.7"
 _SCRIPT_FILE_NAME="bssg.sh"
 _SCRIPT_SITE="https://github.com/raycc51/bssg"
 
@@ -112,7 +114,7 @@ make_before() {
       <p class=\"meta\" id=\"meta-lastmod\">Updated in $LASTMOD</p>"
   fi
   
-  if [ -n "$LASTMOD" ]; then
+  if [ -n "$TAGS" ]; then
     OUTPUT+="
       <p class=\"meta\" id=\"meta-tags\">Tags: $TAGS</p>"
   fi
@@ -478,7 +480,7 @@ make_directory() {
   echo -e "$BLUE*$RESET Create directories"
 }
 
-# Make reusable resources.
+# Make imutable resources.
 #
 # Resource: style.css
 # If there is resources, then ignore.
@@ -631,7 +633,7 @@ converting() {
 make_all_posts() {
   local TEMP_DATE=""
   local TEMP_ALL_POSTS=""
-  local HTML_ALL_POSTS
+  local HTML_ALL_POSTS=""
 
   # Sort All_POSTS by reverse chrononical
   ALL_POSTS=$(echo "$ALL_POSTS" | grep -v '^$' | sort -k1,1r)
@@ -675,7 +677,54 @@ make_all_posts() {
   } >> all-posts.html
   make_after >> all-posts.html
 
-  echo -e "$BLUE*$RESET Make all-posts.html"
+  echo -e "$BLUE*$RESET Make  all-posts.html"
+}
+
+# Make index.html
+#
+# It contains: PROFILE, resent posts
+make_index_html() {
+  local RECENT_POSTS=$(echo "$ALL_POSTS" | head -n "$RECENT_POSTS_COUNT")
+  local HTML_RECENT_POSTS="<div id=\"recent-posts\">
+  <h2>Recent posts</h2>
+  <ul>"
+
+  while IFS=' ' read -r _DATE _NEW_PATH _TITLE; do
+    _PATH=$(echo "${_NEW_PATH}" | awk -F"$BASE_URL" '{print $2}')
+    _PATH=".$_PATH"
+    
+    _DESCRIPTION=$(awk -F'"' '/description/{print $4; exit}' ${_PATH})
+
+    HTML_RECENT_POSTS+="
+<li>
+  <p><span class=\"recent-date\">${_DATE}</span> <a href=\"${_NEW_PATH}\">${_TITLE}</a></p>
+"
+    if [ -n "$_DESCRIPTION" ]; then 
+      HTML_RECENT_POSTS+="  <p class=\"recent-description\">${_DESCRIPTION}</p>
+"
+    fi
+    HTML_RECENT_POSTS+="</li>
+"
+    
+  done <<< "$RECENT_POSTS"
+  
+  HTML_RECENT_POSTS+="
+  </ul>
+</div>"
+
+  reset_var
+  TITLE="$BLOG_NAME"
+  DESCRIPTION="$AUTHOR_NAME\'s $BLOG_NAME"
+  NEW_PATH="./index.html"
+  
+  make_before > index.html
+  echo "<div id=\"profile\">" >> index.html
+  echo "$PROFILE" >> index.html
+  echo "</div>" >> index.html
+  echo "$HTML_RECENT_POSTS" >> index.html
+  make_after >> index.html
+
+  echo -e "$BLUE*$RESET Make  index.html"
 }
 
 # Command line help text
@@ -703,7 +752,7 @@ elif [[ "$1" == b* || "$1" == r* ]]; then
   echo -e "$BLUE*$RESET Converting..."
   while IFS=' ' read -r FILE_PATH UPDATED; do
     reset_var
-    get_file_stat $FILE_PATH $UPDATED
+    get_file_stat "$FILE_PATH" "$UPDATED"
 
     NEW_PATH=${FILE_PATH/write/posts}
     NEW_PATH=${NEW_PATH/.md/.html}
@@ -711,7 +760,7 @@ elif [[ "$1" == b* || "$1" == r* ]]; then
     if [ "$FILESTATUS" = "R" ]; then
       remove_file "$FILE_PATH"
     else
-      frontmatter $FILE_PATH
+      frontmatter "$FILE_PATH"
 
       # Check is drafted
       if [ "$DRAFT" != "true" ] && [ "$DRAFT" != "True" ] && [ "$DRAFT" != "TRUE" ] && [ "$DRAFT" != "1" ]; then
@@ -720,7 +769,7 @@ elif [[ "$1" == b* || "$1" == r* ]]; then
         # Build new updated posts
         # Rebuild every posts
         if [[ "$FILESTATUS" = "U" || "$FILESTATUS" = "N" || ( "$FILESTATUS" = "C" && "$1" = r* ) ]]; then
-          converting $FILE_PATH
+          converting "$FILE_PATH"
         fi
       fi
     fi
@@ -728,6 +777,7 @@ elif [[ "$1" == b* || "$1" == r* ]]; then
 
   update_file_list
   make_all_posts
+  make_index_html
   
   echo -e "Done in $YELLOW$(( ($(date +%s%N) - start_time) / 1000000 ))${RESET}ms!"
 else

@@ -11,68 +11,60 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 - [x] make front matter
 - [x] make file list
 - [x] make arguments
-- [ ] make posts, tags page
+- [ ] make tags page
+- [x] make posts page
 - [ ] error handling
 - [ ] make doc
 - [ ] make rss, sitemap, robots
 
-## Arguments
+## Quick start
 
-`./bssg.sh` = help
+1. Download `bssg.sh` from [Release page]().
+2. Make your blog directory. 
+3. Move `bssg.sh` to your blog directory. 
+4. Open `bssg.sh`, edit config data and save the file.
+5. Open *terminal*, change directory to your blog path and run `./bssg.sh b`
 
-`./bssg.sh help` = help
+## Commends
 
-`./bssg.sh build` = build new posts
+`./bssg.sh [Argument]`
 
-## Directory
+[Argument] =
+    - help
+    - h
+        Show help dialog. 
+    
+    - build
+    - b
+        Build new, updated posts. 
+    
+    - rebuild
+    - r
+        Rebuild every posts. 
 
-### Clone from repo
+
+## About directory structure
+
+### Download from repo
 
 - bssg.sh
 - readme.md
-- .github/
+- .github/ - Download this file if you use github pages.
 
-### Generated: Do not edit
-
-- index.html
-- posts.html - Contain every posts.
-- tags.html - Contain every tags.
-- style.css
-- sitemap.xml
-- robots.txt
-- feed.rss
-- filelist.txt - Contain list of posts, and modified date.
+### Generated automatically: Do not edit these files
 
 - posts/
 - tags/
+- all-posts.html - Contain every posts.
+- all-tags.html - Contain every tags.
+- filelist.txt - Contain list of posts, and modified date.
+- index.html
+- robots.txt
+- rss.xml
+- style.css
+- sitemap.xml
 
-### Generated: User
+### Generated autumatically: User edit these files
 
-- write/
+- write/ - Write your markdowns in this folder.
 - assets/
-  - images/
-  - fonts/
-  - css/
-  - js/
-  - etc/
-
-## Workflow
-
-### Install
-
-1. Clone this repo
-2. Open *bssg.sh* file and edit config
-
-### New post
-
-1. Create new markdown file in *write/*
-2. `./bssg.sh build`
-
-### Edit post
-
-1. Edit markdown file in *write/*
-2. `./bssg.sh build`
-
-### Delete post
-
-1. Remove markdown file in *write/*
