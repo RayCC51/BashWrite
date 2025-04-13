@@ -15,7 +15,8 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 - [x] make posts page
 - [ ] error handling
 - [ ] make doc
-- [ ] make rss, sitemap, robots
+- [x] make rss, sitemap, robots
+- [ ] style.css
 
 ## Quick start
 

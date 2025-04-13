@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap-image/1.1">
+
+<url>
+  <loc>http://localhost:8080/sample</loc>
+  <lastmod>2025-04-13</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>1.0</priority>
+</url>
+
+<url>
+  <loc>http://localhost:8080/sample/all-posts.html</loc>
+  <lastmod>2025-04-13</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.8</priority>
+</url>
+
+<url>
+  <loc>http://localhost:8080/sample/all-tags.html</loc>
+  <lastmod>2025-04-13</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.4</priority>
+</url>
+
+<url>
+  <loc>http://localhost:8080/sample/posts/</loc>
+  <lastmod>2025-04-13</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.9</priority>
+</url>
+
+<url>
+  <loc>http://localhost:8080/sample/tags/</loc>
+  <lastmod>2025-04-13</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.3</priority>
+</url>
+
+</urlset>

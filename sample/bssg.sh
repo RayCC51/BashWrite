@@ -27,7 +27,7 @@ RECENT_POSTS_COUNT=5
 
 # script info
 _SCRIPT_NAME="Bash static site generator"
-_SCRIPT_VERSION="0.7"
+_SCRIPT_VERSION="0.8"
 _SCRIPT_FILE_NAME="bssg.sh"
 _SCRIPT_SITE="https://github.com/raycc51/bssg"
 
@@ -68,6 +68,8 @@ reset_var() {
 # Make style.css
 make_style_css() {
   echo 'html{padding:0;margin:0;}' > style.css
+
+  echo -e "  $BLUE+$RESET style.css"
 }
 
 # Make html that comes Before the CONTENS
@@ -481,13 +483,67 @@ make_directory() {
   echo -e "$BLUE*$RESET Create directories"
 }
 
+# Make robots.txt
+make_robots_txt() {
+  echo "User-agent: *
+Disallow:" >> robots.txt
+
+  echo -e "  $BLUE+$RESET robots.txt"
+}
+
+# Make sitemap.xml
+make_sitemap_xml() {
+  echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap-image/1.1\">
+
+<url>
+  <loc>$BASE_URL</loc>
+  <lastmod>$(date +"%Y-%m-%d")</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>1.0</priority>
+</url>
+
+<url>
+  <loc>$BASE_URL/all-posts.html</loc>
+  <lastmod>$(date +"%Y-%m-%d")</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.8</priority>
+</url>
+
+<url>
+  <loc>$BASE_URL/all-tags.html</loc>
+  <lastmod>$(date +"%Y-%m-%d")</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.4</priority>
+</url>
+
+<url>
+  <loc>$BASE_URL/posts/</loc>
+  <lastmod>$(date +"%Y-%m-%d")</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.9</priority>
+</url>
+
+<url>
+  <loc>$BASE_URL/tags/</loc>
+  <lastmod>$(date +"%Y-%m-%d")</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.3</priority>
+</url>
+
+</urlset>" > sitemap.xml
+
+  echo -e "  $BLUE+$RESET sitemap.xml"
+}
+
 # Make imutable resources.
 #
-# Resource: style.css
 # If there is resources, then ignore.
 make_resource() {
-  [ -e "style.css" ] || make_style_css
-  echo -e "$BLUE*$RESET Build resources"
+  echo -e "$BLUE*$RESET Make resources..."
+  make_style_css
+  make_robots_txt
+  make_sitemap_xml
 }
 
 # Make markdown file list
@@ -678,7 +734,7 @@ make_all_posts() {
   } >> all-posts.html
   make_after >> all-posts.html
 
-  echo -e "$BLUE*$RESET Create  all-posts.html"
+  echo -e "  $BLUE+$RESET all-posts.html"
 }
 
 # Make rss.xml
@@ -711,7 +767,7 @@ make_rss_xml() {
     echo "</channel>
 </rss>
 " >> rss.xml
-    echo -e "$BLUE*$RESET Create  rss.xml"
+    echo -e "  $BLUE+$RESET rss.xml"
 
   elif [ "$1" = "A" ]; then
     local title="$2"
@@ -781,7 +837,7 @@ make_index_html() {
   echo "$HTML_RECENT_POSTS" >> index.html
   make_after >> index.html
 
-  echo -e "$BLUE*$RESET Create  index.html"
+  echo -e "  $BLUE+$RESET index.html"
 }
 
 # Command line help text
@@ -801,8 +857,14 @@ if [[ "$#" -eq 0 || "$1" == h* ]]; then
   show_help
 elif [[ "$1" == b* || "$1" == r* ]]; then
   fix_config
-  make_directory
-  make_resource
+
+  # Build default files.
+  # When rebuild or there is no file.
+  if [[ "$1" == r* ]] || [[ ! -f "style.css" ]] || [[ ! -f "robots.txt" ]] || [[ ! -f "sitemap.xml" ]]; then
+    make_directory
+    make_resource
+  fi
+  
   make_list
   find_new_files
 
@@ -833,6 +895,8 @@ elif [[ "$1" == b* || "$1" == r* ]]; then
   done <<< "$FILELIST"
 
   update_file_list
+  
+  echo -e "$BLUE*$RESET Make resources..."
   make_all_posts
   make_index_html
   
