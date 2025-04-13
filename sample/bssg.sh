@@ -10,14 +10,18 @@ BASE_URL="localhost:8080/sample/"
 ### <html lang="$LANG">
 LANG="en"
 
-### Write your profile in html string.
+### Write your profile in markdown string.
 ### This string will be included in homepage of your blog.
-PROFILE="<h1>Welcome to bssg blog</h1>
-<p>I am a banana!!</p>
+PROFILE="
+# Welcome to my blog
+
+I am a banana!!
 "
 
 ### How many recent posts show in homepage
 RECENT_POSTS_COUNT=5
+
+
 #
 #
 # If you don't know what you're doing,
@@ -832,7 +836,7 @@ make_index_html() {
   
   make_before > index.html
   echo "<div id=\"profile\">" >> index.html
-  echo "$PROFILE" >> index.html
+  md2html "$PROFILE" >> index.html
   echo "</div>" >> index.html
   echo "$HTML_RECENT_POSTS" >> index.html
   make_after >> index.html
