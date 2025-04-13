@@ -5,7 +5,7 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 ## TODO
 
 - [x] make directory
-- [ ] make config
+- [x] make config
 - [x] make default html, css
 - [x] make md to html converter
 - [x] make front matter

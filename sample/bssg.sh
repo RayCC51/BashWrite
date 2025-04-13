@@ -4,23 +4,29 @@ start_time=$(date +%s%N)
 
 ### Edit these settings.
 BLOG_NAME="bssg blog"
-AUTHOR_NAME="name"
-BASE_URL="localhost:8080/sample/"
+AUTHOR_NAME="my name"
+BASE_URL="localhost:8080/"
 
 ### <html lang="$LANG">
 LANG="en"
 
-### Write your profile in markdown string.
-### This string will be included in homepage of your blog.
+### How many recent posts show in homepage
+### Set 0 to hide recent posts.
+RECENT_POSTS_COUNT=5
+
+### Write your profile in Markdown format.
+### This paragraph will be included in the homepage of your blog.
+### Be careful! You need to escape some letters: \\ \' \" \$
 PROFILE="
 # Welcome to my blog
 
-I am a banana!!
+I am a **banana**!!
 "
 
-### How many recent posts show in homepage
-RECENT_POSTS_COUNT=5
-
+### Write your own HTML code. 
+### This variable will be includes inside the <html><head>Here!</head></html> in every html files.
+### You can add your css or js in this line. 
+CUSTOM_HTML_HEAD=""
 
 #
 #
@@ -31,7 +37,7 @@ RECENT_POSTS_COUNT=5
 
 # script info
 _SCRIPT_NAME="Bash static site generator"
-_SCRIPT_VERSION="0.8"
+_SCRIPT_VERSION="0.9"
 _SCRIPT_FILE_NAME="bssg.sh"
 _SCRIPT_SITE="https://github.com/raycc51/bssg"
 
@@ -95,6 +101,8 @@ make_before() {
   
   <title>$TITLE</title>
   <link rel=\"stylesheet\" href=\"/styles.css\">
+
+  $CUSTOM_HTML_HEAD
 </head>
 <body>
   <header>
@@ -794,6 +802,12 @@ make_rss_xml() {
 #
 # It contains: PROFILE, resent posts
 make_index_html() {
+  local isShowRecent=true
+  if [ "$RECENT_POSTS_COUNT" -eq 0]; then
+    RECENT_POSTS_COUNT=5
+    isShowRecent=false
+  fi
+  
   local RECENT_POSTS=$(echo "$ALL_POSTS" | head -n "$RECENT_POSTS_COUNT")
   local HTML_RECENT_POSTS="<div id=\"recent-posts\">
   <h2>Recent posts</h2>
@@ -807,16 +821,18 @@ make_index_html() {
     
     _DESCRIPTION=$(awk -F'"' '/description/{print $4; exit}' ${_PATH})
 
-    HTML_RECENT_POSTS+="
+    if [ "$isShowRecent" = true ]; then
+      HTML_RECENT_POSTS+="
 <li>
   <p><span class=\"recent-date\">${_DATE}</span> <a href=\"${_NEW_PATH}\">${_TITLE}</a></p>
 "
-    if [ -n "$_DESCRIPTION" ]; then 
-      HTML_RECENT_POSTS+="  <p class=\"recent-description\">${_DESCRIPTION}</p>
+      if [ -n "$_DESCRIPTION" ]; then 
+        HTML_RECENT_POSTS+="  <p class=\"recent-description\">${_DESCRIPTION}</p>
+"
+      fi
+      HTML_RECENT_POSTS+="</li>
 "
     fi
-    HTML_RECENT_POSTS+="</li>
-"
 
     # RSS
     make_rss_xml "A" "$_TITLE" "$_NEW_PATH" "$_DESCRIPTION" "$_DATE"
@@ -826,6 +842,7 @@ make_index_html() {
   HTML_RECENT_POSTS+="
   </ul>
 </div>"
+
 
   make_rss_xml "E"
 
@@ -838,7 +855,11 @@ make_index_html() {
   echo "<div id=\"profile\">" >> index.html
   md2html "$PROFILE" >> index.html
   echo "</div>" >> index.html
-  echo "$HTML_RECENT_POSTS" >> index.html
+  
+  if [ "$isShowRecent" = true ]; then
+    echo "$HTML_RECENT_POSTS" >> index.html
+  fi
+  
   make_after >> index.html
 
   echo -e "  $BLUE+$RESET index.html"
