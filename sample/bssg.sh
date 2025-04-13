@@ -1,16 +1,6 @@
 #!/bin/bash
 start_time=$(date +%s%N)
 
-#
-#
-# Frontmatter has bug
-# written in 2000-01-
-# written in 2020-25-04
-# like this. 
-# and other front matter is not working
-# maybe only title working
-#
-#
 
 ### Edit these settings.
 BLOG_NAME="bssg blog"
@@ -621,6 +611,8 @@ converting() {
     STATUS="New"
   elif [ "$FILESTATUS" = "U" ]; then
     STATUS="Update"
+  elif [ "$FILESTATUS" = "U" ]; then
+    STATUS="Rebuild"
   fi
   
   echo -e "  $BLUE+[$STATUS]$RESET $NEW_PATH"
@@ -697,15 +689,17 @@ show_help() {
   echo -e "$GREEN$_SCRIPT_NAME$RESET
 ${BLUE}version${RESET}: $_SCRIPT_VERSION
 
-${BLUE}Arguments${RESET}
-  ${YELLOW}./${_SCRIPT_FILE_NAME} help${RESET}    Show this text.
-  ${YELLOW}./${_SCRIPT_FILE_NAME} build${RESET}   Build website. "
+Commands: ${YELLOW}./$_SCRIPT_FILE_NAME${RESET} [Argument]
+  [Argument] =
+    ${YELLOW}help${RESET}      : Show this dialog.
+    ${YELLOW}build${RESET}     : Build new, updated posts.
+    ${YELLOW}rebuild${RESET}   : Rebuild every posts."
 }
 
 # Main code
-if [[ "$#" -eq 0 || "$1" == "help" || "$1" == "h" ]]; then
+if [[ "$#" -eq 0 || "$1" == h* ]]; then
   show_help
-elif [[ "$1" == "build" || "$1" == "b" ]]; then
+elif [[ "$1" == b* || "$1" == r* ]]; then
   fix_config
   make_directory
   make_resource
@@ -717,7 +711,7 @@ elif [[ "$1" == "build" || "$1" == "b" ]]; then
     reset_var
     get_file_stat $FILE_PATH $UPDATED
 
-    if [[ "$FILESTATUS" = "U" || "$FILESTATUS" = "N" ]]; then
+    if [[ "$FILESTATUS" = "U" || "$FILESTATUS" = "N" || ( "$FILESTATUS" = "C" && "$1" = r* ) ]]; then
       
       frontmatter $FILE_PATH
       # If not  draft
@@ -735,7 +729,5 @@ elif [[ "$1" == "build" || "$1" == "b" ]]; then
   echo -e "Done in $YELLOW$(( ($(date +%s%N) - start_time) / 1000000 ))${RESET}ms!"
 else
   echo -e "$RED! Invaild argument$RESET
-$BLUE* Valid Arguments$RESET
-  ${YELLOW}./$_SCRIPT_FILE_NAME help${RESET}
-  ${YELLOW}./$_SCRIPT_FILE_NAME build${RESET}"
+If you need help, $YELLOW./$_SCRIPT_FILE_NAME help$RESET "
 fi
