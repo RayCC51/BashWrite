@@ -8,7 +8,7 @@
 
   <meta property="og:title" content="My blog title">
   <meta property="og:description" content="This is discription">
-  <meta property="og:url" content="localhost:8080/posts/fm/frontmatter.html">
+  <meta property="og:url" content="http://localhost:8080/sample/posts/fm/frontmatter.html">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="My blog title">
   <meta name="twitter:description" content="This is discription">
@@ -18,29 +18,29 @@
 </head>
 <body>
   <header>
-    <h3><a href="localhost:8080">bssg blog</a></h3>
+    <h3><a href="http://localhost:8080/sample">bssg blog</a></h3>
     <nav>
       <ul>
-        <li><a href="localhost:8080/posts/">Posts</a></li>
-        <li><a href="localhost:8080/tags/">Tags</a></li>
+        <li><a href="http://localhost:8080/sample/all-posts.html">Posts</a></li>
+        <li><a href="http://localhost:8080/sample/all-tags.html">Tags</a></li>
       </ul>
     </nav>
   </header>
   <article>
     <header>
-      <h1>My blog title</h1>
-
-      <p>Written in 2020-25-04</p>
-      <p>Updated in 2025-12-31</p>
-      <p>Tags: tag1, tag2</p>
+      <h1 class="meta" id="meta-title">My blog title</h1>
+      <p class="meta" id="meta-lastmod">Written in 2025-01-01</p>
+      <p class="meta" id="meta-lastmod">Updated in 2025-12-31</p>
+      <p class="meta" id="meta-tags">Tags: tag1, tag2</p>
     </header>
     <main>
 
 <p>ppp</p>
 <p>ppp</p>
+
     </main>
-    <footer>
-      <p>Generated with Bash static site generator</p>
-    </footer>
   </article>
+  <footer>
+    <p>Generated with <a href="https://github.com/raycc51/bssg">Bash static site generator</a></p>
+  </footer>
 </body>

@@ -8,7 +8,7 @@
 
   <meta property="og:title" content="Markdown sample">
   <meta property="og:description" content="Extended markdown codes">
-  <meta property="og:url" content="localhost:8080/posts/markdown.html">
+  <meta property="og:url" content="http://localhost:8080/sample/posts/markdown.html">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Markdown sample">
   <meta name="twitter:description" content="Extended markdown codes">
@@ -18,18 +18,18 @@
 </head>
 <body>
   <header>
-    <h3><a href="localhost:8080">bssg blog</a></h3>
+    <h3><a href="http://localhost:8080/sample">bssg blog</a></h3>
     <nav>
       <ul>
-        <li><a href="localhost:8080/posts/">Posts</a></li>
-        <li><a href="localhost:8080/tags/">Tags</a></li>
+        <li><a href="http://localhost:8080/sample/all-posts.html">Posts</a></li>
+        <li><a href="http://localhost:8080/sample/all-tags.html">Tags</a></li>
       </ul>
     </nav>
   </header>
   <article>
     <header>
-      <h1>Markdown sample</h1>
-      <p>Written in 2000-0-</p>
+      <h1 class="meta" id="meta-title">Markdown sample</h1>
+      <p class="meta" id="meta-lastmod">Written in 2025-04-11</p>
     </header>
     <main>
 
@@ -345,9 +345,10 @@ foot[^1] note[^note] sup a
 
 [^note]: long
 </code></pre>
+
     </main>
-    <footer>
-      <p>Generated with Bash static site generator</p>
-    </footer>
   </article>
+  <footer>
+    <p>Generated with <a href="https://github.com/raycc51/bssg">Bash static site generator</a></p>
+  </footer>
 </body>

@@ -88,21 +88,21 @@ make_before() {
   </header>
   <article>
     <header>
-      <h1>$TITLE</h1>"
+      <h1 class=\"meta\" id=\"meta-title\">$TITLE</h1>"
 
-  if [ -n "$LASTMOD" ]; then
+  if [ -n "$DATE" ]; then
     OUTPUT+="
-      <p>Written in $DATE</p>"
+      <p class=\"meta\" id=\"meta-lastmod\">Written in $DATE</p>"
   fi
 
   if [ -n "$LASTMOD" ]; then
     OUTPUT+="
-      <p>Updated in $LASTMOD</p>"
+      <p class=\"meta\" id=\"meta-lastmod\">Updated in $LASTMOD</p>"
   fi
   
   if [ -n "$LASTMOD" ]; then
     OUTPUT+="
-      <p>Tags: $TAGS</p>"
+      <p class=\"meta\" id=\"meta-tags\">Tags: $TAGS</p>"
   fi
   
   OUTPUT+="
@@ -611,7 +611,7 @@ converting() {
     STATUS="New"
   elif [ "$FILESTATUS" = "U" ]; then
     STATUS="Update"
-  elif [ "$FILESTATUS" = "U" ]; then
+  elif [ "$FILESTATUS" = "C" ]; then
     STATUS="Rebuild"
   fi
   
