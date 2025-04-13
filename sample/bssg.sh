@@ -132,6 +132,7 @@ make_after() {
     </main>
   </article>
   <footer>
+    <p>© $(date +%Y) ${AUTHOR_NAME}</p>
     <p>Generated with <a href=\"${_SCRIPT_SITE}\">${_SCRIPT_NAME}</a></p>
   </footer>
 </body>"
@@ -677,7 +678,56 @@ make_all_posts() {
   } >> all-posts.html
   make_after >> all-posts.html
 
-  echo -e "$BLUE*$RESET Make  all-posts.html"
+  echo -e "$BLUE*$RESET Create  all-posts.html"
+}
+
+# Make rss.xml
+#
+# Using rss 2.0
+# Depend on recent post in make_index_html()
+# So rss contain RECENT_POST_COUNT posts only
+#
+# $1: status: "I"nit rss, "E"nd file, "A"dd item
+# $2: title
+# $3: page link http://.../...html
+# $4: description
+# $5: pubDate yyyy-mm-dd
+make_rss_xml() {
+  if [ "$1" = "I" ]; then
+    echo "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>
+<rss version=\"2.0\" xmlns:atom=\"http://www.w3.org/2005/Atom\">
+
+<channel>
+  <title>$BLOG_NAME</title>
+  <link>$BASE_URL</link>
+  <description>$AUTHOR_NAME's blog</description>
+  <language>$LANG</language>
+  <pubDate>$(date -u +"%a, %d %b %Y %H:%M:%S +0000")</pubDate>
+  <copyright>© $(date +%Y) $AUTHOR_NAME</copyright>
+  <atom:link href=\"$BASE_URL/rss.xml\" rel=\"self\" type=\"application/rss+xml\" />
+" > rss.xml
+
+  elif [ "$1" = "E" ]; then
+    echo "</channel>
+</rss>
+" >> rss.xml
+    echo -e "$BLUE*$RESET Create  rss.xml"
+
+  elif [ "$1" = "A" ]; then
+    local title="$2"
+    local page_link="$3"
+    local description="$4"
+    local pubDate=$(date -d "$5" +"%a, %d %b %Y 00:00:00 +0000")
+
+    echo "<item>
+  <title>$title</title>
+    <link>$page_link</link>
+    <guid>$page_link</guid>
+    <description>$description</description>
+    <pubDate>$pubDate</pubDate>
+</item>
+" >> rss.xml
+  fi
 }
 
 # Make index.html
@@ -688,6 +738,8 @@ make_index_html() {
   local HTML_RECENT_POSTS="<div id=\"recent-posts\">
   <h2>Recent posts</h2>
   <ul>"
+
+  make_rss_xml "I"
 
   while IFS=' ' read -r _DATE _NEW_PATH _TITLE; do
     _PATH=$(echo "${_NEW_PATH}" | awk -F"$BASE_URL" '{print $2}')
@@ -705,6 +757,9 @@ make_index_html() {
     fi
     HTML_RECENT_POSTS+="</li>
 "
+
+    # RSS
+    make_rss_xml "A" "$_TITLE" "$_NEW_PATH" "$_DESCRIPTION" "$_DATE"
     
   done <<< "$RECENT_POSTS"
   
@@ -712,9 +767,11 @@ make_index_html() {
   </ul>
 </div>"
 
+  make_rss_xml "E"
+
   reset_var
   TITLE="$BLOG_NAME"
-  DESCRIPTION="$AUTHOR_NAME\'s $BLOG_NAME"
+  DESCRIPTION="$AUTHOR_NAME's $BLOG_NAME"
   NEW_PATH="./index.html"
   
   make_before > index.html
@@ -724,7 +781,7 @@ make_index_html() {
   echo "$HTML_RECENT_POSTS" >> index.html
   make_after >> index.html
 
-  echo -e "$BLUE*$RESET Make  index.html"
+  echo -e "$BLUE*$RESET Create  index.html"
 }
 
 # Command line help text

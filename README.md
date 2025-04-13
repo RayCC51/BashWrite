@@ -30,16 +30,12 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 `./bssg.sh [Argument]`
 
 [Argument] =
+
     - help
-    - h
-        Show help dialog. 
-    
+        Show help dialog.   
     - build
-    - b
-        Build new, updated posts. 
-    
+        Build new, updated posts.    
     - rebuild
-    - r
         Rebuild every posts. 
 
 
