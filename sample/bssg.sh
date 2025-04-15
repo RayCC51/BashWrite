@@ -491,15 +491,13 @@ echo "$MOD"
 
 # Make folder structure.
 make_directory() {
-  local folders=("resouces" "posts" "tags" "write" "assets")
+  local folders=("posts" "tags" "write" "assets")
 
   for folder in "${folders[@]}"; do
     if [ ! -d "$folder" ]; then
       mkdir "$folder"
     fi
   done
-
-  echo -e "$BLUE*$RESET Create directories"
 }
 
 # Make robots.txt
@@ -886,47 +884,57 @@ make_tag_pages() {
   local links=""
   local HTML_ALL_POSTS=""
   local MD_PATH=""
+  
+  # Find removed tag
+  local REMOVED_TAG=$(grep -F -x -v -f "tags-list.txt" "tags-list-old.txt")
 
+  if [ -n "$REMOVED_TAG" ]; then
+    while IFS= read -r line; do
+      tag=$(echo "$line" | awk '{print $1}')
+      rm "./tags/$tag.html"
+      grep -v ">$tag</a>" "all-tags.html" > temp_file && mv temp_file "all-tags.html"
+    done <<< "$REMOVED_TAG"
+  fi
+
+  # Find updated or added tag
+  local UPDATED_TAG=$(grep -Fv -x -f <(cat tags-list-old.txt) tags-list.txt)
   reset_var
 
-  # Create tags folder
-  if [ ! -d "./tags" ]; then
-    mkdir ./tags
+  if [ -n "$UPDATED_TAG" ]; then
+    while IFS= read -r line; do
+      tag=$(echo "$line" | awk '{print $1}')
+      links=$(echo "$line" | cut -d' ' -f2-)
+
+      for url in $links; do
+        MD_PATH=${url/posts/write}
+        MD_PATH=${MD_PATH/.html/.md}
+
+        frontmatter "$MD_PATH"
+
+        if [ "$DRAFT" != "true" ] && [ "$DRAFT" != "True" ] && [ "$DRAFT" != "TRUE" ] && [ "$DRAFT" != "1" ]; then
+          url="$BASE_URL${url:1}"
+          HTML_ALL_POSTS+="$DATE $url $TITLE"$'\n'
+        fi
+      done
+
+      HTML_ALL_POSTS=$(group_list "$HTML_ALL_POSTS")
+
+      reset_var
+      TITLE="$tag"
+      DESCRIPTION="$tag tag in $BLOG_NAME"
+      NEW_PATH="./tags/$tag.html"
+  
+      make_before > "$NEW_PATH"
+      {
+        echo "<ul id=\"tag-posts\">"
+        echo "$HTML_ALL_POSTS"
+        echo "</ul>" 
+      } >> "$NEW_PATH"
+      make_after >> "$NEW_PATH"
+    done <<< "$UPDATED_TAG"
+  
+    echo -e "  $BLUE+$RESET tags/*.html"
   fi
-  
-  while IFS= read -r line; do
-    tag=$(echo "$line" | awk '{print $1}')
-    links=$(echo "$line" | cut -d' ' -f2-)
-
-    for url in $links; do
-      MD_PATH=${url/posts/write}
-      MD_PATH=${MD_PATH/.html/.md}
-
-      frontmatter "$MD_PATH"
-
-      if [ "$DRAFT" != "true" ] && [ "$DRAFT" != "True" ] && [ "$DRAFT" != "TRUE" ] && [ "$DRAFT" != "1" ]; then
-        url="$BASE_URL${url:1}"
-        HTML_ALL_POSTS+="$DATE $url $TITLE"$'\n'
-      fi
-    done
-
-    HTML_ALL_POSTS=$(group_list "$HTML_ALL_POSTS")
-
-    reset_var
-    TITLE="$tag"
-    DESCRIPTION="$tag tag in $BLOG_NAME"
-    NEW_PATH="./tags/$tag.html"
-  
-    make_before > "$NEW_PATH"
-    {
-      echo "<ul id=\"tag-posts\">"
-      echo "$HTML_ALL_POSTS"
-      echo "</ul>" 
-    } >> "$NEW_PATH"
-    make_after >> "$NEW_PATH"
-  done < tags-list.txt
-  
-  echo -e "  $BLUE+$RESET tags/*.html"
 }
 
 # Make rss.xml
@@ -1062,11 +1070,18 @@ if [[ "$#" -eq 0 || "$1" == h* ]]; then
   show_help
 elif [[ "$1" == b* || "$1" == r* ]]; then
   fix_config
+  make_directory
+
+  # Copy tags-list.txt for find diffrence
+  if [[ -e tags-list.txt ]]; then
+    cp tags-list.txt tags-list-old.txt
+  else
+    touch tags-list-old.txt
+  fi
 
   # Build default files.
   # When rebuild or there is no file.
   if [[ "$1" == r* ]] || [[ ! -f "style.css" ]] || [[ ! -f "robots.txt" ]] || [[ ! -f "sitemap.xml" ]]; then
-    make_directory
     make_resource
   fi
   
@@ -1112,6 +1127,7 @@ elif [[ "$1" == b* || "$1" == r* ]]; then
   make_all_tags
   make_index_html
   make_tag_pages
+  rm tags-list-old.txt
   
   echo -e "Done in $YELLOW$(( ($(date +%s%N) - start_time) / 1000000 ))${RESET}ms!"
 else
