@@ -37,7 +37,7 @@ CUSTOM_HTML_HEAD=""
 
 # script info
 _SCRIPT_NAME="Bash static site generator"
-_SCRIPT_VERSION="0.9"
+_SCRIPT_VERSION="0.10"
 _SCRIPT_FILE_NAME="bssg.sh"
 _SCRIPT_SITE="https://github.com/raycc51/bssg"
 
@@ -617,10 +617,13 @@ update_tags_list() {
   if [ ! -f "$FILE" ]; then
     touch "$FILE"
   fi
+
+  # Remove useless whitespace. 
+  TAGS=$(echo "$TAGS" | xargs)
+  # Change to lowercase
+  TAGS=$(echo "$TAGS" | tr '[:upper:]' '[:lower:]')
   
   for tag in $TAGS; do 
-    # Change to lowercase
-    tag=$(echo "$tag" | tr '[:upper:]' '[:lower:]')
   
     tag_line=$(grep "^$tag " "$FILE")
 
@@ -709,6 +712,8 @@ remove_file() {
 }
 
 # Find frontmatter and get data
+#
+# $1: markdown file path
 frontmatter() {
   local FILE_PATH="$1"
 
@@ -771,42 +776,55 @@ converting() {
   echo -e "  $BLUE+[$STATUS]$RESET $NEW_PATH"
 }
 
-# Make all-posts.html
+# Convert link list to html format with group by year-month
 #
-# List of every posts link
-make_all_posts() {
+# $1: string variable with format
+#   date url title
+# return: html string
+group_list() {
+  local ORIGIN="$1"
+  local RESULT=""
   local TEMP_DATE=""
-  local TEMP_ALL_POSTS=""
-  local HTML_ALL_POSTS=""
 
-  # Sort All_POSTS by reverse chrononical
-  ALL_POSTS=$(echo "$ALL_POSTS" | grep -v '^$' | sort -k1,1r)
-
+  # Sort by reverse chronicle
+  ORIGIN=$(echo "$ORIGIN" | grep -v '^$' | sort -k1,1r)
+  
   # Group the posts by year-month
   while IFS= read -r -a line; do
     DATE="${line[0]}"
     URL="${line[1]}"
     TITLE="${line[@]:2}"
-  
+    
     if [ -z "$TEMP_DATE" ]; then
       TEMP_DATE="${DATE:0:7}"
     elif [ "$TEMP_DATE" != "${DATE:0:7}" ]; then
-      TEMP_ALL_POSTS+=$'\n'
+      RESULT+=$'\n'
       TEMP_DATE="${DATE:0:7}"
     fi
-    TEMP_ALL_POSTS+="$DATE $URL $TITLE"$'\n'
-  done <<< "$ALL_POSTS"
-  
+      RESULT+="$DATE $URL $TITLE"$'\n'
+  done <<< "$ORIGIN"
+    
   # Wraping with html tag
-  HTML_ALL_POSTS=$(echo "$TEMP_ALL_POSTS" | sed -E '
-    s/^([0-9]{4}-[0-9]{2})(-[0-9]{2}) ([^ ]*) (.*)$/<li>\1<ul>\n<li>\1\2 <a href="\3">\4<\/a><\/li>\n<\/ul><\/li>/
-  ')
-  HTML_ALL_POSTS=$(echo "$HTML_ALL_POSTS" | sed -E '
-    /^<\/ul><\/li>$/ {
-      N
-      /<\/ul><\/li>\n<li>.*<ul>/d
-    }
-  ')
+  RESULT=$(echo "$RESULT" | sed -E '
+      s/^([0-9]{4}-[0-9]{2})(-[0-9]{2}) ([^ ]*) (.*)$/<li>\1<ul>\n<li>\1\2 <a href="\3">\4<\/a><\/li>\n<\/ul><\/li>/
+    ')
+  RESULT=$(echo "$RESULT" | sed -E '
+      /^<\/ul><\/li>$/ {
+        N
+        /<\/ul><\/li>\n<li>.*<ul>/d
+      }
+    ')
+    
+  echo "$RESULT"
+}
+
+# Make all-posts.html
+#
+# List of every posts link
+make_all_posts() {
+  local HTML_ALL_POSTS=""
+
+  HTML_ALL_POSTS=$(group_list "$ALL_POSTS")
   
   reset_var
   TITLE="All Posts"
@@ -828,7 +846,6 @@ make_all_posts() {
 #
 # Contain every tag page link in tags/
 make_all_tags() {
-  local FILE="tags-list.txt"
   local HTML_ALL_TAGS=""
 
   # Find all tags and counts
@@ -837,7 +854,7 @@ make_all_tags() {
     count=$(( $(echo "$line" | wc -w) - 1 ))
       
     HTML_ALL_TAGS+="$first_word $count\n"
-  done < "$FILE"
+  done < tags-list.txt
 
   # Sort tags by abc order
   HTML_ALL_TAGS=$(echo -e "$HTML_ALL_TAGS" | sort)
@@ -846,8 +863,6 @@ make_all_tags() {
   HTML_ALL_TAGS=$(echo "$HTML_ALL_TAGS" | sed -E "
     s|^([^ ]*) ([0-9]*)$|<li><a href=\"$BASE_URL/tags/\1.html\">\1</a> (\2)</li>|
   ")
-
-  # todo
 
   reset_var
   TITLE="All Tags"
@@ -863,6 +878,55 @@ make_all_tags() {
   make_after >> all-tags.html
 
   echo -e "  $BLUE+$RESET all-tags.html"
+}
+
+# Make every tag pages
+make_tag_pages() {
+  local tag=""
+  local links=""
+  local HTML_ALL_POSTS=""
+  local MD_PATH=""
+
+  reset_var
+
+  # Create tags folder
+  if [ ! -d "./tags" ]; then
+    mkdir ./tags
+  fi
+  
+  while IFS= read -r line; do
+    tag=$(echo "$line" | awk '{print $1}')
+    links=$(echo "$line" | cut -d' ' -f2-)
+
+    for url in $links; do
+      MD_PATH=${url/posts/write}
+      MD_PATH=${MD_PATH/.html/.md}
+
+      frontmatter "$MD_PATH"
+
+      if [ "$DRAFT" != "true" ] && [ "$DRAFT" != "True" ] && [ "$DRAFT" != "TRUE" ] && [ "$DRAFT" != "1" ]; then
+        url="$BASE_URL${url:1}"
+        HTML_ALL_POSTS+="$DATE $url $TITLE"$'\n'
+      fi
+    done
+
+    HTML_ALL_POSTS=$(group_list "$HTML_ALL_POSTS")
+
+    reset_var
+    TITLE="$tag"
+    DESCRIPTION="$tag tag in $BLOG_NAME"
+    NEW_PATH="./tags/$tag.html"
+  
+    make_before > "$NEW_PATH"
+    {
+      echo "<ul id=\"tag-posts\">"
+      echo "$HTML_ALL_POSTS"
+      echo "</ul>" 
+    } >> "$NEW_PATH"
+    make_after >> "$NEW_PATH"
+  done < tags-list.txt
+  
+  echo -e "  $BLUE+$RESET tags/*.html"
 }
 
 # Make rss.xml
@@ -1047,6 +1111,7 @@ elif [[ "$1" == b* || "$1" == r* ]]; then
   make_all_posts
   make_all_tags
   make_index_html
+  make_tag_pages
   
   echo -e "Done in $YELLOW$(( ($(date +%s%N) - start_time) / 1000000 ))${RESET}ms!"
 else

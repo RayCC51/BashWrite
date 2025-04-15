@@ -11,12 +11,13 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 - [x] make front matter
 - [x] make file list
 - [x] make arguments
-- [ ] make tags page
+- [x] make tags page
 - [x] make posts page
 - [ ] error handling
 - [ ] make doc
 - [x] make rss, sitemap, robots
 - [ ] style.css
+- [ ] refactoring, speed up
 
 ## Quick start
 
