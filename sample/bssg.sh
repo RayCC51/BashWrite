@@ -824,6 +824,47 @@ make_all_posts() {
   echo -e "  $BLUE+$RESET all-posts.html"
 }
 
+# Make all-tags.html
+#
+# Contain every tag page link in tags/
+make_all_tags() {
+  local FILE="tags-list.txt"
+  local HTML_ALL_TAGS=""
+
+  # Find all tags and counts
+  while IFS= read -r line; do
+    first_word=$(echo "$line" | awk '{print $1}')
+    count=$(( $(echo "$line" | wc -w) - 1 ))
+      
+    HTML_ALL_TAGS+="$first_word $count\n"
+  done < "$FILE"
+
+  # Sort tags by abc order
+  HTML_ALL_TAGS=$(echo -e "$HTML_ALL_TAGS" | sort)
+
+  # Wrapping with html tags
+  HTML_ALL_TAGS=$(echo "$HTML_ALL_TAGS" | sed -E "
+    s|^([^ ]*) ([0-9]*)$|<li><a href=\"$BASE_URL/tags/\1.html\">\1</a> (\2)</li>|
+  ")
+
+  # todo
+
+  reset_var
+  TITLE="All Tags"
+  DESCRIPTION="Every tags in $BLOG_NAME"
+  NEW_PATH="./all-tags.html"
+
+  make_before > all-tags.html
+  {
+    echo "<ul id=\"all-tags\">"
+    echo "$HTML_ALL_TAGS"
+    echo "</ul>" 
+  } >> all-tags.html
+  make_after >> all-tags.html
+
+  echo -e "  $BLUE+$RESET all-tags.html"
+}
+
 # Make rss.xml
 #
 # Using rss 2.0
@@ -1004,6 +1045,7 @@ elif [[ "$1" == b* || "$1" == r* ]]; then
   
   echo -e "$BLUE*$RESET Make resources..."
   make_all_posts
+  make_all_tags
   make_index_html
   
   echo -e "Done in $YELLOW$(( ($(date +%s%N) - start_time) / 1000000 ))${RESET}ms!"
