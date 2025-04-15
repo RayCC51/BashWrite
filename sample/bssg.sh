@@ -111,26 +111,33 @@ make_before() {
       <ul>
         <li><a href=\"$BASE_URL/all-posts.html\">Posts</a></li>
         <li><a href=\"$BASE_URL/all-tags.html\">Tags</a></li>
+        <li><a href=\"$BASE_URL/rss.xml\">RSS</a></li>
       </ul>
     </nav>
   </header>
   <article>
     <header>
-      <h1 class=\"meta\" id=\"meta-title\">$TITLE</h1>"
+      <h1 id=\"meta-title\">$TITLE</h1>"
 
   if [ -n "$DATE" ]; then
     OUTPUT+="
-      <p class=\"meta\" id=\"meta-lastmod\">Written in $DATE</p>"
+      <p id=\"meta-lastmod\">Written in $DATE</p>"
   fi
 
   if [ -n "$LASTMOD" ]; then
     OUTPUT+="
-      <p class=\"meta\" id=\"meta-lastmod\">Updated in $LASTMOD</p>"
+      <p id=\"meta-lastmod\">Updated in $LASTMOD</p>"
   fi
   
   if [ -n "$TAGS" ]; then
+    tags_html=""
+
+    for tag in $TAGS; do
+        tags_html+="<a href=\"$BASE_URL/tags/${tag}.html/\">${tag}</a> "
+    done
+    
     OUTPUT+="
-      <p class=\"meta\" id=\"meta-tags\">Tags: $TAGS</p>"
+      <p id=\"meta-tags\">Tags: $tags_html</p>"
   fi
   
   OUTPUT+="
@@ -592,6 +599,63 @@ update_file_list() {
   echo "$FILELIST" > "filelist.txt"
 }
 
+# Update tags-list.txt
+#
+# tags-list.txt has lines like
+#   tag_name html_link_1 html_link_2 ...
+# Each lines start with tag name.
+# Each links are seperated by whitespace.
+# Tags are all lowercase
+# 
+# $1: TAGS(tags are seperated by whitespce)
+update_tags_list() {
+  local TAGS="$1"
+  local FILE="tags-list.txt"
+  local tag_line=""
+  
+  # Make tags-list.txt
+  if [ ! -f "$FILE" ]; then
+    touch "$FILE"
+  fi
+  
+  for tag in $TAGS; do 
+    # Change to lowercase
+    tag=$(echo "$tag" | tr '[:upper:]' '[:lower:]')
+  
+    tag_line=$(grep "^$tag " "$FILE")
+
+    if [ -z "$tag_line" ]; then
+      # Add a new tag. 
+      echo "$tag $NEW_PATH" >> "$FILE"
+    elif [[ "$tag_line" != *"$NEW_PATH"* ]]; then
+      # Add a path in existing tag. 
+      if [[ "$OSTYPE" == "darwin"* ]]; then
+        # mac os
+        sed -i '' "/^$tag / s|$| $NEW_PATH|" "$FILE"
+      else
+        # linux
+        sed -i "/^$tag / s|$| $NEW_PATH|" "$FILE"
+      fi
+    fi
+  done
+
+  # Remove old tag. 
+  local pattern='^'
+  pattern+=$(echo "$TAGS" | sed 's/ /\\|^/g')
+
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    # mac os
+    # Remove old tag
+    sed -i '' "/$pattern /! s| $NEW_PATH||g" "$FILE"
+    # Remove empty tag. 
+    sed -i '' '/^[^ ]*$/d' "$FILE"
+  else
+    # linux
+    sed -i "/$pattern /! s| $NEW_PATH||g" "$FILE"
+    sed -i '/^[^ ]*$/d' "$FILE"
+  fi
+}
+
 # File status
 #
 # Save file status in FILESTATUS
@@ -621,7 +685,7 @@ get_file_stat() {
 
 # Remove file
 #
-# User remove markdown file, 
+  # User remove markdown file, 
 # then script remove html file, ...
 #
 # $1: Removed file path
@@ -629,6 +693,17 @@ remove_file() {
   local FILE_PATH="$1"
   
   rm "$NEW_PATH"
+
+  # Remove tags
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    # mac os
+    sed -i '' -e "s/ $NEW_PATH//g" tags-list.txt
+    sed -i '' '/^[^ ]*$/d' tags-list.txt
+  else
+    # linux
+    sed -i -e "s/ $NEW_PATH//g" tags-list.txt
+    sed -i '/^[^ ]*$/d' tags-list.txt
+  fi
 
   echo -e "  $RED-[Remove]$RESET $NEW_PATH"
 }
@@ -803,7 +878,7 @@ make_rss_xml() {
 # It contains: PROFILE, resent posts
 make_index_html() {
   local isShowRecent=true
-  if [ "$RECENT_POSTS_COUNT" -eq 0]; then
+  if [ "$RECENT_POSTS_COUNT" -eq 0 ]; then
     RECENT_POSTS_COUNT=5
     isShowRecent=false
   fi
@@ -821,7 +896,7 @@ make_index_html() {
     
     _DESCRIPTION=$(awk -F'"' '/description/{print $4; exit}' ${_PATH})
 
-    if [ "$isShowRecent" = true ]; then
+    if [ "$isShowRecent" = "true" ]; then
       HTML_RECENT_POSTS+="
 <li>
   <p><span class=\"recent-date\">${_DATE}</span> <a href=\"${_NEW_PATH}\">${_TITLE}</a></p>
@@ -856,7 +931,7 @@ make_index_html() {
   md2html "$PROFILE" >> index.html
   echo "</div>" >> index.html
   
-  if [ "$isShowRecent" = true ]; then
+  if [ "$isShowRecent" = "true" ]; then
     echo "$HTML_RECENT_POSTS" >> index.html
   fi
   
@@ -908,7 +983,13 @@ elif [[ "$1" == b* || "$1" == r* ]]; then
 
       # Check is drafted
       if [ "$DRAFT" != "true" ] && [ "$DRAFT" != "True" ] && [ "$DRAFT" != "TRUE" ] && [ "$DRAFT" != "1" ]; then
+        # Update file list
         ALL_POSTS+="$DATE $BASE_URL${NEW_PATH:1} $TITLE"$'\n'
+
+        # Update tags list
+        if [ -n "$TAGS" ]; then
+          update_tags_list "$TAGS"
+        fi
         
         # Build new updated posts
         # Rebuild every posts

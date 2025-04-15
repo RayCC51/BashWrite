@@ -20,11 +20,29 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 
 ## Quick start
 
+### Install
+
 1. Download `bssg.sh` from [Release page]().
 2. Make your blog directory. 
 3. Move `bssg.sh` to your blog directory. 
 4. Open `bssg.sh`, edit config data and save the file.
 5. Open *terminal*, change directory to your blog path and run `./bssg.sh b`
+
+### Write new posts
+
+1. Write markdown file in *write/*.
+2. Markdown file should starts with frontmatter
+    ```
+    ---
+    title: My new post
+    description: Write description of this post. 
+    date: 2025-02-05
+    lastmod: 2025-05-02
+    tags: tags seperated by a whitespace
+    draft: false
+    ---
+    ```
+3. Save your file and run `./bssg.sh b`
 
 ## Commends
 
@@ -37,7 +55,8 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
     - build
         Build new, updated posts.    
     - rebuild
-        Rebuild every posts. 
+        Rebuild every posts and some resources. 
+        If you edit `bssg.sh`, then run rebuild. 
 
 
 ## About directory structure
@@ -48,7 +67,7 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 - readme.md
 - .github/ - Download this file if you use github pages.
 
-### Generated automatically: Do not edit these files
+### Automatically generated: Do not edit these files
 
 - posts/
 - tags/
@@ -60,8 +79,9 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 - rss.xml
 - style.css
 - sitemap.xml
+- tags-list.txt - Contain every tags.
 
-### Generated autumatically: User edit these files
+### Automatically generated: User edit these files
 
 - write/ - Write your markdowns in this folder.
 - assets/

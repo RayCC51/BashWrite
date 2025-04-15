@@ -3,41 +3,41 @@
 
 <channel>
   <title>bssg blog</title>
-  <link>http://localhost:8080/sample</link>
-  <description>name's blog</description>
+  <link>http://localhost:8080</link>
+  <description>my name's blog</description>
   <language>en</language>
-  <pubDate>Sun, 13 Apr 2025 06:43:25 +0000</pubDate>
-  <copyright>© 2025 name</copyright>
-  <atom:link href="http://localhost:8080/sample/rss.xml" rel="self" type="application/rss+xml" />
+  <pubDate>Tue, 15 Apr 2025 05:31:56 +0000</pubDate>
+  <copyright>© 2025 my name</copyright>
+  <atom:link href="http://localhost:8080/rss.xml" rel="self" type="application/rss+xml" />
 
 <item>
-  <title>New post 2025-04-13</title>
-    <link>http://localhost:8080/sample/posts/sub/test3.html</link>
-    <guid>http://localhost:8080/sample/posts/sub/test3.html</guid>
+  <title>New post 2025-04-15</title>
+    <link>http://localhost:8080/posts/sub/test3.html</link>
+    <guid>http://localhost:8080/posts/sub/test3.html</guid>
     <description></description>
-    <pubDate>Sun, 13 Apr 2025 00:00:00 +0000</pubDate>
+    <pubDate>Tue, 15 Apr 2025 00:00:00 +0000</pubDate>
 </item>
 
 <item>
   <title>test2</title>
-    <link>http://localhost:8080/sample/posts/test2.html</link>
-    <guid>http://localhost:8080/sample/posts/test2.html</guid>
+    <link>http://localhost:8080/posts/test2.html</link>
+    <guid>http://localhost:8080/posts/test2.html</guid>
     <description></description>
-    <pubDate>Sun, 13 Apr 2025 00:00:00 +0000</pubDate>
+    <pubDate>Tue, 15 Apr 2025 00:00:00 +0000</pubDate>
 </item>
 
 <item>
   <title>Markdown sample</title>
-    <link>http://localhost:8080/sample/posts/markdown.html</link>
-    <guid>http://localhost:8080/sample/posts/markdown.html</guid>
+    <link>http://localhost:8080/posts/markdown.html</link>
+    <guid>http://localhost:8080/posts/markdown.html</guid>
     <description>Extended markdown codes</description>
     <pubDate>Fri, 11 Apr 2025 00:00:00 +0000</pubDate>
 </item>
 
 <item>
   <title>My blog title</title>
-    <link>http://localhost:8080/sample/posts/fm/frontmatter.html</link>
-    <guid>http://localhost:8080/sample/posts/fm/frontmatter.html</guid>
+    <link>http://localhost:8080/posts/fm/frontmatter.html</link>
+    <guid>http://localhost:8080/posts/fm/frontmatter.html</guid>
     <description>This is discription</description>
     <pubDate>Wed, 01 Jan 2025 00:00:00 +0000</pubDate>
 </item>

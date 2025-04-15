@@ -3,7 +3,7 @@ title: Markdown sample
 description: Extended markdown codes
 date: 2025-04-11
 lastmod: 
-tags: markdown, sample
+tags: markdown sample
 draft: false
 ---
 
