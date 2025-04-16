@@ -16,6 +16,12 @@
   <title>Markdown sample</title>
   <link rel="stylesheet" href="http://localhost:8080/style.css">
 
+  <script>
+  if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    document.documentElement.classList.add("dark");
+  }
+  </script>
+
   
 </head>
 <body>
@@ -32,7 +38,7 @@
   <article>
     <header>
       <h1 id="meta-title">Markdown sample</h1>
-      <p id="meta-lastmod">Written in 2025-04-11</p>
+      <p id="meta-date">Written in 2025-04-11</p>
       <p id="meta-tags">Tags: <a href="http://localhost:8080/tags/markdown.html">markdown</a> <a href="http://localhost:8080/tags/sample.html">sample</a> </p>
     </header>
     <main>
@@ -121,7 +127,7 @@ italic and bold ***em strong***
 escape: \\ \. \| \# \! \* \+ \- \_ \( \{ \[ \&lt; `
 </code></pre>
 
-<p>&lt;code>escape `backtick</code> in code`</p>
+<p>`escape <code>backtick</code> in code`</p>
 
 <pre><code class="language-md">
 ``escape `backtick` in code``
@@ -149,9 +155,9 @@ ___
 <ul>
 <li>unordered ul</li>
 <li>list li</li>
-<li><ul>
+    <li><ul>
     <li>indented</li>
-</ul></li>
+    </ul></li>
 <li>list</li>
 </ul>
 
@@ -165,9 +171,9 @@ ___
 <ol>
 <li>ordered ol</li>
 <li>list li</li>
-<li><ol>
+    <li><ol>
     <li>indented</li>
-</ol></li>
+    </ol></li>
 <li>list</li>
 </ol>
 
@@ -181,10 +187,10 @@ ___
 <ul>
 <li>mixed</li>
 <li>list</li>
-<li><ol>
+    <li><ol>
     <li>ul</li>
     <li>ol</li>
-</ol></li>
+    </ol></li>
 <li>is work</li>
 </ul>
 
@@ -228,13 +234,19 @@ ___
 &lt;https://example.com&gt;
 </code></pre>
 
-<img src="https://place-hold.it/100x100" alt="img">
+<figure>
+  <img src="https://place-hold.it/100x100" alt="img">
+ <figcaption>img</figcaption>
+</figure>
 
 <pre><code class="language-md">
 ![img](https://place-hold.it/100x100)
 </code></pre>
 
-<img src="https://place-hold.it/100x100" alt="img alt" title="title">
+<figure>
+  <img src="https://place-hold.it/100x100" alt="img alt" title="title">
+ <figcaption>img alt</figcaption>
+</figure>
 
 <pre><code class="language-md">
 ![img alt](https://place-hold.it/100x100 "title")
@@ -305,13 +317,13 @@ highlight ==mark==
 - [x] input type="checkbox" checked disabled
 </code></pre>
 
-<h3 id="extened"><a href="#extened">headling with id</a></h3>
+<h3 id="extened"><a href="#extened">heading with id 🔗</a></h3>
 
 <pre><code class="language-md">
-### headling with id {#extened}
+### heading with id {#extened}
 </code></pre>
 
-<table>
+<div class="table-container"><table>
 <thead>
 <tr>
     <th>t</th>
@@ -328,7 +340,7 @@ highlight ==mark==
     <td>r</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 
 <pre><code class="language-md">
 |t|a|b|l|

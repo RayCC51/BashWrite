@@ -16,6 +16,12 @@
   <title>test2</title>
   <link rel="stylesheet" href="http://localhost:8080/style.css">
 
+  <script>
+  if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    document.documentElement.classList.add("dark");
+  }
+  </script>
+
   
 </head>
 <body>
@@ -32,7 +38,7 @@
   <article>
     <header>
       <h1 id="meta-title">test2</h1>
-      <p id="meta-lastmod">Written in 2025-04-16</p>
+      <p id="meta-date">Written in 2025-04-17</p>
     </header>
     <main>
 

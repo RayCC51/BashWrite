@@ -87,18 +87,27 @@ make_style_css() {
   echo '
   --background-color: #ffffff;
   --font-color: #272822;
+  --gray: color-mix(in srgb, var(--font-color), var(--background-color) 30%);
   --code-bg: color-mix(in srgb, var(--main-theme), var(--background-color) 90%);
 }
 
-.darkmode {
+.dark {
   --background-color: #272822;
   --font-color: #cfcfce;
+}
+
+.dark a {
+  color: #1E90FF;
+}
+
+.dark a:visited {
+  color: #9370DB;
 }
 
 body {
   color: var(--font-color);
   background-color: var(--background-color);
-  max-width: 1000px;
+  max-width: 900px;
   margin: 0 auto;
   padding: 0 1em;
 }
@@ -113,6 +122,10 @@ body > header {
 
 body > header h3 a {
   color: var(--main-theme);
+}
+
+body > header h3 a:visited {
+  color: var(--main-theme) !important;
 }
 
 body > header ul {
@@ -129,12 +142,20 @@ body > header a {
   color: var(--font-color);
 }
 
+body > header a:visited {
+  color: var(--font-color) !important;
+}
+
 body > footer {
   border-top: 1px solid var(--main-theme);
 }
 
 article > header {
   border-bottom: 2px solid var(--main-theme);
+}
+
+#meta-date, #meta-lastmod {
+  color: var(--gray);
 }
 
 pre {
@@ -146,65 +167,33 @@ pre {
 code {
   background-color: var(--code-bg);
 }
-  --background-color: #ffffff;
-  --font-color: #272822;
-  --code-bg: color-mix(in srgb, var(--main-theme), var(--background-color), 50%);
-}
 
-.darkmode {
-  --background-color: #272822;
-  --font-color: #cfcfce;
-}
-k
-body {
-  color: var(--font-color);
-  background-color: var(--background-color);
-  max-width: 1000px;
+figure {
+  text-align: center;
   margin: 0 auto;
-  padding: 0 1em;
 }
 
-body > header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 0.5em;
-  border-bottom: 1px solid var(--main-theme);
+figcaption {
+  color: var(--gray);
 }
 
-body > header h3 a {
-  color: var(--main-theme);
+blockquote {
+  border-left: 2px solid var(--main-theme);
+  padding-left: 1em;
+  margin-left: 2em;
+  margin-right: 2em;
 }
 
-body > header ul {
-  display: flex;
-}
-
-body > header li {
-  list-style: none;
-  margin-left: 1em;
-}
-
-3k3kbody > header a {
-  text-decoration: none;
-  color: var(--font-color);
-}
-
-body > footer {
-  border-top: 1px solid var(--main-theme);
-}
-
-article > header {
-  border-bottom: 2px solid var(--main-theme);
-}
-
-pre {
-  background-color: var(--code-bg);
+.table-container {
   overflow-x: auto;
 }
 
-code {
-  background-color: var(--code-bg);
+th {
+  border-bottom: 2px solid var(--main-theme);
+}
+
+td {
+  border-bottom: 1px solid var(--gray);
 }
 ' >> style.css
 
@@ -231,6 +220,12 @@ make_before() {
   <title>$TITLE</title>
   <link rel=\"stylesheet\" href=\"$BASE_URL/style.css\">
 
+  <script>
+  if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    document.documentElement.classList.add(\"dark\");
+  }
+  </script>
+
   $CUSTOM_HTML_HEAD
 </head>
 <body>
@@ -250,7 +245,7 @@ make_before() {
 
   if [ -n "$DATE" ]; then
     OUTPUT+="
-      <p id=\"meta-lastmod\">Written in $DATE</p>"
+      <p id=\"meta-date\">Written in $DATE</p>"
   fi
 
   if [ -n "$LASTMOD" ]; then
@@ -291,6 +286,13 @@ make_after() {
 
 # Fix config that user make mistake
 fix_config() {
+  # Check THEME_COLOR is hex code color
+  if [[ ! "$THEME_COLOR" =~ ^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$ ]]; then
+    echo -e "$RED!$RESET THEME_COLOR is not hex code color!"
+    echo "  $_SCRIPT_FILE_NAME line:11"
+    THEME_COLOR="#CAD926"
+  fi
+  
   # Remove slash in BASE_URL
   if [[ "$BASE_URL" == */ ]]; then
     BASE_URL="${BASE_URL%/}"
@@ -412,7 +414,7 @@ MOD=$(echo "$MOD" | sed -E '
 
 # heading with id
 MOD=$(echo "$MOD" | sed -E '
-  s/^<h([1-6])>(.*) \{# ?(.*)\}<\/h\1>$/<h\1 id="\3"><a href="#\3">\2<\/a><\/h\1>/
+  s/^<h([1-6])>(.*) \{# ?(.*)\}<\/h\1>$/<h\1 id="\3"><a href="#\3">\2<\/a> 🔗<\/h\1>/
 ')
 
 # hr
@@ -451,9 +453,9 @@ MOD=$(echo "$MOD" | sed -E '
 
 # img, a
 MOD=$(echo "$MOD" | sed -E '
-  s/!\[(.*)\]\((.*) "(.*)"\)/<img src="\2" alt="\1" title="\3">/g
-  s/!\[(.*)\]\((.*)\)/<img src="\2" alt="\1">/g
-
+  s/!\[(.*)\]\((.*) "(.*)"\)/<figure>\n  <img src="\2" alt="\1" title="\3">\n <figcaption>\1<\/figcaption>\n<\/figure>/g
+  s/!\[(.*)\]\((.*)\)/<figure>\n  <img src="\2" alt="\1">\n <figcaption>\1<\/figcaption>\n<\/figure>/g
+  
   s/&lt;(.*)&gt;/<a href="\1">\1<\/a>/g
   s/\[(.*)\]\((.*) "(.*)"\)/<a href="\2" title="\3">\1<\/a>/g
   s/\[(.*)\]\((.*)\)/<a href="\2">\1<\/a>/g
@@ -592,6 +594,12 @@ MOD=$(echo "$MOD" | sed -E '
     s/^<//
     s/>$//
   }
+')
+
+# wrapping table with div
+MOD=$(echo "$MOD" | sed -E '
+  s/^<table>$/<div class="table-container"><table>/
+  s/^<\/table>$/<\/table><\/div>/
 ')
 
 # escape keys
@@ -1257,7 +1265,7 @@ elif [[ "$1" == b* || "$1" == r* ]]; then
     else
       frontmatter "$FILE_PATH"
 
-      # Check is drafted
+      # Check draft is false
       if [ "$DRAFT" != "true" ] && [ "$DRAFT" != "True" ] && [ "$DRAFT" != "TRUE" ] && [ "$DRAFT" != "1" ]; then
         # Update file list
         ALL_POSTS+="$DATE $BASE_URL${NEW_PATH:1} $TITLE"$'\n'

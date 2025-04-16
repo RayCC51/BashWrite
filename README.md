@@ -16,6 +16,7 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 - [ ] error handling
 - [ ] make doc
 - [x] make rss, sitemap, robots
+- [ ] make github action
 - [ ] style.css
 - [ ] refactoring, speed up
 
@@ -81,7 +82,7 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 - rss.xml
 - style.css
 - sitemap.xml
-- tags-list.txt - Contain every tags.
+- tags-list.txt - Contain list of  tags and links.
 
 ### Automatically generated: User edit these files
 

@@ -258,10 +258,10 @@ highlight ==mark==
 - [x] input type="checkbox" checked disabled
 ```
 
-### headling with id {#extened}
+### heading with id {#extened}
 
 ```md
-### headling with id {#extened}
+### heading with id {#extened}
 ```
 
 |t|a|b|l|

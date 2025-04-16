@@ -16,6 +16,12 @@
   <title>All Posts</title>
   <link rel="stylesheet" href="http://localhost:8080/style.css">
 
+  <script>
+  if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    document.documentElement.classList.add("dark");
+  }
+  </script>
+
   
 </head>
 <body>
@@ -36,8 +42,8 @@
     <main>
 <ul id="all-posts">
 <li>2025-04<ul>
-<li>2025-04-16 <a href="http://localhost:8080/posts/sub/test3.html">New post 2025-04-16  </a></li>
-<li>2025-04-16 <a href="http://localhost:8080/posts/test2.html">test2  </a></li>
+<li>2025-04-17 <a href="http://localhost:8080/posts/sub/test3.html">New post 2025-04-17  </a></li>
+<li>2025-04-17 <a href="http://localhost:8080/posts/test2.html">test2  </a></li>
 <li>2025-04-11 <a href="http://localhost:8080/posts/markdown.html">Markdown sample  </a></li>
 </ul></li>
 

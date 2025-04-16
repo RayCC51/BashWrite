@@ -99,7 +99,7 @@ MOD=$(echo "$MOD" | sed -E '
 
 # heading with id
 MOD=$(echo "$MOD" | sed -E '
-  s/^<h([1-6])>(.*) \{# ?(.*)\}<\/h\1>$/<h\1 id="\3"><a href="#\3">\2<\/a><\/h\1>/
+  s/^<h([1-6])>(.*) \{# ?(.*)\}<\/h\1>$/<h\1 id="\3"><a href="#\3">\2<\/a> 🔗<\/h\1>/
 ')
 
 # hr
@@ -134,8 +134,8 @@ MOD=$(echo "$MOD" | sed -E '
 
 # img, a
 MOD=$(echo "$MOD" | sed -E '
-  s/!\[(.*)\]\((.*) "(.*)"\)/<img src="\2" alt="\1" title="\3">/g
-  s/!\[(.*)\]\((.*)\)/<img src="\2" alt="\1">/g
+  s/!\[(.*)\]\((.*) "(.*)"\)/<figure>\n  <img src="\2" alt="\1" title="\3">\n  <figcaption>\1<\/figcaption>\n<\/figure>/g
+  s/!\[(.*)\]\((.*)\)/<figure>\n  <img src="\2" alt="\1">\n  <figcaption>\1<\/figcaption>\n<\/figure>/g
 
   s/&lt;(.*)&gt;/<a href="\1">\1<\/a>/g
   s/\[(.*)\]\((.*) "(.*)"\)/<a href="\2" title="\3">\1<\/a>/g

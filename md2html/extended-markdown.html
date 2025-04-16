@@ -81,7 +81,7 @@ italic and bold ***em strong***
 escape: \\ \. \| \# \! \* \+ \- \_ \( \{ \[ \&lt; ``
 </code></pre>
 
-<p>&lt;code>escape `backtick</code> in code`</p>
+<p>`escape <code>backtick</code> in code`</p>
 
 <pre><code class="language-md">
 ``escape `backtick` in code``
@@ -109,9 +109,9 @@ ___
 <ul>
 <li>unordered ul</li>
 <li>list li</li>
-<li><ul>
+    <li><ul>
     <li>indented</li>
-</ul></li>
+    </ul></li>
 <li>list</li>
 </ul>
 
@@ -125,9 +125,9 @@ ___
 <ol>
 <li>ordered ol</li>
 <li>list li</li>
-<li><ol>
+    <li><ol>
     <li>indented</li>
-</ol></li>
+    </ol></li>
 <li>list</li>
 </ol>
 
@@ -141,10 +141,14 @@ ___
 <ul>
 <li>mixed</li>
 <li>list</li>
-<li><ol>
+</ul>
+<ol>
+    <li><ol>
     <li>ul</li>
     <li>ol</li>
-</ol></li>
+    </ol></li>
+</ol>
+<ul>
 <li>is work</li>
 </ul>
 
@@ -188,13 +192,19 @@ ___
 &lt;https://example.com&gt;
 </code></pre>
 
-<img src="https://place-hold.it/100x100" alt="img">
+<figure>
+  <img src="https://place-hold.it/100x100" alt="img">
+  <figcaption>img</figcaption>
+</figure>
 
 <pre><code class="language-md">
 ![img](https://place-hold.it/100x100)
 </code></pre>
 
-<img src="https://place-hold.it/100x100" alt="img alt" title="title">
+<figure>
+  <img src="https://place-hold.it/100x100" alt="img alt" title="title">
+  <figcaption>img alt</figcaption>
+</figure>
 
 <pre><code class="language-md">
 ![img alt](https://place-hold.it/100x100 "title")
@@ -265,7 +275,7 @@ highlight ==mark==
 - [x] input type="checkbox" checked disabled
 </code></pre>
 
-<h3 id="extened">headling with id</h3>
+<h3 id="extened"><a href="#extened">headling with id</a></h3>
 
 <pre><code class="language-md">
 ### headling with id {#extened}

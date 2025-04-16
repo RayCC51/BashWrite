@@ -16,6 +16,12 @@
   <title>My blog title</title>
   <link rel="stylesheet" href="http://localhost:8080/style.css">
 
+  <script>
+  if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    document.documentElement.classList.add("dark");
+  }
+  </script>
+
   
 </head>
 <body>
@@ -32,7 +38,7 @@
   <article>
     <header>
       <h1 id="meta-title">My blog title</h1>
-      <p id="meta-lastmod">Written in 2025-01-01</p>
+      <p id="meta-date">Written in 2025-01-01</p>
       <p id="meta-lastmod">Updated in 2025-12-31</p>
       <p id="meta-tags">Tags: <a href="http://localhost:8080/tags/tag1.html">tag1</a> <a href="http://localhost:8080/tags/tag2.html">tag2</a> <a href="http://localhost:8080/tags/sample.html">sample</a> </p>
     </header>
