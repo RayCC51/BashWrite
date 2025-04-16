@@ -631,10 +631,8 @@ update_tags_list() {
     touch "$FILE"
   fi
 
-  # Remove useless whitespace. 
-  TAGS=$(echo "$TAGS" | xargs)
-  # Change to lowercase
-  TAGS=$(echo "$TAGS" | tr '[:upper:]' '[:lower:]')
+  # Remove useless whitespace. Change to lowercase 
+  TAGS=$(echo "$TAGS" | xargs | tr '[:upper:]' '[:lower:]')
   
   for tag in $TAGS; do 
   
@@ -919,6 +917,7 @@ make_tag_pages() {
     while IFS= read -r line; do
       tag=$(echo "$line" | awk '{print $1}')
       links=$(echo "$line" | cut -d' ' -f2-)
+      HTML_ALL_POSTS=""
 
       for url in $links; do
         MD_PATH=${url/posts/write}
@@ -1094,6 +1093,11 @@ elif [[ "$1" == b* || "$1" == r* ]]; then
     touch tags-list-old.txt
   fi
 
+  # Clear old tgas list when rebuild
+  if [[ "$1" == r* ]]; then
+    echo -n > tags-list-old.txt
+  fi
+  
   # Build default files.
   # When rebuild or there is no file.
   if [[ "$1" == r* ]] || [[ ! -f "style.css" ]] || [[ ! -f "robots.txt" ]] || [[ ! -f "sitemap.xml" ]]; then
@@ -1141,10 +1145,6 @@ elif [[ "$1" == b* || "$1" == r* ]]; then
   make_all_posts
   make_all_tags
   make_index_html
-
-  if [[ "$1" == r* ]]; then
-    echo -n > tags-list-old.txt
-  fi
   make_tag_pages
   rm tags-list-old.txt
   
