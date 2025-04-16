@@ -6,16 +6,16 @@
   <link>http://localhost:8080</link>
   <description>my name's blog</description>
   <language>en</language>
-  <pubDate>Tue, 15 Apr 2025 07:56:20 +0000</pubDate>
+  <pubDate>Wed, 16 Apr 2025 01:12:01 +0000</pubDate>
   <copyright>© 2025 my name</copyright>
   <atom:link href="http://localhost:8080/rss.xml" rel="self" type="application/rss+xml" />
 
 <item>
-  <title>New post 2025-04-15</title>
+  <title>New post 2025-04-16</title>
     <link>http://localhost:8080/posts/sub/test3.html</link>
     <guid>http://localhost:8080/posts/sub/test3.html</guid>
     <description></description>
-    <pubDate>Tue, 15 Apr 2025 00:00:00 +0000</pubDate>
+    <pubDate>Wed, 16 Apr 2025 00:00:00 +0000</pubDate>
 </item>
 
 <item>
@@ -39,7 +39,7 @@
     <link>http://localhost:8080/posts/test2.html</link>
     <guid>http://localhost:8080/posts/test2.html</guid>
     <description></description>
-    <pubDate>Tue, 15 Apr 2025 00:00:00 +0000</pubDate>
+    <pubDate>Wed, 16 Apr 2025 00:00:00 +0000</pubDate>
 </item>
 
 </channel>

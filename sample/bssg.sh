@@ -133,7 +133,7 @@ make_before() {
     tags_html=""
 
     for tag in $TAGS; do
-        tags_html+="<a href=\"$BASE_URL/tags/${tag}.html/\">${tag}</a> "
+        tags_html+="<a href=\"$BASE_URL/tags/${tag}.html\">${tag}</a> "
     done
     
     OUTPUT+="
@@ -553,6 +553,20 @@ make_sitemap_xml() {
   echo -e "  $BLUE+$RESET sitemap.xml"
 }
 
+# Make 404 not found page
+make_404_html() {
+  reset_var
+  TITLE="404 Page not found"
+  DESCRIPTION="404"
+  NEW_PATH="./404.html"
+
+  make_before > 404.html
+  echo "<p>404 404 404 404</p>" >> 404.html
+  make_after >> 404.html
+
+  echo -e "  $BLUE+$RESET 404.html"
+}
+
 # Make imutable resources.
 #
 # If there is resources, then ignore.
@@ -561,6 +575,7 @@ make_resource() {
   make_style_css
   make_robots_txt
   make_sitemap_xml
+  make_404_html
 }
 
 # Make markdown file list
@@ -1126,6 +1141,10 @@ elif [[ "$1" == b* || "$1" == r* ]]; then
   make_all_posts
   make_all_tags
   make_index_html
+
+  if [[ "$1" == r* ]]; then
+    echo -n > tags-list-old.txt
+  fi
   make_tag_pages
   rm tags-list-old.txt
   
