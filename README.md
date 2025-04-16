@@ -72,6 +72,7 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 
 - posts/
 - tags/
+- 404.html
 - all-posts.html - Contain every posts.
 - all-tags.html - Contain every tags.
 - filelist.txt - Contain list of posts, and modified date.

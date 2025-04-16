@@ -1,1 +1,126 @@
-html{padding:0;margin:0;}
+:root{
+  --main-theme: #CAD926;
+
+
+  --background-color: #ffffff;
+  --font-color: #272822;
+  --code-bg: color-mix(in srgb, var(--main-theme), var(--background-color) 90%);
+}
+
+.darkmode {
+  --background-color: #272822;
+  --font-color: #cfcfce;
+}
+
+body {
+  color: var(--font-color);
+  background-color: var(--background-color);
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 1em;
+}
+
+body > header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 0.5em;
+  border-bottom: 1px solid var(--main-theme);
+}
+
+body > header h3 a {
+  color: var(--main-theme);
+}
+
+body > header ul {
+  display: flex;
+}
+
+body > header li {
+  list-style: none;
+  margin-left: 1em;
+}
+
+body > header a {
+  text-decoration: none;
+  color: var(--font-color);
+}
+
+body > footer {
+  border-top: 1px solid var(--main-theme);
+}
+
+article > header {
+  border-bottom: 2px solid var(--main-theme);
+}
+
+pre {
+  background-color: var(--code-bg);
+  overflow-x: auto;
+  padding: 0 0 1em 1em;
+}
+
+code {
+  background-color: var(--code-bg);
+}
+  --background-color: #ffffff;
+  --font-color: #272822;
+  --code-bg: color-mix(in srgb, var(--main-theme), var(--background-color), 50%);
+}
+
+.darkmode {
+  --background-color: #272822;
+  --font-color: #cfcfce;
+}
+k
+body {
+  color: var(--font-color);
+  background-color: var(--background-color);
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 1em;
+}
+
+body > header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 0.5em;
+  border-bottom: 1px solid var(--main-theme);
+}
+
+body > header h3 a {
+  color: var(--main-theme);
+}
+
+body > header ul {
+  display: flex;
+}
+
+body > header li {
+  list-style: none;
+  margin-left: 1em;
+}
+
+3k3kbody > header a {
+  text-decoration: none;
+  color: var(--font-color);
+}
+
+body > footer {
+  border-top: 1px solid var(--main-theme);
+}
+
+article > header {
+  border-bottom: 2px solid var(--main-theme);
+}
+
+pre {
+  background-color: var(--code-bg);
+  overflow-x: auto;
+}
+
+code {
+  background-color: var(--code-bg);
+}
+

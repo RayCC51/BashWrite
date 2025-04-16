@@ -6,9 +6,25 @@
   <link>http://localhost:8080</link>
   <description>my name's blog</description>
   <language>en</language>
-  <pubDate>Wed, 16 Apr 2025 01:25:24 +0000</pubDate>
+  <pubDate>Wed, 16 Apr 2025 09:26:14 +0000</pubDate>
   <copyright>© 2025 my name</copyright>
   <atom:link href="http://localhost:8080/rss.xml" rel="self" type="application/rss+xml" />
+
+<item>
+  <title>test2</title>
+    <link>http://localhost:8080/posts/test2.html</link>
+    <guid>http://localhost:8080/posts/test2.html</guid>
+    <description></description>
+    <pubDate>Wed, 16 Apr 2025 00:00:00 +0000</pubDate>
+</item>
+
+<item>
+  <title>Markdown sample</title>
+    <link>http://localhost:8080/posts/markdown.html</link>
+    <guid>http://localhost:8080/posts/markdown.html</guid>
+    <description>Extended markdown codes</description>
+    <pubDate>Fri, 11 Apr 2025 00:00:00 +0000</pubDate>
+</item>
 
 <item>
   <title>New post 2025-04-16</title>
@@ -24,22 +40,6 @@
     <guid>http://localhost:8080/posts/fm/frontmatter.html</guid>
     <description>This is discription</description>
     <pubDate>Wed, 01 Jan 2025 00:00:00 +0000</pubDate>
-</item>
-
-<item>
-  <title>Markdown sample</title>
-    <link>http://localhost:8080/posts/markdown.html</link>
-    <guid>http://localhost:8080/posts/markdown.html</guid>
-    <description>Extended markdown codes</description>
-    <pubDate>Fri, 11 Apr 2025 00:00:00 +0000</pubDate>
-</item>
-
-<item>
-  <title>test2</title>
-    <link>http://localhost:8080/posts/test2.html</link>
-    <guid>http://localhost:8080/posts/test2.html</guid>
-    <description></description>
-    <pubDate>Wed, 16 Apr 2025 00:00:00 +0000</pubDate>
 </item>
 
 </channel>

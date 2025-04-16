@@ -33,6 +33,7 @@ it support extended markdown [mattcone/markdown-guide](https://github.com/mattco
 
 - list
     - can not handle more then 2 level indented list
+    - can not use mixed ul ol
 - table
     - table can not align
 - footnote

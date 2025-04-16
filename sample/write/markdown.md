@@ -87,7 +87,7 @@ italic and bold ***em strong***
 escape: \\ \. \| \# \! \* \+ \- \_ \( \{ \[ \< \``
 
 ```md
-escape: \\ \. \| \# \! \* \+ \- \_ \( \{ \[ \< \``
+escape: \\ \. \| \# \! \* \+ \- \_ \( \{ \[ \< \`
 ```
 
 ``escape `backtick` in code``

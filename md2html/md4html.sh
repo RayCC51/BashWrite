@@ -121,17 +121,13 @@ MOD=$(echo "$MOD" | sed -E '
    s/([^\\]?)\*(.*[^\\])\*/\1<em>\2<\/em>/g
   
   s/``(.*)``/\\`\1\\`/g
-  s/([^\\]?)`(.*[^\\])`/\1<code>\2<\/code>/g
+  s/(^|[^\\])`([^`]*[^\\])`/\1<code>\2<\/code>/g
 ')
 
-  # s/~(.*)~/<sub>\1<\/sub>/g
-  # s/\^(.*)\^/<sup>\1<\/sup>/g
 # del, mark, sup, sub
 MOD=$(echo "$MOD" | sed -E '
   s/~~(.*)~~/<del>\1<\/del>/g
   s/==(.*)==/<mark>\1<\/mark>/g
-  
-
   s/([^\\]?)~(.*[^\\])~/\1<sub>\2<\/sub>/g
   s/([^\\]?)\^(.*[^\\])\^/\1<sup>\2<\/sup>/g
 ')
@@ -156,17 +152,17 @@ MOD=$(echo "$MOD" | sed -E '
 
 # clean duplicated ul ol
 MOD=$(echo "$MOD" | sed -E '
-  /^<\/[uo]l>$/ {
+  /^( {4}*)<\/[uo]l>$/ {
     N
-    /<\/[uo]l>\n<[uo]l>/d
+    /( {4}*)<\/([uo]l)>\n\1<\2>/d
   }
 ')
 
 # indented ul ol
 MOD=$(echo "$MOD" | sed -E '
-  s/^    ( {4}*)(<li>.*)$/\1<li><ul>\n    \1\2\n\1<\/ul><\/li>/
+  s/^( {4}+)(<li>.*)$/\1<li><ul>\n\1\2\n\1<\/ul><\/li>/
   
-  s/^    ( {4}*)(<il>.*)$/\1<il><ol>\n    \1\2\n\1<\/ol><\/il>/
+  s/^( {4}+)(<il>.*)$/\1<il><ol>\n\1\2\n\1<\/ol><\/il>/
 ')
 
 # clean duplicated indented ul ol
@@ -180,6 +176,14 @@ MOD=$(echo "$MOD" | sed -E '
 # restore il to li
 MOD=$(echo "$MOD" | sed -E '
   s/il>/li>/g
+')
+
+# fix indented list
+MOD=$(echo "$MOD" | sed -E '
+  /<\/li>$/ {
+    N
+    s/<\/li>\n {4}+<li>(<[uo]l>)/\1/
+  }
 ')
 
 # checkbox

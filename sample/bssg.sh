@@ -7,6 +7,9 @@ BLOG_NAME="bssg blog"
 AUTHOR_NAME="my name"
 BASE_URL="localhost:8080/"
 
+### Your blog main theme color. Write in hex code #rrggbb
+THEME_COLOR="#CAD926"
+
 ### <html lang="$LANG">
 LANG="en"
 
@@ -77,7 +80,133 @@ reset_var() {
 
 # Make style.css
 make_style_css() {
-  echo 'html{padding:0;margin:0;}' > style.css
+  echo ":root{
+  --main-theme: $THEME_COLOR;
+" > style.css
+
+  echo '
+  --background-color: #ffffff;
+  --font-color: #272822;
+  --code-bg: color-mix(in srgb, var(--main-theme), var(--background-color) 90%);
+}
+
+.darkmode {
+  --background-color: #272822;
+  --font-color: #cfcfce;
+}
+
+body {
+  color: var(--font-color);
+  background-color: var(--background-color);
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 1em;
+}
+
+body > header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 0.5em;
+  border-bottom: 1px solid var(--main-theme);
+}
+
+body > header h3 a {
+  color: var(--main-theme);
+}
+
+body > header ul {
+  display: flex;
+}
+
+body > header li {
+  list-style: none;
+  margin-left: 1em;
+}
+
+body > header a {
+  text-decoration: none;
+  color: var(--font-color);
+}
+
+body > footer {
+  border-top: 1px solid var(--main-theme);
+}
+
+article > header {
+  border-bottom: 2px solid var(--main-theme);
+}
+
+pre {
+  background-color: var(--code-bg);
+  overflow-x: auto;
+  padding: 0 0 1em 1em;
+}
+
+code {
+  background-color: var(--code-bg);
+}
+  --background-color: #ffffff;
+  --font-color: #272822;
+  --code-bg: color-mix(in srgb, var(--main-theme), var(--background-color), 50%);
+}
+
+.darkmode {
+  --background-color: #272822;
+  --font-color: #cfcfce;
+}
+k
+body {
+  color: var(--font-color);
+  background-color: var(--background-color);
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 1em;
+}
+
+body > header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 0.5em;
+  border-bottom: 1px solid var(--main-theme);
+}
+
+body > header h3 a {
+  color: var(--main-theme);
+}
+
+body > header ul {
+  display: flex;
+}
+
+body > header li {
+  list-style: none;
+  margin-left: 1em;
+}
+
+3k3kbody > header a {
+  text-decoration: none;
+  color: var(--font-color);
+}
+
+body > footer {
+  border-top: 1px solid var(--main-theme);
+}
+
+article > header {
+  border-bottom: 2px solid var(--main-theme);
+}
+
+pre {
+  background-color: var(--code-bg);
+  overflow-x: auto;
+}
+
+code {
+  background-color: var(--code-bg);
+}
+' >> style.css
 
   echo -e "  $BLUE+$RESET style.css"
 }
@@ -100,7 +229,7 @@ make_before() {
   <meta name=\"twitter:description\" content=\"$DESCRIPTION\">
   
   <title>$TITLE</title>
-  <link rel=\"stylesheet\" href=\"/styles.css\">
+  <link rel=\"stylesheet\" href=\"$BASE_URL/style.css\">
 
   $CUSTOM_HTML_HEAD
 </head>
@@ -305,7 +434,7 @@ MOD=$(echo "$MOD" | sed -E '
    s/([^\\]?)\*(.*[^\\])\*/\1<em>\2<\/em>/g
   
   s/``(.*)``/\\`\1\\`/g
-  s/([^\\]?)`(.*[^\\])`/\1<code>\2<\/code>/g
+  s/(^|[^\\])`([^`]*[^\\])`/\1<code>\2<\/code>/g
 ')
 
   # s/~(.*)~/<sub>\1<\/sub>/g
@@ -340,17 +469,17 @@ MOD=$(echo "$MOD" | sed -E '
 
 # clean duplicated ul ol
 MOD=$(echo "$MOD" | sed -E '
-  /^<\/[uo]l>$/ {
+  /^( {4}*)<\/[uo]l>$/ {
     N
-    /<\/[uo]l>\n<[uo]l>/d
+    /( {4}*)<\/[uo]l>\n<[uo]l>/d
   }
 ')
 
 # indented ul ol
 MOD=$(echo "$MOD" | sed -E '
-  s/^    ( {4}*)(<li>.*)$/\1<li><ul>\n    \1\2\n\1<\/ul><\/li>/
+  s/^( {4}+)(<li>.*)$/\1<li><ul>\n\1\2\n\1<\/ul><\/li>/
   
-  s/^    ( {4}*)(<il>.*)$/\1<il><ol>\n    \1\2\n\1<\/ol><\/il>/
+  s/^( {4}+)(<il>.*)$/\1<il><ol>\n\1\2\n\1<\/ol><\/il>/
 ')
 
 # clean duplicated indented ul ol
@@ -364,6 +493,14 @@ MOD=$(echo "$MOD" | sed -E '
 # restore il to li
 MOD=$(echo "$MOD" | sed -E '
   s/il>/li>/g
+')
+
+# fix indented li
+MOD=$(echo "$MOD" | sed -E '
+  /<\/li>$/ {
+    N
+    s/<\/li>\n {4}+<li>(<[uo]l>)/\1/
+  }
 ')
 
 # checkbox
@@ -1012,7 +1149,7 @@ make_index_html() {
   
   local RECENT_POSTS=$(echo "$ALL_POSTS" | head -n "$RECENT_POSTS_COUNT")
   local HTML_RECENT_POSTS="<div id=\"recent-posts\">
-  <h2>Recent posts</h2>
+  <h4>Recent posts</h4>
   <ul>"
 
   make_rss_xml "I"
