@@ -1,5 +1,0 @@
-tag1 ./posts/sub/test3.html ./posts/fm/frontmatter.html
-tag2 ./posts/sub/test3.html ./posts/fm/frontmatter.html
-sample ./posts/sub/test3.html ./posts/fm/frontmatter.html ./posts/markdown.html
-markdown ./posts/markdown.html
-test4 ./posts/sub/test3.html

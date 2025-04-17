@@ -1,12 +1,9 @@
 ---
 title: Markdown sample
-description: Extended markdown codes
-date: 2025-04-11
-lastmod: 
-tags: markdown sample
-draft: false
+description: Testing markdown to html converter. 
+date: 2025-04-17
+tags: sample md html
 ---
-
 
 # Pure markdown
 
@@ -87,7 +84,7 @@ italic and bold ***em strong***
 escape: \\ \. \| \# \! \* \+ \- \_ \( \{ \[ \< \``
 
 ```md
-escape: \\ \. \| \# \! \* \+ \- \_ \( \{ \[ \< \`
+escape: \\ \. \| \# \! \* \+ \- \_ \( \{ \[ \< \``
 ```
 
 ``escape `backtick` in code``
@@ -139,18 +136,14 @@ ___
 4. list
 ```
 
-- mixed
-- list
-    1. ul
-    2. ol
-- is work
+1. mixed
+    - ul
+2. ol
 
 ```md
-- mixed
-- list
-    1. ul
-    2. ol
-- is work
+1. mixed
+    - ul
+2. ol
 ```
 
 > block quote
@@ -258,10 +251,10 @@ highlight ==mark==
 - [x] input type="checkbox" checked disabled
 ```
 
-### heading with id {#extened}
+### headling with id {#extened}
 
 ```md
-### heading with id {#extened}
+### headling with id {#extened}
 ```
 
 |t|a|b|l|
@@ -287,5 +280,3 @@ foot[^1] note[^note] sup a
 
 [^note]: long
 ```
-
-
