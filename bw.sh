@@ -1289,9 +1289,6 @@ elif [[ "$ARG" == b* || "$ARG" == r* || "$ARG" == B* || "$ARG" == R* ]]; then
   fix_config
   make_directory
 
-  # Check this script is modified. 
-  ARG=$(build_rebuild)
-
   # Copy taglist.txt for find diffrence. 
   if [[ -e taglist.txt ]]; then
     cp taglist.txt taglist-old.txt
@@ -1307,6 +1304,9 @@ elif [[ "$ARG" == b* || "$ARG" == r* || "$ARG" == B* || "$ARG" == R* ]]; then
   if [[ ! -e filelist.txt ]]; then
     touch filelist.txt
   fi
+  
+  # Check this script is modified. 
+  ARG=$(build_rebuild)
 
   # Clear old tgas list when rebuild
   if [[ "$ARG" == r* ]]; then
