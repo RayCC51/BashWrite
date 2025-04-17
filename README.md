@@ -1,34 +1,22 @@
-# Bash Static Site Generator
+# BashWrite
+
+Pure bash script for make a blog. 
+
+No dependencies. 
+
+It support extended markdown from [mattcone/markdown-guide](https://github.com/mattcone/markdown-guide)
 
 Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
-
-## TODO
-
-- [x] make directory
-- [x] make config
-- [x] make default html, css
-- [x] make md to html converter
-- [x] make front matter
-- [x] make file list
-- [x] make arguments
-- [x] make tags page
-- [x] make posts page
-- [ ] error handling
-- [x] make doc
-- [x] make rss, sitemap, robots
-- [ ] make github action
-- [x] style.css
-- [ ] refactoring, speed up
 
 ## Quick start
 
 ### Install
 
-1. Download `bssg.sh` from [Release page]().
+1. Download `bw.sh` from [Release page]().
 2. Make your blog directory. 
-3. Move `bssg.sh` to your blog directory. 
-4. Open `bssg.sh`, edit config data and save the file.
-5. Open *terminal*, change directory to your blog path and run `./bssg.sh b`
+3. Move `bw.sh` to your blog directory. 
+4. Open `bw.sh`, edit config data and save the file.
+5. Open *terminal*, change directory to your blog path and run `./bw.sh b`
 
 ### Write new posts
 
@@ -44,24 +32,24 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
     draft: false
     ---
     ```
-3. Save your file and run `./bssg.sh b`
+3. Save your file and run `./bw.sh b`
 
 ## Commends
 
-`./bssg.sh [Argument]`
+`./bw.sh [Argument]`
 
 [Argument] =
 
-    - h
-        Show help dialog.   
-    - b
-        Build blog. 
+  h
+      Show help dialog.   
+  b
+      Build blog. 
 
 ## About directory structure
 
 ### Download from repo
 
-- bssg.sh
+- bw.sh
 - readme.md
 - .github/ - Download this file if you want to use github pages.
 

@@ -5,7 +5,7 @@ on:
     paths:
       - 'write/**'
       - 'assets/**'
-      - 'bssg.sh'     
+      - 'bw.sh'     
 
 permissions:
   contents: read/write
@@ -19,8 +19,8 @@ jobs:
 
       - name: Run script...
         run: |
-          chmod +x bssg.sh
-          ./bssg.sh b
+          chmod +x bw.sh
+          ./bw.sh b
 
       - name: Commit and push changes
         run: |

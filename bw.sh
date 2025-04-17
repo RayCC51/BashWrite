@@ -3,8 +3,8 @@ start_time=$(date +%s%N)
 
 
 ### Edit these settings.
-BLOG_NAME="bssg blog"
-AUTHOR_NAME="my name"
+BLOG_NAME="bashwrite blog"
+AUTHOR_NAME="raycc"
 BASE_URL="localhost:8080/"
 
 ### Your blog main theme color. Write in hex code #rrggbb
@@ -39,10 +39,10 @@ CUSTOM_HTML_HEAD=""
 #
 
 # script info
-_SCRIPT_NAME="Bash static site generator"
+_SCRIPT_NAME="BashWrite"
 _SCRIPT_VERSION="0.12"
-_SCRIPT_FILE_NAME="bssg.sh"
-_SCRIPT_SITE="https://github.com/raycc51/bssg"
+_SCRIPT_FILE_NAME="bw.sh"
+_SCRIPT_SITE="https://github.com/raycc51/bashwrite"
 
 # echo colors
 RED='\e[31m'
