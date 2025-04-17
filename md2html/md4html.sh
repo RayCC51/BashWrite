@@ -108,6 +108,23 @@ MOD=$(echo "$MOD" | sed -E '
 ')
 
 # footnote
+# todo
+MOD=$(echo "$MOD" | sed -E '
+  s/\[\^([^\]]+)\]/\[\^\]\n\[\^\1\]\n/g
+')
+
+MOD=$(echo "$MOD" | sed -E '
+  /^\[\^.+\]$/ s/ /-/g
+')
+
+MOD=$(echo "$MOD" | sed -E '
+  /\[\^\]$/ {
+    N
+    N
+    s/\[\^\]\n\[\^(.+)\]\n/\[\^\1\]/
+  }
+')
+
 MOD=$(echo "$MOD" | sed -E '
   s/^\[\^(.*)\]: /[<a class="footnote" id="footnote-\1" href="#fn-\1">\1<\/a>]: /
   
@@ -115,10 +132,9 @@ MOD=$(echo "$MOD" | sed -E '
 ')
 
 # bold italic code
-MOD=$(echo "$MOD" | sed -E '
-  s/\*\*\*(.*)\*\*\*/<strong><em>\1<\/em><\/strong>/g
-  s/\*\*(.*)\*\*/<strong>\1<\/strong>/g
-   s/([^\\]?)\*(.*[^\\])\*/\1<em>\2<\/em>/g
+MOD=$(echo "$MOD" | sed -E '   s/(^|[^\\*])\*([^*]*[^\\*])\*([^*]|$)/\1<em>\2<\/em>\3/g
+   s/(^|[^\\*])\*\*([^*]*[^\\*])\*\*([^*]|$)/\1<strong>\2<\/strong>\3/g
+   s/(^|[^\\])\*\*\*([^*]*[^\\*])\*\*\*/\1<strong><em>\2<\/em><\/strong>/g
   
   s/``(.*)``/\\`\1\\`/g
   s/(^|[^\\])`([^`]*[^\\])`/\1<code>\2<\/code>/g

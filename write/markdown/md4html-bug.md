@@ -118,3 +118,13 @@ Footnote[^with].
 
 `witg p tag`
 ```
+
+## Bold, Itallic
+
+# Italicized bold
+
+*itallic, **bold**, itallic*
+
+```md
+*itallic, **bold**, itallic*
+```
