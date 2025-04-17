@@ -1223,10 +1223,6 @@ make_index_html() {
 # Rebuild if this script is modified
 build_rebuild() {
   local file_mod_time=$(date -r build.txt +%Y%m%d%H%M%S)
-  
-  if [[ ! -e "$build.txt" ]]; then
-    touch build.txt
-  fi
 
   local last_mod_time=$(cat build.txt)
   if [[ "$file_mod_time" != "$last_mod_time" ]]; then
@@ -1284,6 +1280,15 @@ elif [[ "$ARG" == b* || "$ARG" == r* || "$ARG" == B* || "$ARG" == R* ]]; then
     cp taglist.txt taglist-old.txt
   else
     touch taglist-old.txt
+  fi
+
+  # Create some files
+  if [[ ! -e build.txt ]]; then
+    touch build.txt
+  fi
+
+  if [[ ! -e filelist.txt ]]; then
+    touch filelist.txt
   fi
 
   # Clear old tgas list when rebuild
