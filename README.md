@@ -12,7 +12,7 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 
 ### Install
 
-1. Download `bw.sh` from [Release page]().
+1. Download `bw.sh` from [Release page](https://github.com/RayCC51/BashWrite/releases).
 2. Make your blog directory. 
 3. Move `bw.sh` to your blog directory. 
 4. Open `bw.sh`, edit config data and save the file.

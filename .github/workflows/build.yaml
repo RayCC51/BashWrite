@@ -6,9 +6,6 @@ on:
       - 'write/**'
       - 'assets/**'
       - 'bw.sh'     
-
-permissions:
-  contents: read/write
   
 jobs:
   build:

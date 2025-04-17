@@ -196,6 +196,10 @@ th {
 td {
   border-bottom: 1px solid var(--gray);
 }
+
+.indented {
+  text-indent: 30px;
+}
 ' >> style.css
 
   echo -e "  $BLUE+$RESET style.css"
@@ -561,7 +565,7 @@ MOD=$(echo "$MOD" | sed -E '
   s/^(.*[^>])$/<p>\1<\/p>/
   
   /<p> *<\/p>/d
-  s/^<p> {4}+(.*)/<p class="indented-p">\1/
+  s/^<p> {4}+(.*)/<p class="indented">\1/
   s/  <\/p>$/<\/p>\n/
 ')
 
