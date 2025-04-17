@@ -27,18 +27,20 @@ tag: md html sample bug fixme
 
 ### Mixed ul ol list
 
-1. ol 
-2. ol 
-    - indented ul
-    - indented ul
-3. ol
+1. this
+    - is
+2. okay
+
+- this is
+    1. not okay
 
 ```md
-1. ol 
-2. ol 
-    - indented ul
-    - indented ul
-3. ol
+1. this
+    - is
+2. okay
+
+- this is
+    1. not okay
 ```
 
 ## Table

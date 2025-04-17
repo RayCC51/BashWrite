@@ -40,9 +40,12 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 
 [Argument] =
 
-  h
-      Show help dialog.   
-  b
+    - h
+    
+      Show help dialog. 
+      
+    - b
+    
       Build blog. 
 
 ## About directory structure

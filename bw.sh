@@ -7,17 +7,17 @@ BLOG_NAME="bashwrite blog"
 AUTHOR_NAME="raycc"
 BASE_URL="localhost:8080/"
 
-### Your blog main theme color. Write in hex code #rrggbb
-THEME_COLOR="#CAD926"
+### Your blog theme color. Write in hex code #rrggbb
+MAIN_COLOR="#CAD926"
 
 ### <html lang="$LANG">
 LANG="en"
 
-### How many recent posts show in homepage
-### Set 0 to hide recent posts.
+### How many recent posts should be shown on the homepage.
+### Set it to 0 to hide recent posts.
 RECENT_POSTS_COUNT=5
 
-### Write your profile in Markdown format.
+### Write your profile in Markdown syntax.
 ### This paragraph will be included in the homepage of your blog.
 ### Be careful! You need to escape some letters: \\ \' \" \$
 PROFILE="
@@ -82,7 +82,7 @@ reset_var() {
 # Make style.css
 make_style_css() {
   echo ":root{
-  --main-theme: $THEME_COLOR;
+  --main-theme: $MAIN_COLOR;
 " > style.css
 
   echo '
@@ -200,6 +200,22 @@ td {
 .indented {
   text-indent: 30px;
 }
+
+#toTop {
+  position: fixed;
+  bottom: 1em;
+  right: 1em;
+  width: 3em;
+  height: 3em;
+  background-color: var(--main-theme);
+  color: white;
+  border-radius: 50%;
+  z-index: 5;
+  text-decoration: none;
+  text-align: center;
+  line-height: 3em;
+  opacity: 0.8;
+}
 ' >> style.css
 
   echo -e "  $BLUE+$RESET style.css"
@@ -285,6 +301,7 @@ make_after() {
     <p>© $(date +%Y) ${AUTHOR_NAME}</p>
     <p>Generated with <a href=\"${_SCRIPT_SITE}\">${_SCRIPT_NAME}</a></p>
   </footer>
+  <a href=\"#\" id=\"toTop\">↑</a>
 </body>"
 }
 
@@ -292,10 +309,10 @@ make_after() {
 # Fix config that user make mistake
 fix_config() {
   # Check THEME_COLOR is hex code color
-  if [[ ! "$THEME_COLOR" =~ ^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$ ]]; then
+  if [[ ! "$MAIN_COLOR" =~ ^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$ ]]; then
     echo -e "$RED!$RESET THEME_COLOR is not hex code color!"
     echo "  $_SCRIPT_FILE_NAME line:11"
-    THEME_COLOR="#CAD926"
+    MAIN_COLOR="#CAD926"
   fi
   
   # Remove slash in BASE_URL
