@@ -1,0 +1,7 @@
+name: Build 
+
+on:
+  push:
+    paths:
+      - 'write/**'
+      - 'assets/**'

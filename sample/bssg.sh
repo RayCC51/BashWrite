@@ -64,6 +64,7 @@ DATE=""
 LASTMOD=""
 TAGS=""
 DRAFT=""
+COUNT_CHANGE=0
 
 reset_var() {
   FILESTATUS=""
@@ -759,9 +760,9 @@ update_file_list() {
   echo "$FILELIST" > "filelist.txt"
 }
 
-# Update tags-list.txt
+# Update taglist.txt
 #
-# tags-list.txt has lines like
+# taglist.txt has lines like
 #   tag_name html_link_1 html_link_2 ...
 # Each lines start with tag name.
 # Each links are seperated by whitespace.
@@ -770,10 +771,10 @@ update_file_list() {
 # $1: TAGS(tags are seperated by whitespce)
 update_tags_list() {
   local TAGS="$1"
-  local FILE="tags-list.txt"
+  local FILE="taglist.txt"
   local tag_line=""
   
-  # Make tags-list.txt
+  # Make taglist.txt
   if [ ! -f "$FILE" ]; then
     touch "$FILE"
   fi
@@ -858,12 +859,12 @@ remove_file() {
   # Remove tags
   if [[ "$OSTYPE" == "darwin"* ]]; then
     # mac os
-    sed -i '' -e "s/ $NEW_PATH//g" tags-list.txt
-    sed -i '' '/^[^ ]*$/d' tags-list.txt
+    sed -i '' -e "s/ $NEW_PATH//g" taglist.txt
+    sed -i '' '/^[^ ]*$/d' taglist.txt
   else
     # linux
-    sed -i -e "s/ $NEW_PATH//g" tags-list.txt
-    sed -i '/^[^ ]*$/d' tags-list.txt
+    sed -i -e "s/ $NEW_PATH//g" taglist.txt
+    sed -i '/^[^ ]*$/d' taglist.txt
   fi
 
   echo -e "  $RED-[Remove]$RESET $NEW_PATH"
@@ -1012,7 +1013,7 @@ make_all_tags() {
     count=$(( $(echo "$line" | wc -w) - 1 ))
       
     HTML_ALL_TAGS+="$first_word $count\n"
-  done < tags-list.txt
+  done < taglist.txt
 
   # Sort tags by abc order
   HTML_ALL_TAGS=$(echo -e "$HTML_ALL_TAGS" | sort)
@@ -1046,7 +1047,7 @@ make_tag_pages() {
   local MD_PATH=""
   
   # Find removed tag
-  local REMOVED_TAG=$(grep -F -x -v -f "tags-list.txt" "tags-list-old.txt")
+  local REMOVED_TAG=$(grep -F -x -v -f "taglist.txt" "taglist-old.txt")
 
   if [ -n "$REMOVED_TAG" ]; then
     while IFS= read -r line; do
@@ -1057,7 +1058,7 @@ make_tag_pages() {
   fi
 
   # Find updated or added tag
-  local UPDATED_TAG=$(grep -Fv -x -f <(cat tags-list-old.txt) tags-list.txt)
+  local UPDATED_TAG=$(grep -Fv -x -f <(cat taglist-old.txt) taglist.txt)
   reset_var
 
   if [ -n "$UPDATED_TAG" ]; then
@@ -1192,7 +1193,6 @@ make_index_html() {
   </ul>
 </div>"
 
-
   make_rss_xml "E"
 
   reset_var
@@ -1214,6 +1214,25 @@ make_index_html() {
   echo -e "  $BLUE+$RESET index.html"
 }
 
+# Check build or rebuild
+#
+# Rebuild if this script is modified
+build_rebuild() {
+  local file_mod_time=$(date -r build.txt +%Y%m%d%H%M%S)
+  
+  if [[ ! -e "$build.txt" ]]; then
+    touch build.txt
+  fi
+
+  local last_mod_time=$(cat build.txt)
+  if [[ "$file_mod_time" != "$last_mod_time" ]]; then
+    echo "rebuild"
+    date +%Y%m%d%H%M%S > build.txt
+  else
+    echo "build"
+  fi
+}
+
 # Command line help text
 show_help() {
   echo -e "$GREEN$_SCRIPT_NAME$RESET
@@ -1222,10 +1241,8 @@ ${BLUE}site${RESET}: $_SCRIPT_SITE
 
 Commands: ${YELLOW}./$_SCRIPT_FILE_NAME${RESET} [Argument]
   [Argument] =
-    ${YELLOW}help${RESET}     : Show this dialog.
-    ${YELLOW}build${RESET}    : Build new, updated posts, tag posts and homepage.
-    ${YELLOW}rebuild${RESET}  : Rebuild every posts. 
-               If you edit $YELLOW$_SCRIPT_FILE_NAME$RESET, then you need to rebuild everything.
+    ${YELLOW}h${RESET}    : (h)elp. Show this dialog.
+    ${YELLOW}b${RESET}    : (b)uild. Build new, updated posts, tag posts and homepage.
 
 First to do:
   ${BLUE}1.$RESET Open $YELLOW$_SCRIPT_FILE_NAME$RESET and edit config. 
@@ -1248,27 +1265,31 @@ First to do:
 }
 
 # Main code
-if [[ "$#" -eq 0 || "$1" == h* ]]; then
+ARG="$1"
+if [[ "$#" -eq 0 || "$ARG" == h* || "$ARG" == H* ]]; then
   show_help
-elif [[ "$1" == b* || "$1" == r* ]]; then
+elif [[ "$ARG" == b* || "$ARG" == r* || "$ARG" == B* || "$ARG" == R* ]]; then
   fix_config
   make_directory
 
-  # Copy tags-list.txt for find diffrence
-  if [[ -e tags-list.txt ]]; then
-    cp tags-list.txt tags-list-old.txt
+  # Check this script is modified. 
+  ARG=$(build_rebuild)
+
+  # Copy taglist.txt for find diffrence. 
+  if [[ -e taglist.txt ]]; then
+    cp taglist.txt taglist-old.txt
   else
-    touch tags-list-old.txt
+    touch taglist-old.txt
   fi
 
   # Clear old tgas list when rebuild
-  if [[ "$1" == r* ]]; then
-    echo -n > tags-list-old.txt
+  if [[ "$ARG" == r* ]]; then
+    echo -n > taglist-old.txt
   fi
   
   # Build default files.
   # When rebuild or there is no file.
-  if [[ "$1" == r* ]] || [[ ! -f "style.css" ]] || [[ ! -f "robots.txt" ]] || [[ ! -f "sitemap.xml" ]]; then
+  if [[ "$ARG" == r* ]] || [[ ! -f "style.css" ]] || [[ ! -f "robots.txt" ]] || [[ ! -f "sitemap.xml" ]]; then
     make_resource
   fi
   
@@ -1285,6 +1306,7 @@ elif [[ "$1" == b* || "$1" == r* ]]; then
     
     if [ "$FILESTATUS" = "R" ]; then
       remove_file "$FILE_PATH"
+      COUNT_CHANGE+=1
     else
       frontmatter "$FILE_PATH"
 
@@ -1300,21 +1322,26 @@ elif [[ "$1" == b* || "$1" == r* ]]; then
         
         # Build new updated posts
         # Rebuild every posts
-        if [[ "$FILESTATUS" = "U" || "$FILESTATUS" = "N" || ( "$FILESTATUS" = "C" && "$1" = r* ) ]]; then
+        if [[ "$FILESTATUS" = "U" || "$FILESTATUS" = "N" || ( "$FILESTATUS" = "C" && "$ARG" = r* ) ]]; then
           converting "$FILE_PATH"
+          COUNT_CHANGE+=1
         fi
       fi
     fi
   done <<< "$FILELIST"
 
+  if [[ "$COUNT_CHANGE" == 0 ]];then
+    echo -e "$BLUE*$RESET There is no changes!"
+  fi
+
   update_file_list
-  
+
   echo -e "$BLUE*$RESET Make resources..."
   make_all_posts
   make_all_tags
   make_index_html
-  make_tag_pages
-  rm tags-list-old.txt
+  make_tag_pages 
+  rm taglist-old.txt
   
   echo -e "Done in $YELLOW$(( ($(date +%s%N) - start_time) / 1000000 ))${RESET}ms!"
 else

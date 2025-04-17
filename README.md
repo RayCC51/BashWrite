@@ -52,14 +52,10 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 
 [Argument] =
 
-    - help
+    - h
         Show help dialog.   
-    - build
-        Build new, updated posts.    
-    - rebuild
-        Rebuild every posts and some resources. 
-        If you edit `bssg.sh`, then run rebuild. 
-
+    - b
+        Build blog. 
 
 ## About directory structure
 
@@ -67,7 +63,7 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 
 - bssg.sh
 - readme.md
-- .github/ - Download this file if you use github pages.
+- .github/ - Download this file if you want to use github pages.
 
 ### Automatically generated: Do not edit these files
 
@@ -76,13 +72,14 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 - 404.html
 - all-posts.html - Contain every posts.
 - all-tags.html - Contain every tags.
+- build.txt - Contain the main script last updated date for check build or rebuild. 
 - filelist.txt - Contain list of posts, and modified date.
 - index.html
 - robots.txt
 - rss.xml
 - style.css
 - sitemap.xml
-- tags-list.txt - Contain list of  tags and links.
+- taglist.txt - Contain list of  tags and links.
 
 ### Automatically generated: User edit these files
 
