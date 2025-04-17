@@ -14,10 +14,10 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 - [x] make tags page
 - [x] make posts page
 - [ ] error handling
-- [ ] make doc
+- [x] make doc
 - [x] make rss, sitemap, robots
 - [ ] make github action
-- [ ] style.css
+- [x] style.css
 - [ ] refactoring, speed up
 
 ## Quick start

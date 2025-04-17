@@ -129,18 +129,14 @@ ___
 4. list
 ```
 
-- mixed
-- list
-    1. ul
-    2. ol
-- is work
+1. mixed
+    - ul
+2. ol
 
 ```md
-- mixed
-- list
-    1. ul
-    2. ol
-- is work
+1. mixed
+    - ul
+2. ol
 ```
 
 > block quote
@@ -277,5 +273,3 @@ foot[^1] note[^note] sup a
 
 [^note]: long
 ```
-
-

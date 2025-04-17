@@ -181,8 +181,10 @@ MOD=$(echo "$MOD" | sed -E '
 # fix indented list
 MOD=$(echo "$MOD" | sed -E '
   /<\/li>$/ {
+    :a
     N
-    s/<\/li>\n {4}+<li>(<[uo]l>)/\1/
+    /<\/li>$/ ba
+    s/<\/li>\n {4}<li>(<[uo]l>)$/\1/
   }
 ')
 
@@ -264,8 +266,8 @@ MOD=$(echo "$MOD" | sed -E '
     N
     /^<p>.*<\/p>\n<p>.*<\/p>$/ {
       s/<\/p>\n<p>/\n/
+      ba
     }
-    ba
   }
 ')
 

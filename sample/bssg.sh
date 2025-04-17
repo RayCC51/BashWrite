@@ -40,7 +40,7 @@ CUSTOM_HTML_HEAD=""
 
 # script info
 _SCRIPT_NAME="Bash static site generator"
-_SCRIPT_VERSION="0.10"
+_SCRIPT_VERSION="0.12"
 _SCRIPT_FILE_NAME="bssg.sh"
 _SCRIPT_SITE="https://github.com/raycc51/bssg"
 
@@ -497,11 +497,13 @@ MOD=$(echo "$MOD" | sed -E '
   s/il>/li>/g
 ')
 
-# fix indented li
+# fix indented list
 MOD=$(echo "$MOD" | sed -E '
   /<\/li>$/ {
+    :a
     N
-    s/<\/li>\n {4}+<li>(<[uo]l>)/\1/
+    /<\/li>$/ ba
+    s/<\/li>\n {4}<li>(<[uo]l>)$/\1/
   }
 ')
 
@@ -1216,12 +1218,33 @@ make_index_html() {
 show_help() {
   echo -e "$GREEN$_SCRIPT_NAME$RESET
 ${BLUE}version${RESET}: $_SCRIPT_VERSION
+${BLUE}site${RESET}: $_SCRIPT_SITE
 
 Commands: ${YELLOW}./$_SCRIPT_FILE_NAME${RESET} [Argument]
   [Argument] =
-    ${YELLOW}help${RESET}      : Show this dialog.
-    ${YELLOW}build${RESET}     : Build new, updated posts.
-    ${YELLOW}rebuild${RESET}   : Rebuild every posts."
+    ${YELLOW}help${RESET}     : Show this dialog.
+    ${YELLOW}build${RESET}    : Build new, updated posts, tag posts and homepage.
+    ${YELLOW}rebuild${RESET}  : Rebuild every posts. 
+               If you edit $YELLOW$_SCRIPT_FILE_NAME$RESET, then you need to rebuild everything.
+
+First to do:
+  ${BLUE}1.$RESET Open $YELLOW$_SCRIPT_FILE_NAME$RESET and edit config. 
+  ${BLUE}2.$RESET Create a markdown file in $YELLOW./write/$RESET
+    - Markdown files should starts with frontmatter. 
+    $YELLOW---
+    title: New post
+    description: Description of this post.
+    date: 2025-02-05
+    lastmod: 2025-05-02
+    tags: tag1 tag2
+    draft: false
+    ---$RESET
+    - [date] and [lastmod](last modified date) should be yyyy-mm-dd format. 
+    - [tags] are seperated with whitespace. 
+    - [description], [lastmod], [tags] and [draft] are option.
+  ${BLUE}3.$RESET Run ${YELLOW}./$_SCRIPT_FILE_NAME b$RESET
+  ${BLUE}4.$RESET Now your posts are in ${YELLOW}./posts/$RESET
+"
 }
 
 # Main code
