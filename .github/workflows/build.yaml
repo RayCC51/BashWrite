@@ -1,7 +1,31 @@
-name: Build 
+name: Build the blog
 
 on:
   push:
     paths:
       - 'write/**'
       - 'assets/**'
+      - 'bssg.sh'     
+
+permissions:
+  contents: read/write
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run script...
+        run: |
+          chmod +x bssg.sh
+          ./bssg.sh b
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "${{ github.actor }}"
+           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          git add .
+          git commit -m "Build blog [skip actions]"
+          git push origin main

@@ -84,4 +84,4 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 ### Automatically generated: User edit these files
 
 - write/ - Write your markdowns in this folder.
-- assets/
+- assets/ - Add any assets in this folder. 
