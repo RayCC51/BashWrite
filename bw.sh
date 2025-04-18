@@ -587,6 +587,8 @@ MOD=$(echo "$MOD" | sed -E '
 MOD=$(echo "$MOD" | sed -E '
   s/^( *)([^< ].*)$/<p>\1\2<\/p>/
   s/^(.*[^>])$/<p>\1<\/p>/
+
+  s/^(<[em|strong|code|del|sup|sub|mark|].*)$/<p>\1<\/p>/
   
   /<p> *<\/p>/d
   s/^<p> {4}+(.*)/<p class="indented">\1/

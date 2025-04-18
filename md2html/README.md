@@ -39,6 +39,5 @@ it support extended markdown [mattcone/markdown-guide](https://github.com/mattco
 - footnote
     - footnote name with space does not working
     - note with several lines not working
-- p
-    - currently p tag detect the line starts with < and ends with >. that means can not wrap some lines like "\<em\>a\</em\>"
-
+- em, strong
+    - * a **strong** inside em*

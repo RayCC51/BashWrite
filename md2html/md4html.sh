@@ -108,23 +108,7 @@ MOD=$(echo "$MOD" | sed -E '
 ')
 
 # footnote
-# todo
-MOD=$(echo "$MOD" | sed -E '
-  s/\[\^([^\]]+)\]/\[\^\]\n\[\^\1\]\n/g
-')
-
-MOD=$(echo "$MOD" | sed -E '
-  /^\[\^.+\]$/ s/ /-/g
-')
-
-MOD=$(echo "$MOD" | sed -E '
-  /\[\^\]$/ {
-    N
-    N
-    s/\[\^\]\n\[\^(.+)\]\n/\[\^\1\]/
-  }
-')
-
+# todo: remove whitespace in [^...]
 MOD=$(echo "$MOD" | sed -E '
   s/^\[\^(.*)\]: /[<a class="footnote" id="footnote-\1" href="#fn-\1">\1<\/a>]: /
   
@@ -132,7 +116,8 @@ MOD=$(echo "$MOD" | sed -E '
 ')
 
 # bold italic code
-MOD=$(echo "$MOD" | sed -E '   s/(^|[^\\*])\*([^*]*[^\\*])\*([^*]|$)/\1<em>\2<\/em>\3/g
+MOD=$(echo "$MOD" | sed -E '   
+  s/(^|[^\\*])\*([^*]*[^\\*])\*([^*]|$)/\1<em>\2<\/em>\3/g
    s/(^|[^\\*])\*\*([^*]*[^\\*])\*\*([^*]|$)/\1<strong>\2<\/strong>\3/g
    s/(^|[^\\])\*\*\*([^*]*[^\\*])\*\*\*/\1<strong><em>\2<\/em><\/strong>/g
   
@@ -255,9 +240,11 @@ MOD=$(echo "$MOD" | sed -E '
 MOD=$(echo "$MOD" | sed -E '
   s/^( *)([^< ].*)$/<p>\1\2<\/p>/
   s/^(.*[^>])$/<p>\1<\/p>/
-  
+
+  s/^(<[em|strong|code|del|sup|sub|mark|].*)$/<p>\1<\/p>/
+    
   /<p> *<\/p>/d
-  s/^<p> {4}+(.*)/<p class="indented-p">\1/
+  s/^<p> {4}+(.*)/<p class="indented">\1/
   s/  <\/p>$/<\/p>\n/
 ')
 

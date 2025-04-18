@@ -97,28 +97,6 @@ Footnote[^with].
     work. 
 ```
 
-## Paragraph
-
-### Single inline tag with paragraph
-
-*If there is only*
-
-**one inline tag in a**
-
-***sentance, it can not wrap***
-
-`witg p tag`
-
-```md
-*If there is only*
-
-**one inline tag in a**
-
-***sentance, it can not wrap***
-
-`witg p tag`
-```
-
 ## Bold, Itallic
 
 # Italicized bold
