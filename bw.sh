@@ -5,7 +5,7 @@ start_time=$(date +%s%N)
 ### Edit these settings.
 BLOG_NAME="bashwrite blog"
 AUTHOR_NAME="raycc"
-BASE_URL="localhost:8080/"
+BASE_URL="localhost:1313/"
 
 ### Your blog theme color. Write in hex code #rrggbb
 MAIN_COLOR="#CAD926"
@@ -337,7 +337,6 @@ fix_config() {
 # Markdown to HTML converter
 md2html() {
 # input
-# MOD=$(cat "$1")
 MOD="$1"
 
 # escape < > &
@@ -389,10 +388,10 @@ MOD=$(echo "$MOD" | sed -E '
     s/~/\\~/g
     s/=/\\=/g
     s/\^/\\^/g
+    s/^:/\\:/
     
     s/&lt;/\\</g
     s/&gt;/\\>/g
-    s/&amp;/&/g
   }
 ')
 
@@ -404,14 +403,19 @@ MOD=$(echo "$MOD" | sed -E '
   }
 ')
 
-# blockquote
-BLOCKQUOTE() {
+# details summary html
 MOD=$(echo "$MOD" | sed -E '
-  s/^&gt; (.*)/<blockquote>\n\1\n<\/blockquote>/
-  /^&gt; *$/d
+  s/&lt;(\/?details)&gt;/<\1>/
+  s/&lt;(\/?summary)&gt;/<\1>/g
 ')
 
-MOD=$(echo "$MOD" | sed -E '
+# blockquote
+BLOCKQUOTE() {
+  MOD=$(echo "$MOD" | sed -E '
+  s/^&gt; ?(.*)/<blockquote>\n\1\n<\/blockquote>/
+')
+
+  MOD=$(echo "$MOD" | sed -E '
   /^<\/blockquote>$/ {
     N
     /<\/blockquote>\n<blockquote>/d
@@ -436,7 +440,7 @@ MOD=$(echo "$MOD" | sed -E '
 
 # heading with id
 MOD=$(echo "$MOD" | sed -E '
-  s/^<h([1-6])>(.*) \{# ?(.*)\}<\/h\1>$/<h\1 id="\3"><a href="#\3">\2<\/a> 🔗<\/h\1>/
+  s/^<h([1-6])>(.*) ?\{# ?(.*)\}<\/h\1>$/<h\1 id="\3"><a href="#\3">\2<\/a> 🔗<\/h\1>/
 ')
 
 # hr
@@ -445,6 +449,7 @@ MOD=$(echo "$MOD" | sed -E '
 ')
 
 # footnote
+# todo: remove whitespace in [^...]
 MOD=$(echo "$MOD" | sed -E '
   s/^\[\^(.*)\]: /[<a class="footnote" id="footnote-\1" href="#fn-\1">\1<\/a>]: /
   
@@ -452,20 +457,11 @@ MOD=$(echo "$MOD" | sed -E '
 ')
 
 # bold italic code
-MOD=$(echo "$MOD" | sed -E '
-  s/\*\*\*([^\*]*)\*\*\*/<strong><em>\1<\/em><\/strong>/g
-  s/\*\*([^\*]*)\*\*/<strong>\1<\/strong>/g
-   s/([^\\]?)\*([^\*]*[^\\])\*/\1<em>\2<\/em>/g
-  
-  s/``(.*)``/\\`\1\\`/g
-  s/(^|[^\\])`([^`]*[^\\])`/\1<code>\2<\/code>/g
-')
-
-MOD=$(echo "$MOD" | sed -E '
+MOD=$(echo "$MOD" | sed -E '   
   s/(^|[^\\*])\*([^*]*[^\\*])\*([^*]|$)/\1<em>\2<\/em>\3/g
-  s/(^|[^\\*])\*\*([^*]*[^\\*])\*\*([^*]|$)/\1<strong>\2<\/strong>\3/g
-  s/(^|[^\\])\*\*\*([^*]*[^\\*])\*\*\*/\1<strong><em>\2<\/em><\/strong>/g
-
+   s/(^|[^\\*])\*\*([^*]*[^\\*])\*\*([^*]|$)/\1<strong>\2<\/strong>\3/g
+   s/(^|[^\\])\*\*\*([^*]*[^\\*])\*\*\*/\1<strong><em>\2<\/em><\/strong>/g
+  
   s/``(.*)``/\\`\1\\`/g
   s/(^|[^\\])`([^`]*[^\\])`/\1<code>\2<\/code>/g
 ')
@@ -474,17 +470,15 @@ MOD=$(echo "$MOD" | sed -E '
 MOD=$(echo "$MOD" | sed -E '
   s/~~(.*)~~/<del>\1<\/del>/g
   s/==(.*)==/<mark>\1<\/mark>/g
-  
-
-  s/([^\\]?)~(.*[^\\])~/\1<sub>\2<\/sub>/g
+  s/~(.*)~/<sub>\1<\/sub>/g
   s/([^\\]?)\^(.*[^\\])\^/\1<sup>\2<\/sup>/g
 ')
 
 # img, a
 MOD=$(echo "$MOD" | sed -E '
-  s/!\[(.*)\]\((.*) "(.*)"\)/<figure>\n  <img src="\2" alt="\1" title="\3">\n <figcaption>\1<\/figcaption>\n<\/figure>/g
-  s/!\[(.*)\]\((.*)\)/<figure>\n  <img src="\2" alt="\1">\n <figcaption>\1<\/figcaption>\n<\/figure>/g
-  
+  s/!\[(.*)\]\((.*) "(.*)"\)/<figure>\n  <img src="\2" alt="\1" title="\3">\n  <figcaption>\1<\/figcaption>\n<\/figure>/g
+  s/!\[(.*)\]\((.*)\)/<figure>\n  <img src="\2" alt="\1">\n  <figcaption>\1<\/figcaption>\n<\/figure>/g
+
   s/&lt;(.*)&gt;/<a href="\1">\1<\/a>/g
   s/\[(.*)\]\((.*) "(.*)"\)/<a href="\2" title="\3">\1<\/a>/g
   s/\[(.*)\]\((.*)\)/<a href="\2">\1<\/a>/g
@@ -502,7 +496,7 @@ MOD=$(echo "$MOD" | sed -E '
 MOD=$(echo "$MOD" | sed -E '
   /^( {4}*)<\/[uo]l>$/ {
     N
-    /( {4}*)<\/[uo]l>\n<[uo]l>/d
+    /( {4}*)<\/([uo]l)>\n\1<\2>/d
   }
 ')
 
@@ -558,9 +552,58 @@ MOD=$(echo "$MOD" | sed -E '
   }
 ')
 
+# colgroup
+# todo: move |:- line to top
+MOD=$(echo "$MOD" | sed -E '
+  /^<tr>[|:-]+<\/tr>$/ {
+    h
+    G
+  }
+')
+
+MOD=$(echo "$MOD" | sed -E '
+  /^<table>$/ {
+    n
+    h
+    n
+    G
+  }
+')
+
+MOD=$(echo "$MOD" | sed -E '
+  /^<table>$/ {
+    n
+    d
+  }
+')
+
+MOD=$(echo "$MOD" | sed -E '
+  /^<table>$/ {
+    n
+    s/<\/?tr>//g
+    s/^\|/<colgroup>\n    <col>/
+    s/\|$/\n<\/colgroup>/
+  }
+')
+
+MOD=$(echo "$MOD" | sed -E '
+  /^    <col>/ {
+    s/\|/\n    <col>/g
+  }
+')
+
+MOD=$(echo "$MOD" | sed -E '
+  s/^    <col>-+$/    <col>/
+  s/^    <col>:-+$/    <col style="text-align: left;">/
+  s/^    <col>-+:$/    <col style="text-align: right;">/
+  s/^    <col>:-+:$/    <col style="text-align: center;">/
+')
+
 # thead tbody seperator
 MOD=$(echo "$MOD" | sed -E '
-  s/^<tr>[|:-]+<\/tr>$/<\/thead>\n<tbody>/
+  /^<table>$/,/^<\/table>$/ {
+    s/^<tr>[|:-]+<\/tr>$/<\/thead>\n<tbody>/
+  }
 ')
 
 # td
@@ -574,8 +617,8 @@ MOD=$(echo "$MOD" | sed -E '
 
 # thead tbody
 MOD=$(echo "$MOD" | sed -E '
-  s/^<table>$/<table>\n<thead>/
-  s/^<\/table>$/<\/tbody>\n<\/table>/
+  /^<\/colgroup>$/ a\<thead>
+  /^<\/table>$/ i\<\/tbody>
 ')
 
 # td -> th
@@ -583,41 +626,56 @@ MOD=$(echo "$MOD" | sed -E '
   /<thead>/,/<\/thead>/s/td>/th>/g
 ')
 
+# dt
+MOD=$(echo "$MOD" | sed -E '
+  /.*/ {
+    N
+    s/(.*)\n(: .*)/<dl>\n<dt>\1<\/dt>\n<\/dl>\n\2/
+  }
+')
+
+# dl dd
+MOD=$(echo "$MOD" | sed -E '
+  s/^: (.*)$/<dl>\n<dd>\1<\/dd>\n<\/dl>/
+')
+
+# clean dl
+MOD=$(echo "$MOD" | sed -E '
+  /^<\/dl>$/ {
+    N
+    /<\/dl>\n<dl>/d
+  }
+')
+
+MOD=$(echo "$MOD" | sed -E '
+  /^<\/dl>$/ {
+    N
+    N
+    /<\/dl>\n\n<dl>/d
+  }
+')
+
 # p
 MOD=$(echo "$MOD" | sed -E '
   s/^( *)([^< ].*)$/<p>\1\2<\/p>/
   s/^(.*[^>])$/<p>\1<\/p>/
-
-  s/^(<[em|strong|code|del|sup|sub|mark|].*)$/<p>\1<\/p>/
   
+  s/^(<(em|strong|code|del|sup|sub|mark).*)$/<p>\1<\/p>/
+
   /<p> *<\/p>/d
   s/^<p> {4}+(.*)/<p class="indented">\1/
   s/  <\/p>$/<\/p>\n/
 ')
 
-# fixing p in blockquote
+# combine continuous p
 MOD=$(echo "$MOD" | sed -E '
-  /^<blockquote>$/,/^<\/blockquote>$/ {
-    /^<p>/ {
-      N
-      s/<\/p>\n<p>/<\/p>\n\n<p>/
-    }
-  }
-')
-
-# p clean empty line, combine continuous p in single p
-MOD=$(echo "$MOD" | sed -E '
-  /^<p>/ {
-    N
-    /^<p> *$\n<\/p>$/d
-  }
   /^<p>.*<\/p>$/ {
     :a
     N
-    /^<p>.*<\/p>\n<p>.*<\/p>$/ {
+    /<\/p>\n<p>/ {
       s/<\/p>\n<p>/\n/
+      ba
     }
-    ba
   }
 ')
 
@@ -629,13 +687,7 @@ MOD=$(echo "$MOD" | sed -E '
   }
 ')
 
-# wrapping table with div
-MOD=$(echo "$MOD" | sed -E '
-  s/^<table>$/<div class="table-container"><table>/
-  s/^<\/table>$/<\/table><\/div>/
-')
-
-# escape keys
+# return escape keys
 MOD=$(echo "$MOD" | sed -E '
   s/\\\\/\\/g
   s/\\\./\./g
@@ -659,6 +711,7 @@ MOD=$(echo "$MOD" | sed -E '
   s/\\~/~/g
   s/\\=/=/g
   s/\\\^/^/g
+  s/^\\:/:/
 ')
 
 # output
