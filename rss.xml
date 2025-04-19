@@ -3,41 +3,41 @@
 
 <channel>
   <title>bashwrite blog</title>
-  <link>http://localhost:1313</link>
+  <link>https://raycc51.github.io/BashWrite</link>
   <description>raycc's blog</description>
   <language>en</language>
-  <pubDate>Sat, 19 Apr 2025 01:33:46 +0000</pubDate>
+  <pubDate>Sat, 19 Apr 2025 01:36:38 +0000</pubDate>
   <copyright>© 2025 raycc</copyright>
-  <atom:link href="http://localhost:1313/rss.xml" rel="self" type="application/rss+xml" />
+  <atom:link href="https://raycc51.github.io/BashWrite/rss.xml" rel="self" type="application/rss+xml" />
 
 <item>
   <title>Frontmatter</title>
-    <link>http://localhost:1313/posts/about-frontmatter.html</link>
-    <guid>http://localhost:1313/posts/about-frontmatter.html</guid>
+    <link>https://raycc51.github.io/BashWrite/posts/about-frontmatter.html</link>
+    <guid>https://raycc51.github.io/BashWrite/posts/about-frontmatter.html</guid>
     <description>About frontmatter</description>
     <pubDate>Thu, 17 Apr 2025 00:00:00 +0000</pubDate>
 </item>
 
 <item>
   <title>Github Actions</title>
-    <link>http://localhost:1313/posts/github-action.html</link>
-    <guid>http://localhost:1313/posts/github-action.html</guid>
+    <link>https://raycc51.github.io/BashWrite/posts/github-action.html</link>
+    <guid>https://raycc51.github.io/BashWrite/posts/github-action.html</guid>
     <description>How to publish the blog on Github Pages</description>
     <pubDate>Thu, 17 Apr 2025 00:00:00 +0000</pubDate>
 </item>
 
 <item>
   <title>Markdown sample</title>
-    <link>http://localhost:1313/posts/markdown/markdown-sample.html</link>
-    <guid>http://localhost:1313/posts/markdown/markdown-sample.html</guid>
+    <link>https://raycc51.github.io/BashWrite/posts/markdown/markdown-sample.html</link>
+    <guid>https://raycc51.github.io/BashWrite/posts/markdown/markdown-sample.html</guid>
     <description>Testing markdown to html converter. </description>
     <pubDate>Thu, 17 Apr 2025 00:00:00 +0000</pubDate>
 </item>
 
 <item>
   <title>md4html bug list</title>
-    <link>http://localhost:1313/posts/markdown/md4html-bug.html</link>
-    <guid>http://localhost:1313/posts/markdown/md4html-bug.html</guid>
+    <link>https://raycc51.github.io/BashWrite/posts/markdown/md4html-bug.html</link>
+    <guid>https://raycc51.github.io/BashWrite/posts/markdown/md4html-bug.html</guid>
     <description>I don't know how to solve these bugs...</description>
     <pubDate>Thu, 17 Apr 2025 00:00:00 +0000</pubDate>
 </item>
