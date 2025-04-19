@@ -729,6 +729,22 @@ make_directory() {
       mkdir "$folder"
     fi
   done
+
+  # Copy taglist.txt for find diffrence.   
+  if [[ -e taglist.txt ]]; then
+    cp taglist.txt taglist-old.txt
+  else
+    touch taglist.txt
+    touch taglist-old.txt
+  fi
+  
+  if [[ ! -e build.txt ]]; then
+    touch build.txt
+  fi
+  
+  if [[ ! -e filelist.txt ]]; then
+    touch filelist.txt
+  fi
 }
 
 # Make robots.txt
@@ -1075,7 +1091,7 @@ make_all_posts() {
 
   make_before > all-posts.html
   {
-    echo "<ul id=\"all-posts\">"
+    echo "<ul>"
     echo "$HTML_ALL_POSTS"
     echo "</ul>" 
   } >> all-posts.html
@@ -1113,7 +1129,7 @@ make_all_tags() {
 
   make_before > all-tags.html
   {
-    echo "<ul id=\"all-tags\">"
+    echo "<ul>"
     echo "$HTML_ALL_TAGS"
     echo "</ul>" 
   } >> all-tags.html
@@ -1171,7 +1187,7 @@ make_tag_pages() {
   
       make_before > "$NEW_PATH"
       {
-        echo "<ul id=\"tag-posts\">"
+        echo "<ul>"
         echo "$HTML_ALL_POSTS"
         echo "</ul>" 
       } >> "$NEW_PATH"
@@ -1301,12 +1317,12 @@ make_index_html() {
 #
 # Rebuild if this script is modified
 build_rebuild() {
-  local file_mod_time=$(date -r build.txt +%Y%m%d%H%M%S)
-
-  local last_mod_time=$(cat build.txt)
-  if [[ "$file_mod_time" != "$last_mod_time" ]]; then
+  local script_mod_time=$(date -r "$_SCRIPT_FILE_NAME" +%Y%m%d%H%M%S)
+  local prev_mod_time=$(cat build.txt)
+  
+  if [[ "$script_mod_time" != "$prev_mod_time" ]]; then
     echo "rebuild"
-    date +%Y%m%d%H%M%S > build.txt
+    echo "$script_mod_time" > build.txt
   else
     echo "build"
   fi
@@ -1351,26 +1367,12 @@ elif [[ "$ARG" == b* || "$ARG" == r* || "$ARG" == B* || "$ARG" == R* ]]; then
   fix_config
   make_directory
 
-  # Copy taglist.txt for find diffrence. 
-  if [[ -e taglist.txt ]]; then
-    cp taglist.txt taglist-old.txt
-  else
-    touch taglist-old.txt
-  fi
-
-  # Create some files
-  if [[ ! -e build.txt ]]; then
-    touch build.txt
-  fi
-
-  if [[ ! -e filelist.txt ]]; then
-    touch filelist.txt
-  fi
-  
   # Check this script is modified. 
-  ARG=$(build_rebuild)
+  if [[ ! "$ARG" == r* ]]; then
+    ARG=$(build_rebuild)
+  fi
 
-  # Clear old tgas list when rebuild
+  # Clear old tags list when rebuild
   if [[ "$ARG" == r* ]]; then
     echo -n > taglist-old.txt
   fi
@@ -1410,7 +1412,7 @@ elif [[ "$ARG" == b* || "$ARG" == r* || "$ARG" == B* || "$ARG" == R* ]]; then
         
         # Build new updated posts
         # Rebuild every posts
-        if [[ "$FILESTATUS" = "U" || "$FILESTATUS" = "N" || ( "$FILESTATUS" = "C" && "$ARG" = r* ) ]]; then
+        if [[ "$FILESTATUS" = "U" || "$FILESTATUS" = "N" || ( "$FILESTATUS" = "C" && "$ARG" == r* ) ]]; then
           converting "$FILE_PATH"
           COUNT_CHANGE+=1
         fi
@@ -1419,16 +1421,17 @@ elif [[ "$ARG" == b* || "$ARG" == r* || "$ARG" == B* || "$ARG" == R* ]]; then
   done <<< "$FILELIST"
 
   if [[ "$COUNT_CHANGE" == 0 ]];then
-    echo -e "$BLUE*$RESET There is no changes!"
+    echo -e "  $BLUE*$RESET There is no changes!"
+  else
+    update_file_list
+
+    echo -e "$BLUE*$RESET Make resources..."
+    make_all_posts
+    make_all_tags
+    make_index_html
+    make_tag_pages 
   fi
-
-  update_file_list
-
-  echo -e "$BLUE*$RESET Make resources..."
-  make_all_posts
-  make_all_tags
-  make_index_html
-  make_tag_pages 
+  
   rm taglist-old.txt
   
   echo -e "Done in $YELLOW$(( ($(date +%s%N) - start_time) / 1000000 ))${RESET}ms!"

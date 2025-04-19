@@ -5,24 +5,27 @@ on:
     paths:
       - 'write/**'
       - 'assets/**'
-      - 'bw.sh'     
+      - 'bw.sh'
+  workflow_dispatch:
   
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Run script...
+      - name: Build
         run: |
           chmod +x bw.sh
           ./bw.sh b
 
-      - name: Commit and push changes
-        run: |
-          git config --global user.name "${{ github.actor }}"
-           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
-          git add .
-          git commit -m "Build blog [skip actions]"
-          git push origin main
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v4
+        if: github.ref == 'refs/heads/main'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .

@@ -257,14 +257,46 @@ highlight ==mark==
 ### headling with id {#extened}
 ```
 
-|t|a|b|l|
+|ttt|aaa|bbb|lll|
 |---|:--|:-:|--:|
 |.|l|c|r|
 
 ```md
-|t|a|b|l|
+|ttt|aaa|bbb|lll|
 |---|:--|:-:|--:|
 |.|l|c|r|
+```
+
+dl
+: definition list
+
+dt
+: definition
+: data
+
+```md
+dl
+: definition list
+
+dt
+: definition
+: data
+```
+
+<details>
+<summary>this is summary</summary>
+this is detail
+this is detail
+this is detail
+</details>
+
+```md
+<details>
+<summary>this is summary</summary>
+this is detail
+this is detail
+this is detail
+</details>
 ```
 
 foot[^1] note[^note] sup a

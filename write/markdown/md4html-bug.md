@@ -45,17 +45,17 @@ tag: md html sample bug fixme
 
 ## Table
 
-### Alignment
+### More then 2 theads
 
-|table|with|align|
+|table|table|table|
+|table|table|table|
 |:-:|:--|--:|
-|is|not|work|
 |!|!|!|
 
 ```md
-|table|with|align|
+|table|table|table|
+|table|table|table|
 |:-:|:--|--:|
-|is|not|work|
 |!|!|!|
 ```
 
@@ -101,8 +101,8 @@ Footnote[^with].
 
 # Italicized bold
 
-*itallic, **bold**, itallic*
+*itallic, **bold and itallic**, itallic*
 
 ```md
-*itallic, **bold**, itallic*
+*itallic, **bold and itallic**, itallic*
 ```
