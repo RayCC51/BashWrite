@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+
+<channel>
+  <title>bashwrite blog</title>
+  <link>http://localhost:1313</link>
+  <description>raycc's blog</description>
+  <language>en</language>
+  <pubDate>Sat, 19 Apr 2025 01:33:46 +0000</pubDate>
+  <copyright>© 2025 raycc</copyright>
+  <atom:link href="http://localhost:1313/rss.xml" rel="self" type="application/rss+xml" />
+
+<item>
+  <title>Frontmatter</title>
+    <link>http://localhost:1313/posts/about-frontmatter.html</link>
+    <guid>http://localhost:1313/posts/about-frontmatter.html</guid>
+    <description>About frontmatter</description>
+    <pubDate>Thu, 17 Apr 2025 00:00:00 +0000</pubDate>
+</item>
+
+<item>
+  <title>Github Actions</title>
+    <link>http://localhost:1313/posts/github-action.html</link>
+    <guid>http://localhost:1313/posts/github-action.html</guid>
+    <description>How to publish the blog on Github Pages</description>
+    <pubDate>Thu, 17 Apr 2025 00:00:00 +0000</pubDate>
+</item>
+
+<item>
+  <title>Markdown sample</title>
+    <link>http://localhost:1313/posts/markdown/markdown-sample.html</link>
+    <guid>http://localhost:1313/posts/markdown/markdown-sample.html</guid>
+    <description>Testing markdown to html converter. </description>
+    <pubDate>Thu, 17 Apr 2025 00:00:00 +0000</pubDate>
+</item>
+
+<item>
+  <title>md4html bug list</title>
+    <link>http://localhost:1313/posts/markdown/md4html-bug.html</link>
+    <guid>http://localhost:1313/posts/markdown/md4html-bug.html</guid>
+    <description>I don't know how to solve these bugs...</description>
+    <pubDate>Thu, 17 Apr 2025 00:00:00 +0000</pubDate>
+</item>
+
+</channel>
+</rss>
+
