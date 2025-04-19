@@ -5,7 +5,7 @@ start_time=$(date +%s%N)
 ### Edit these settings.
 BLOG_NAME="bashwrite blog"
 AUTHOR_NAME="raycc"
-BASE_URL="localhost:1313/"
+BASE_URL="https://raycc51.github.io/BashWrite/"
 
 ### Your blog theme color. Write in hex code #rrggbb
 MAIN_COLOR="#CAD926"
