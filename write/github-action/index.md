@@ -1,5 +1,5 @@
 ---
-title: Github Actions
+title: Publish on Gihub Pages with github actions
 description: How to publish the blog on Github Pages
 date: 2025-04-17
 lastmod: 2025-04-18
@@ -17,13 +17,13 @@ draft: false
 
 ```
 your_blog/
-├─ .github/
-│  ├─ workflows/
-│  │  ├─ build.yaml
+├─ .github/           <<< New!
+│  ├─ workflows/      <<< New!
+│  │  ├─ build.yaml   <<< New!
 ├─ write/
 │  ├─ post1.md
 │  ├─ post2.md
-├─ .nojekyll
+├─ .nojekyll          <<< New!
 ├─ bw.sh
 ```
 
@@ -31,12 +31,10 @@ your_blog/
 
 ![setting image](pages-setting.png)
 
-1. Go to the your blog repository
+0. Push any files in your blog repository, or just run a github action. Then *gh-pages* branch will be created automatically.
+1. Go to the your blog repository settings.
 2. Settings -> Code and automation - Pages -> Build and deployment
     - Source: Deploy from a branch
     - Branch: gh-pages /(root)
-3. Save the settings
-
-### First time to deploy
-
-todo... make doc
+3. Save the settings.
+4. Your site is live at *https://YOUR-NAME.github.io/*
