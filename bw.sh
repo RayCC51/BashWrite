@@ -421,6 +421,16 @@ MOD=$(echo "$MOD" | sed -E '
   s/&lt;(\/?summary)&gt;/<\1>/g
 ')
 
+# html comment
+MOD=$(echo "$MOD" | sed -E '
+  s/&lt;(!-- .* --)&gt;/<\1>/
+')
+
+# html br
+MOD=$(echo "$MOD" | sed -E '
+  s/&lt;(br)&gt;/<\1>/
+')
+
 # blockquote
 BLOCKQUOTE() {
   MOD=$(echo "$MOD" | sed -E '
@@ -638,15 +648,15 @@ MOD=$(echo "$MOD" | sed -E '
 
 # dt
 MOD=$(echo "$MOD" | sed -E '
-  /.*/ {
+  /^[^:]/ {
     N
-    s/(.*)\n(: .*)/<dl>\n<dt>\1<\/dt>\n<\/dl>\n\2/
+    s/^([^:].*)\n(: .*)/<dl>\n    <dt>\1<\/dt>\n<\/dl>\n\2/
   }
 ')
 
 # dl dd
 MOD=$(echo "$MOD" | sed -E '
-  s/^: (.*)$/<dl>\n<dd>\1<\/dd>\n<\/dl>/
+  s/^: (.*)$/<dl>\n    <dd>\1<\/dd>\n<\/dl>/
 ')
 
 # clean dl
