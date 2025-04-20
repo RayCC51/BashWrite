@@ -214,12 +214,20 @@ td {
   text-decoration: none;
   text-align: center;
   line-height: 3em;
-  opacity: 0.8;
+  opacity: 0.5;
 }
 
 img {
   max-width: 95%;
 }
+
+.recent-description {
+  opacity: 0.6;
+}
+
+.align-left {text-align: left;}
+.align-right {text-align: right;}
+.align-center {text-align: center;}
 ' >> style.css
 
   echo -e "  $BLUE+$RESET style.css"
@@ -270,12 +278,12 @@ make_before() {
 
   if [ -n "$DATE" ]; then
     OUTPUT+="
-      <p id=\"meta-date\">Written in $DATE</p>"
+      <p id=\"meta-date\">Written in <time>$DATE<\/time></p>"
   fi
 
   if [ -n "$LASTMOD" ]; then
     OUTPUT+="
-      <p id=\"meta-lastmod\">Updated in $LASTMOD</p>"
+      <p id=\"meta-lastmod\">Updated in <time>$LASTMOD<\/time></p>"
   fi
   
   if [ -n "$TAGS" ]; then
@@ -1066,7 +1074,7 @@ group_list() {
     
   # Wraping with html tag
   RESULT=$(echo "$RESULT" | sed -E '
-      s/^([0-9]{4}-[0-9]{2})(-[0-9]{2}) ([^ ]*) (.*)$/<li>\1<ul>\n<li>\1\2 <a href="\3">\4<\/a><\/li>\n<\/ul><\/li>/
+      s/^([0-9]{4}-[0-9]{2})(-[0-9]{2}) ([^ ]*) (.*)$/<li><time>\1<\/time><ul>\n<li><time>\1\2<\/time> <a href="\3">\4<\/a><\/li>\n<\/ul><\/li>/
     ')
   RESULT=$(echo "$RESULT" | sed -E '
       /^<\/ul><\/li>$/ {
@@ -1276,7 +1284,7 @@ make_index_html() {
     if [ "$isShowRecent" = "true" ]; then
       HTML_RECENT_POSTS+="
 <li>
-  <p><span class=\"recent-date\">${_DATE}</span> <a href=\"${_NEW_PATH}\">${_TITLE}</a></p>
+  <p><span class=\"recent-date\"><time>${_DATE}<\/time></span> <a href=\"${_NEW_PATH}\">${_TITLE}</a></p>
 "
       if [ -n "$_DESCRIPTION" ]; then 
         HTML_RECENT_POSTS+="  <p class=\"recent-description\">${_DESCRIPTION}</p>
