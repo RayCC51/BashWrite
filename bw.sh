@@ -573,52 +573,6 @@ MOD=$(echo "$MOD" | sed -E '
   }
 ')
 
-# colgroup
-MOD=$(echo "$MOD" | sed -E '
-  /^<tr>[|:-]+<\/tr>$/ {
-    h
-    G
-  }
-')
-
-MOD=$(echo "$MOD" | sed -E '
-  /^<table>$/ {
-    n
-    h
-    n
-    G
-  }
-')
-
-MOD=$(echo "$MOD" | sed -E '
-  /^<table>$/ {
-    n
-    d
-  }
-')
-
-MOD=$(echo "$MOD" | sed -E '
-  /^<table>$/ {
-    n
-    s/<\/?tr>//g
-    s/^\|/<colgroup>\n    <col>/
-    s/\|$/\n<\/colgroup>/
-  }
-')
-
-MOD=$(echo "$MOD" | sed -E '
-  /^    <col>/ {
-    s/\|/\n    <col>/g
-  }
-')
-
-MOD=$(echo "$MOD" | sed -E '
-  s/^    <col>-+$/    <col>/
-  s/^    <col>:-+$/    <col style="text-align: left;">/
-  s/^    <col>-+:$/    <col style="text-align: right;">/
-  s/^    <col>:-+:$/    <col style="text-align: center;">/
-')
-
 # thead tbody seperator
 MOD=$(echo "$MOD" | sed -E '
   /^<table>$/,/^<\/table>$/ {
@@ -637,7 +591,7 @@ MOD=$(echo "$MOD" | sed -E '
 
 # thead tbody
 MOD=$(echo "$MOD" | sed -E '
-  /^<\/colgroup>$/ a\<thead>
+  /^<table>$/ a\<thead>
   /^<\/table>$/ i\<\/tbody>
 ')
 
@@ -1070,7 +1024,7 @@ group_list() {
   # Group the posts by year-month
   while IFS= read -r -a line; do
     DATE="${line[0]}"
-    URL="${line[1]}"
+    URL=$(echo "${line[1]}" | sed 's/index.html$//')
     TITLE="${line[@]:2}"
     
     if [ -z "$TEMP_DATE" ]; then
@@ -1084,14 +1038,17 @@ group_list() {
     
   # Wraping with html tag
   RESULT=$(echo "$RESULT" | sed -E '
-      s/^([0-9]{4}-[0-9]{2})(-[0-9]{2}) ([^ ]*) (.*)$/<li><time>\1<\/time><ul>\n<li><time>\1\2<\/time> <a href="\3">\4<\/a><\/li>\n<\/ul><\/li>/
-    ')
+    s/^([0-9]{4}-[0-9]{2})(-[0-9]{2}) ([^ ]*) (.*)$/<li><time>\1<\/time><ul>\n<li><time>\1\2<\/time> <a href="\3">\4<\/a><\/li>\n<\/ul><\/li>/
+  ')
   RESULT=$(echo "$RESULT" | sed -E '
-      /^<\/ul><\/li>$/ {
-        N
-        /<\/ul><\/li>\n<li>.*<ul>/d
-      }
-    ')
+    /^<\/ul><\/li>$/ {
+      N
+      /<\/ul><\/li>\n<li>.*<ul>/d
+    }
+  ')
+  RESULT=$(echo "$RESULT" | sed -E '
+    s/(href=".*\/)index.html">/\1">/
+  ')
     
   echo "$RESULT"
 }
@@ -1291,10 +1248,13 @@ make_index_html() {
     
     _DESCRIPTION=$(awk -F'"' '/description/{print $4; exit}' ${_PATH})
 
+    # todo
+    _NEW_PATH=$(echo "$_NEW_PATH" | sed 's/index.html$//')
+
     if [ "$isShowRecent" = "true" ]; then
       HTML_RECENT_POSTS+="
 <li>
-  <p><span class=\"recent-date\"><time>${_DATE}</time></span> <a href=\"${_NEW_PATH}\">${_TITLE}</a></p>
+  <p><time>${_DATE}</time> <a href=\"${_NEW_PATH}\">${_TITLE}</a></p>
 "
       if [ -n "$_DESCRIPTION" ]; then 
         HTML_RECENT_POSTS+="  <p class=\"recent-description\">${_DESCRIPTION}</p>
