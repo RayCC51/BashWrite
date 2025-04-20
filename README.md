@@ -1,4 +1,4 @@
-# BashWrite
+# [BashWrite](https://raycc51.github.io/BashWrite/)
 
 Pure bash script for make a blog. 
 
@@ -34,7 +34,7 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
     ```
 3. Save your file and run `./bw.sh b`
 
-## Commends
+## Commands
 
 `./bw.sh [Argument]`
 
@@ -76,3 +76,12 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 
 - write/ - Write your markdowns in this folder.
 - assets/ - Add any assets in this folder. 
+
+## Fixme
+
+- Github Action
+    - Can not detect build or rebuild. Action create new branch. 
+- Images
+    - Move assets in *write/* folder to *posts/*
+- index.html
+    - If link has `index.html`, then remove it. 

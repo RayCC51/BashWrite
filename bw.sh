@@ -21,9 +21,9 @@ RECENT_POSTS_COUNT=5
 ### This paragraph will be included in the homepage of your blog.
 ### Be careful! You need to escape some letters: \\ \' \" \$
 PROFILE="
-# Welcome to my blog
+# Welcome to sample blog
 
-I am a **banana**!!
+This blog source in [Github](https://github.com/RayCC51/BashWrite/tree/gh-pages)
 "
 
 ### Write your own HTML code. 
@@ -215,6 +215,10 @@ td {
   text-align: center;
   line-height: 3em;
   opacity: 0.8;
+}
+
+img {
+  max-width: 95%;
 }
 ' >> style.css
 
@@ -449,7 +453,6 @@ MOD=$(echo "$MOD" | sed -E '
 ')
 
 # footnote
-# todo: remove whitespace in [^...]
 MOD=$(echo "$MOD" | sed -E '
   s/^\[\^(.*)\]: /[<a class="footnote" id="footnote-\1" href="#fn-\1">\1<\/a>]: /
   
@@ -553,7 +556,6 @@ MOD=$(echo "$MOD" | sed -E '
 ')
 
 # colgroup
-# todo: move |:- line to top
 MOD=$(echo "$MOD" | sed -E '
   /^<tr>[|:-]+<\/tr>$/ {
     h
@@ -1258,7 +1260,8 @@ make_index_html() {
   fi
   
   local RECENT_POSTS=$(echo "$ALL_POSTS" | head -n "$RECENT_POSTS_COUNT")
-  local HTML_RECENT_POSTS="<div id=\"recent-posts\">
+  local HTML_RECENT_POSTS="<hr>
+<div id=\"recent-posts\">
   <h4>Recent posts</h4>
   <ul>"
 
@@ -1299,18 +1302,59 @@ make_index_html() {
   DESCRIPTION="$AUTHOR_NAME's $BLOG_NAME"
   NEW_PATH="./index.html"
   
-  make_before > index.html
+  make_before > "$NEW_PATH"
   echo "<div id=\"profile\">" >> index.html
-  md2html "$PROFILE" >> index.html
-  echo "</div>" >> index.html
+  md2html "$PROFILE" >> "$NEW_PATH"
+  echo "</div>" >> "$NEW_PATH"
   
   if [ "$isShowRecent" = "true" ]; then
     echo "$HTML_RECENT_POSTS" >> index.html
   fi
   
-  make_after >> index.html
+  make_after >> "$NEW_PATH"
 
   echo -e "  $BLUE+$RESET index.html"
+}
+
+# Copy assets in write/ to posts/
+copy_assets() {
+  find ./write/ -type f ! -name "*.md" -exec sh -c '
+    for file; do
+      echo "$file $(date -d @"$(stat --format="%Y" "$file")" +%Y%m%d%H%M%S)";
+    done
+  ' sh {} + | sed -E '
+    s/^\.\/write/\.\/posts/
+  ' > temp_asset_write.txt
+
+  find ./posts/ -type f ! -name "*.html" -exec sh -c '
+    for file; do
+      echo "$file $(date -d @"$(stat --format="%Y" "$file")" +%Y%m%d%H%M%S)";
+    done
+  ' sh {} + > temp_asset_post.txt
+
+  local REMOVED_ASSET=$(grep -F -x -v -f "temp_asset_write.txt" "temp_asset_post.txt")
+
+  if [ -n "$REMOVED_ASSET" ]; then
+    while IFS=' ' read -r file_path mod_date; do
+    rm "$file_path"
+    done <<< "$REMOVED_ASSET"
+  fi
+
+  local NEW_ASSET=$(grep -Fv -x -f <(cat temp_asset_post.txt) temp_asset_write.txt)
+  local origin_path=''
+
+  if [ -n "$NEW_ASSET" ]; then
+    while IFS=' ' read -r file_path mod_date; do
+      origin_path=$(echo "$file_path" | sed 's/^\.\/posts/\.\/write/')
+      mkdir -p "$(dirname "$file_path")"
+      cp "$origin_path" "$file_path"
+    done <<< "$NEW_ASSET"
+  fi
+
+  rm temp_asset_write.txt
+  rm temp_asset_post.txt
+
+  echo -e "  $BLUE+$RESET Copy assets in write/ to posts/"
 }
 
 # Check build or rebuild
@@ -1431,7 +1475,8 @@ elif [[ "$ARG" == b* || "$ARG" == r* || "$ARG" == B* || "$ARG" == R* ]]; then
     make_index_html
     make_tag_pages 
   fi
-  
+
+  copy_assets
   rm taglist-old.txt
   
   echo -e "Done in $YELLOW$(( ($(date +%s%N) - start_time) / 1000000 ))${RESET}ms!"
