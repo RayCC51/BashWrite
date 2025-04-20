@@ -23,7 +23,7 @@ RECENT_POSTS_COUNT=5
 PROFILE="
 # Welcome to sample blog
 
-This blog source in [Github](https://github.com/RayCC51/BashWrite/tree/gh-pages)
+This blog source in [Github](https://github.com/RayCC51/BashWrite/tree/published)
 "
 
 ### Write your own HTML code. 
