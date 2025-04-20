@@ -278,12 +278,12 @@ make_before() {
 
   if [ -n "$DATE" ]; then
     OUTPUT+="
-      <p id=\"meta-date\">Written in <time>$DATE<\/time></p>"
+      <p id=\"meta-date\">Written in <time>$DATE</time></p>"
   fi
 
   if [ -n "$LASTMOD" ]; then
     OUTPUT+="
-      <p id=\"meta-lastmod\">Updated in <time>$LASTMOD<\/time></p>"
+      <p id=\"meta-lastmod\">Updated in <time>$LASTMOD</time></p>"
   fi
   
   if [ -n "$TAGS" ]; then
@@ -1294,7 +1294,7 @@ make_index_html() {
     if [ "$isShowRecent" = "true" ]; then
       HTML_RECENT_POSTS+="
 <li>
-  <p><span class=\"recent-date\"><time>${_DATE}<\/time></span> <a href=\"${_NEW_PATH}\">${_TITLE}</a></p>
+  <p><span class=\"recent-date\"><time>${_DATE}</time></span> <a href=\"${_NEW_PATH}\">${_TITLE}</a></p>
 "
       if [ -n "$_DESCRIPTION" ]; then 
         HTML_RECENT_POSTS+="  <p class=\"recent-description\">${_DESCRIPTION}</p>

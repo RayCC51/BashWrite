@@ -283,32 +283,54 @@ dt
 : data
 ```
 
-<details>
-<summary>this is summary</summary>
-this is detail
-this is detail
-this is detail
-</details>
+foot[^1] note[^note] sup a
+
+[^1]: first foot note
+
+[^note]: long
 
 ```md
-<details>
-<summary>this is summary</summary>
-this is detail
-this is detail
-this is detail
-</details>
+foot[^1] note[^note] sup a
+
+[^1]: first foot note
+
+[^note]: long
 ```
 
-foot[^1] note[^note] sup a
+# HTML Tags
 
-[^1]: first foot note
-
-[^note]: long
+<!-- comment -->
 
 ```md
-foot[^1] note[^note] sup a
+<!-- comment -->
+```
 
-[^1]: first foot note
+<br>
 
-[^note]: long
+```md
+<br>
+```
+
+<details>
+<summary>details and summary</summary>
+open
+
+and
+
+close
+
+paragraph
+</details>
+
+```md
+<details>
+<summary>details and summary</summary>
+open
+
+and
+
+close
+
+paragraph
+</details>
 ```

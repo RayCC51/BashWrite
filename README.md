@@ -1,4 +1,4 @@
-# [BashWrite](https://raycc51.github.io/BashWrite/)
+# BashWrite - [demo](https://raycc51.github.io/BashWrite/)
 
 Pure bash script for make a blog. 
 

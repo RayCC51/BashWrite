@@ -1,9 +1,11 @@
 ---
-title: md4html bug list
+title: md2html bug list
 description: I don't know how to solve these bugs...
 date: 2025-04-17
 tag: md html sample bug fixme
 ---
+
+[md2html](https://github.com/RayCC51/md2html)
 
 ## List
 
@@ -45,18 +47,16 @@ tag: md html sample bug fixme
 
 ## Table
 
-### More then 2 theads
+### Alignment
 
-|table|table|table|
-|table|table|table|
-|:-:|:--|--:|
-|!|!|!|
+|table|table|table|table|
+|---|:-:|:--|--:|
+|!|!|!|!|
 
 ```md
-|table|table|table|
-|table|table|table|
-|:-:|:--|--:|
-|!|!|!|
+|table|table|table|table|
+|---|:-:|:--|--:|
+|!|!|!|!|
 ```
 
 ## Footnote
