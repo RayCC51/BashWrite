@@ -2,7 +2,7 @@
 title: Publish on Gihub Pages with github actions
 description: How to publish the blog on Github Pages
 date: 2025-04-17
-lastmod: 2025-04-18
+lastmod: 2025-04-20
 tags: github action pages ghpages publish
 draft: false
 ---
