@@ -36,17 +36,13 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 
 ## Commands
 
-`./bw.sh [Argument]`
+`./bw.sh h`
 
-[Argument] =
+    Show help dialog. 
+    
+`./bw.sh b`
 
-    - h
-    
-      Show help dialog. 
-      
-    - b
-    
-      Build blog. 
+    Build blog. 
 
 ## About directory structure
 
@@ -76,12 +72,3 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 
 - write/ - Write your markdowns in this folder.
 - assets/ - Add any assets in this folder. 
-
-## Fixme
-
-- Github Action
-    - Can not detect build or rebuild. Action create new branch. 
-- Images
-    - Move assets in *write/* folder to *posts/*
-- index.html
-    - If link has `index.html`, then remove it. 

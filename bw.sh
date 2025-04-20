@@ -40,7 +40,7 @@ CUSTOM_HTML_HEAD=""
 
 # script info
 _SCRIPT_NAME="BashWrite"
-_SCRIPT_VERSION="1.0.0"
+_SCRIPT_VERSION="1.0.3"
 _SCRIPT_FILE_NAME="bw.sh"
 _SCRIPT_SITE="https://github.com/raycc51/bashwrite"
 
@@ -1365,14 +1365,16 @@ copy_assets() {
     while IFS=' ' read -r file_path mod_date; do
       origin_path=$(echo "$file_path" | sed 's/^\.\/posts/\.\/write/')
       mkdir -p "$(dirname "$file_path")"
-      cp "$origin_path" "$file_path"
+      cp -p "$origin_path" "$file_path"
     done <<< "$NEW_ASSET"
   fi
 
   rm temp_asset_write.txt
   rm temp_asset_post.txt
 
-  echo -e "  $BLUE+$RESET Copy assets in write/ to posts/"
+  if [[ -n "$REMOVED_ASSET" || -n "$NEW_ASSET" ]]; then
+    echo -e "  $BLUE+$RESET Copy assets in write/ to posts/"
+  fi
 }
 
 # Check build or rebuild
@@ -1433,6 +1435,8 @@ elif [[ "$ARG" == b* || "$ARG" == r* || "$ARG" == B* || "$ARG" == R* ]]; then
   if [[ ! "$ARG" == r* ]]; then
     ARG=$(build_rebuild)
   fi
+
+  echo -e "Run $GREEN$_SCRIPT_NAME$RESET $_SCRIPT_VERSION [$ARG]"
 
   # Clear old tags list when rebuild
   if [[ "$ARG" == r* ]]; then
