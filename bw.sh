@@ -1277,7 +1277,7 @@ make_index_html() {
     isShowRecent=false
   fi
   
-  local RECENT_POSTS=$(echo "$ALL_POSTS" | head -n "$RECENT_POSTS_COUNT")
+  local RECENT_POSTS=$(echo "$ALL_POSTS" | sort -r -k1,1 | head -n "$RECENT_POSTS_COUNT")
   local HTML_RECENT_POSTS="<hr>
 <div id=\"recent-posts\">
   <h4>Recent posts</h4>
