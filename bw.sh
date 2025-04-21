@@ -228,6 +228,11 @@ img {
 .align-left {text-align: left;}
 .align-right {text-align: right;}
 .align-center {text-align: center;}
+
+details {
+  border-top: 1px solid var(--main-theme);
+  border-bottom: 1px solid var(--main-theme);
+}
 ' >> style.css
 
   echo -e "  $BLUE+$RESET style.css"

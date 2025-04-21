@@ -2,16 +2,15 @@
 title: Publish on Gihub Pages with github actions
 description: How to publish the blog on Github Pages
 date: 2025-04-17
-lastmod: 2025-04-20
+lastmod: 2025-04-21
 tags: github action pages ghpages publish
 draft: false
 ---
 
 ## Download github action
 
-1. Download `.github/workflows/build.yaml`
+1. Download `.github/workflows/build.yaml` in [Github](https://github.com/raycc51/bashwrite)
 2. Put the `build.yaml` in your `your-blog-path/.github/workflows/`
-3. Make empty file `.nojekyll` in your `your-blog-path/`
 
 ### Directory
 
@@ -23,7 +22,6 @@ your_blog/
 ├─ write/
 │  ├─ post1.md
 │  ├─ post2.md
-├─ .nojekyll          <<< New!
 ├─ bw.sh
 ```
 
@@ -37,4 +35,4 @@ your_blog/
     - Source: Deploy from a branch
     - Branch: gh-pages /(root)
 3. Save the settings.
-4. Your site is live at *https://YOUR-NAME.github.io/*
+4. Your site is live at *https://YOUR-NAME.github.io/* or *https://YOUR-NAME.github.io/REPO-NAME/*

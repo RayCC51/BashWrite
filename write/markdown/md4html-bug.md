@@ -2,7 +2,7 @@
 title: md2html bug list
 description: I don't know how to solve these bugs...
 date: 2025-04-17
-lastmod: 2025-04-20
+lastmod: 2025-04-21
 tag: md html sample bug fixme
 ---
 
@@ -44,6 +44,32 @@ tag: md html sample bug fixme
 
 - this is
     1. not okay
+```
+
+### Other elements insides list
+
+- list
+- list
+
+    p
+    
+- list
+
+    > blockquote
+
+- list
+
+```md
+- list
+- list
+
+    p
+    
+- list
+
+    > blockquote
+
+- list
 ```
 
 ## Table
