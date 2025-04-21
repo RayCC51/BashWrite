@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="raycc">
+  <meta name="description" content="I don't know how to solve these bugs...">
+
+  <meta property="og:title" content="md2html bug list">
+  <meta property="og:description" content="I don't know how to solve these bugs...">
+  <meta property="og:url" content="https://raycc51.github.io/BashWrite/posts/markdown/md4html-bug.html">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="md2html bug list">
+  <meta name="twitter:description" content="I don't know how to solve these bugs...">
+  
+  <title>md2html bug list</title>
+  <link rel="stylesheet" href="https://raycc51.github.io/BashWrite/style.css">
+
+  <script>
+  if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    document.documentElement.classList.add("dark");
+  }
+  </script>
+
+  
+</head>
+<body>
+  <header>
+    <h3><a href="https://raycc51.github.io/BashWrite">bashwrite blog</a></h3>
+    <nav>
+      <ul>
+        <li><a href="https://raycc51.github.io/BashWrite/all-posts.html">Posts</a></li>
+        <li><a href="https://raycc51.github.io/BashWrite/all-tags.html">Tags</a></li>
+        <li><a href="https://raycc51.github.io/BashWrite/rss.xml">RSS</a></li>
+      </ul>
+    </nav>
+  </header>
+  <article>
+    <header>
+      <h1 id="meta-title">md2html bug list</h1>
+      <p id="meta-date">Written in <time>2025-04-17</time></p>
+      <p id="meta-lastmod">Updated in <time>2025-04-21</time></p>
+    </header>
+    <main>
+
+<a href="https://github.com/RayCC51/md2html">md2html</a>
+
+<h2>List</h2>
+
+<h3>More than 2 level indented list</h3>
+
+<ul>
+<li>0 normal<ul>
+    <li>1 indented with 4 space</li>
+    </ul></li>
+        <li><ul>
+        <li>2 this is not working</li>
+        </ul></li>
+            <li><ul>
+            <li>3 this too</li>
+            </ul><ul>
+    <li>1</li>
+    </ul></li>
+<li>0 ...</li>
+</ul>
+
+<pre><code class="language-md">
+- 0 normal
+    - 1 indented with 4 space
+        - 2 this is not working
+            - 3 this too
+    - 1
+- 0 ...
+</code></pre>
+
+<h3>Mixed ul ol list</h3>
+
+<ol>
+<li>this</li>
+</ol>
+<ul>
+    <li><ul>
+    <li>is</li>
+    </ul></li>
+</ul>
+<ol>
+<li>okay</li>
+</ol>
+
+<ul>
+<li>this is</li>
+</ul>
+<ol>
+    <li><ol>
+    <li>not okay</li>
+    </ol></li>
+</ol>
+
+<pre><code class="language-md">
+1. this
+    - is
+2. okay
+
+- this is
+    1. not okay
+</code></pre>
+
+<h3>Other elements insides list</h3>
+
+<ul>
+<li>list</li>
+<li>list</li>
+</ul>
+
+<p class="indented">p</p>
+<ul>
+<li>list</li>
+</ul>
+
+<p class="indented">&gt; blockquote</p>
+
+<ul>
+<li>list</li>
+</ul>
+
+<pre><code class="language-md">
+- list
+- list
+
+    p
+    
+- list
+
+    &gt; blockquote
+
+- list
+</code></pre>
+
+<h2>Table</h2>
+
+<h3>Alignment</h3>
+
+<table>
+<thead>
+<tr>
+    <th>table</th>
+    <th>table</th>
+    <th>table</th>
+    <th>table</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+    <td>!</td>
+    <td>!</td>
+    <td>!</td>
+    <td>!</td>
+</tr>
+</tbody>
+</table>
+
+<pre><code class="language-md">
+|table|table|table|table|
+|---|:-:|:--|--:|
+|!|!|!|!|
+</code></pre>
+
+<h2>Footnote</h2>
+
+<h3>Footnote link with space</h3>
+
+<p>How to call<sup><a class="footnote" id="fn-of this" href="#footnote-of this">of this</a></sup> things<sup><a class="footnote" id="fn-foot note" href="#footnote-foot note">foot note</a></sup>?</p>
+
+<p>[<a class="footnote" id="footnote-of this" href="#fn-of this">of this</a>]: Can not use whitespace in html id. </p>
+
+<p>[<a class="footnote" id="footnote-foot note" href="#fn-foot note">foot note</a>]: So this will not working well.</p>
+
+<pre><code class="language-md">
+How to call[^of this] things[^foot note]?
+
+[^of this]: Can not use whitespace in html id. 
+
+[^foot note]: So this will not working well. 
+</code></pre>
+
+<h3>Footnote with several lines</h3>
+
+<p>Footnote<sup><a class="footnote" id="fn-with" href="#footnote-with">with</a></sup>. </p>
+
+<p>[<a class="footnote" id="footnote-with" href="#fn-with">with</a>]: several lines</p>
+
+<p class="indented">should be</p>
+
+<p class="indented">work. </p>
+
+<pre><code class="language-md">
+Footnote[^with]. 
+
+[^with]: several lines
+
+    should be
+
+    work. 
+</code></pre>
+
+<h2>Bold, Itallic</h2>
+
+<h1>Italicized bold</h1>
+
+<p>*itallic, <strong>bold and itallic</strong>, itallic*</p>
+
+<pre><code class="language-md">
+*itallic, **bold and itallic**, itallic*
+</code></pre>
+
+    </main>
+  </article>
+  <footer>
+    <p>© 2025 raycc</p>
+    <p>Generated with <a href="https://github.com/raycc51/bashwrite">BashWrite</a></p>
+  </footer>
+  <a href="#" id="toTop">↑</a>
+</body>

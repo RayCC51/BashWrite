@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="raycc">
+  <meta name="description" content="How to include images in the posts">
+
+  <meta property="og:title" content="Images in the posts">
+  <meta property="og:description" content="How to include images in the posts">
+  <meta property="og:url" content="https://raycc51.github.io/BashWrite/posts/images/index.html">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Images in the posts">
+  <meta name="twitter:description" content="How to include images in the posts">
+  
+  <title>Images in the posts</title>
+  <link rel="stylesheet" href="https://raycc51.github.io/BashWrite/style.css">
+
+  <script>
+  if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    document.documentElement.classList.add("dark");
+  }
+  </script>
+
+  
+</head>
+<body>
+  <header>
+    <h3><a href="https://raycc51.github.io/BashWrite">bashwrite blog</a></h3>
+    <nav>
+      <ul>
+        <li><a href="https://raycc51.github.io/BashWrite/all-posts.html">Posts</a></li>
+        <li><a href="https://raycc51.github.io/BashWrite/all-tags.html">Tags</a></li>
+        <li><a href="https://raycc51.github.io/BashWrite/rss.xml">RSS</a></li>
+      </ul>
+    </nav>
+  </header>
+  <article>
+    <header>
+      <h1 id="meta-title">Images in the posts</h1>
+      <p id="meta-date">Written in <time>2025-04-20</time></p>
+      <p id="meta-tags">Tags: <a href="https://raycc51.github.io/BashWrite/tags/sample.html">sample</a> <a href="https://raycc51.github.io/BashWrite/tags/blog.html">blog</a> <a href="https://raycc51.github.io/BashWrite/tags/image.html">image</a> </p>
+    </header>
+    <main>
+
+<p>You can use markdown to include the images. </p>
+
+<h3>1. Prepare images. </h3>
+
+<figure>
+  <img src="screenshot.png" alt="screenshot.png">
+  <figcaption>screenshot.png</figcaption>
+</figure>
+
+<h3>2. Put your images in...</h3>
+
+<pre><code>
+your-blog-directory/
+├─ write/
+│  ├─ new-post/           &lt;&lt;&lt; New!
+│  │  ├─ index.md         &lt;&lt;&lt; New!
+│  │  ├─ screenshot.png   &lt;&lt;&lt; New!
+├─ bw.sh
+</code></pre>
+
+<p>Create a new folder under the <code>write/</code> folder. It’s best to name the folder after the title of the new post you will write.</p>
+
+<p>Try to keep only 1 markdown file per folder if possible. This will make file management easier.</p>
+
+<p>Name the markdown file <code>index.md</code>. This way, you can have a clean URL.</p>
+
+<p>Also, include any images you want to put in this folder.</p>
+
+<h3>3. Write markdown.</h3>
+
+<figure>
+  <img src="screenshot.png" alt="screenshot">
+  <figcaption>screenshot</figcaption>
+</figure>
+
+<pre><code class="language-md">
+![screenshot](screenshot.png)
+</code></pre>
+
+    </main>
+  </article>
+  <footer>
+    <p>© 2025 raycc</p>
+    <p>Generated with <a href="https://github.com/raycc51/bashwrite">BashWrite</a></p>
+  </footer>
+  <a href="#" id="toTop">↑</a>
+</body>

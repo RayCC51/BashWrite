@@ -1,0 +1,152 @@
+:root{
+  --main-theme: #CAD926;
+
+
+  --background-color: #ffffff;
+  --font-color: #272822;
+  --gray: color-mix(in srgb, var(--font-color), var(--background-color) 30%);
+  --code-bg: color-mix(in srgb, var(--main-theme), var(--background-color) 90%);
+}
+
+.dark {
+  --background-color: #272822;
+  --font-color: #cfcfce;
+}
+
+.dark a {
+  color: #1E90FF;
+}
+
+.dark a:visited {
+  color: #9370DB;
+}
+
+body {
+  color: var(--font-color);
+  background-color: var(--background-color);
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1em;
+}
+
+body > header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 0.5em;
+  border-bottom: 1px solid var(--main-theme);
+}
+
+body > header h3 a {
+  color: var(--main-theme);
+}
+
+body > header h3 a:visited {
+  color: var(--main-theme) !important;
+}
+
+body > header ul {
+  display: flex;
+}
+
+body > header li {
+  list-style: none;
+  margin-left: 1em;
+}
+
+body > header a {
+  text-decoration: none;
+  color: var(--font-color);
+}
+
+body > header a:visited {
+  color: var(--font-color) !important;
+}
+
+body > footer {
+  border-top: 1px solid var(--main-theme);
+}
+
+article > header {
+  border-bottom: 2px solid var(--main-theme);
+}
+
+#meta-date, #meta-lastmod {
+  color: var(--gray);
+}
+
+pre {
+  background-color: var(--code-bg);
+  overflow-x: auto;
+  padding: 0 0 1em 1em;
+}
+
+code {
+  background-color: var(--code-bg);
+}
+
+figure {
+  text-align: center;
+  margin: 0 auto;
+}
+
+figcaption {
+  color: var(--gray);
+}
+
+blockquote {
+  border-left: 2px solid var(--main-theme);
+  padding-left: 1em;
+  margin-left: 2em;
+  margin-right: 2em;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+th {
+  border-bottom: 2px solid var(--main-theme);
+}
+
+td {
+  border-bottom: 1px solid var(--gray);
+}
+
+.indented {
+  text-indent: 30px;
+}
+
+#toTop {
+  position: fixed;
+  bottom: 1em;
+  right: 1em;
+  width: 3em;
+  height: 3em;
+  background-color: var(--main-theme);
+  color: white;
+  border-radius: 50%;
+  z-index: 5;
+  text-decoration: none;
+  text-align: center;
+  line-height: 3em;
+  opacity: 0.5;
+}
+
+img {
+  max-width: 95%;
+}
+
+.recent-description {
+  opacity: 0.6;
+}
+
+.align-left {text-align: left;}
+.align-right {text-align: right;}
+.align-center {text-align: center;}
+
+details {
+  border-top: 1px solid var(--main-theme);
+  border-bottom: 1px solid var(--main-theme);
+}
+
