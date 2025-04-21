@@ -317,7 +317,7 @@ make_after() {
     <p>© $(date +%Y) ${AUTHOR_NAME}</p>
     <p>Generated with <a href=\"${_SCRIPT_SITE}\">${_SCRIPT_NAME}</a></p>
   </footer>
-  <a href=\"#\" id=\"toTop\">↑</a>
+  <a href=\"#\" id=\"toTop\">&#8679;</a>
 </body>"
 }
 
