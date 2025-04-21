@@ -52,7 +52,6 @@ BLUE='\e[34m'
 RESET='\e[0m'
 
 # Some variables for scripting
-FILELIST=""
 ALL_POSTS=""
 FILESTATUS=""
 CONTENTS=""
@@ -798,36 +797,36 @@ make_resource() {
 
 # Make markdown file list
 # 
-# It contain: 
-# string file path, yyyymmddhhmmss update date
-make_list() {  
-  FILELIST=$(find ./write/ -type f -name "*.md" -exec sh -c 'for file; do
-    echo "$file $(date -d @"$(stat --format="%Y" "$file")" +%Y%m%d%H%M%S)"; 
-   done' sh {} + | sort -k2,2r)
-}
+# checksum file_size file_path
+# For removed files, temparaly set the checksum as 000
+make_list() {
+  local new='./temp_cksum_md.txt'
+  local old='./checksum/cksum_md.txt'
 
-# Find new file
-# 
-# Below function get_file_stat can not detect removed file
-# So compare filelist.txt and FILELIST, add new files lines in FILELIST tempareley
-find_new_files() {
-  local REMOVED_LINES=""
-  
-  while IFS=' ' read -r FILE_PATH UPDATED; do
-    if ! echo "$FILELIST" | grep -qF "$FILE_PATH"; then    
-      REMOVED_LINES="$(printf "%s\n%s 000" "$REMOVED_LINES" "$FILE_PATH")"
+  find ./write/ -type f -name "*.md" -exec cksum {} \; > $new
+
+  if [ ! -e $old ]; then
+    touch $old
+  else
+    local removed_md=$(grep -Fxv -f $new $old)
+    local temp_removed=''
+
+    if [ -n "$removed_md" ]; then
+      while IFS=' ' read -r checksum file_size file_path; do
+        temp_removed+="$'\n'000 $file_size $file_path$"
+      done <<< "$removed_md"
+
+      echo "$temp_removed" >> $new
     fi
-  done < "filelist.txt"
-
-  FILELIST+="$REMOVED_LINES"
+  fi
 }
 
 # Update new file list
 #
-# Remove removed file lines ends with 000
-update_file_list() {
-  FILELIST=$(echo "$FILELIST" | grep -v ' 000$')
-  echo "$FILELIST" > "filelist.txt"
+# Remove removed file lines starts with 000
+update_file_list() {  
+  grep -v '^000 ' ./temp_cksum_md.txt > ./checksum/cksum_md.txt
+  rm ./temp_cksum_md.txt
 }
 
 # Update taglist.txt
@@ -898,20 +897,21 @@ update_tags_list() {
 # 
 # $1: a file path from FILELIST
 # $2: lastest updated date
+# return: FILESTATUS
 get_file_stat() {
-  local NEW="$1"
-  local NEW_UPDATED="$2"
-  
-  local OLD_UPDATED=$(awk -v new="$NEW" -F' ' '$1 == new {print $2}' filelist.txt)
+  local file_path="$1"
+  local file_checksum="$2"
 
-  if [ -z "$OLD_UPDATED" ]; then
-    FILESTATUS="N"
-  elif [[ "$NEW_UPDATED" -gt "$OLD_UPDATED" ]]; then
-    FILESTATUS="U"
-  elif [ "$NEW_UPDATED" = "000" ]; then
-    FILESTATUS="R"
+  local old_checksum=$(awk -v file="$file_path" -F' ' '$3 == file {print $1}' ./checksum/cksum_md.txt)
+
+  if [ -z "$old_checksum" ]; then
+    echo 'N'
+  elif [[ "$file_checksum" != "$old_checksum" ]]; then
+    echo 'U'
+  elif [[ "$file_checksum" == '000' ]]; then
+    echo 'R'
   else
-    FILESTATUS="C"
+    echo 'C'
   fi
 }
 
@@ -981,7 +981,6 @@ frontmatter() {
 # $2: updated date
 converting() {
   local FILE_PATH="$1"
-  local STATUS=""
 
   # Make directory
   mkdir -p "$(dirname "$NEW_PATH")"
@@ -994,15 +993,20 @@ converting() {
   echo "$RESULTS" >> $NEW_PATH
   make_after >> $NEW_PATH
 
-  if [ "$FILESTATUS" = "N" ]; then
-    STATUS="New"
-  elif [ "$FILESTATUS" = "U" ]; then
-    STATUS="Update"
-  elif [ "$FILESTATUS" = "C" ]; then
-    STATUS="Rebuild"
-  fi
+  local status=''
+  case "$FILESTATUS" in
+    N)
+      status='New'
+      ;;
+    U)
+      status='Update'
+      ;;
+    C)
+      status='Rebuild'
+      ;;
+  esac
   
-  echo -e "  $BLUE+[$STATUS]$RESET $NEW_PATH"
+  echo -e "  $BLUE+[$status]$RESET $NEW_PATH"
 }
 
 # Convert link list to html format with group by year-month
@@ -1410,21 +1414,24 @@ elif [[ "$ARG" == b* || "$ARG" == r* || "$ARG" == B* || "$ARG" == R* ]]; then
   fi
   
   make_list
-  find_new_files
 
   echo -e "$BLUE*$RESET Converting..."
-  while IFS=' ' read -r FILE_PATH UPDATED; do
+  while IFS=' ' read -r checksum file_size file_path; do
+    if [ -z $file_path ]; then
+      continue
+    fi
+    
     reset_var
-    get_file_stat "$FILE_PATH" "$UPDATED"
+    FILESTATUS=$(get_file_stat "$file_path" "$checksum")
 
-    NEW_PATH=${FILE_PATH/write/posts}
+    NEW_PATH=${file_path/write/posts}
     NEW_PATH=${NEW_PATH/.md/.html}
     
     if [ "$FILESTATUS" = "R" ]; then
-      remove_file "$FILE_PATH"
-      COUNT_CHANGE+=1
+      remove_file "$file_path"
+      COUNT_CHANGE=1
     else
-      frontmatter "$FILE_PATH"
+      frontmatter "$file_path"
 
       # Check draft is false
       if [ "$DRAFT" != "true" ] && [ "$DRAFT" != "True" ] && [ "$DRAFT" != "TRUE" ] && [ "$DRAFT" != "1" ]; then
@@ -1439,12 +1446,12 @@ elif [[ "$ARG" == b* || "$ARG" == r* || "$ARG" == B* || "$ARG" == R* ]]; then
         # Build new updated posts
         # Rebuild every posts
         if [[ "$FILESTATUS" = "U" || "$FILESTATUS" = "N" || ( "$FILESTATUS" = "C" && "$ARG" == r* ) ]]; then
-          converting "$FILE_PATH"
-          COUNT_CHANGE+=1
+          converting "$file_path"
+          COUNT_CHANGE=1
         fi
       fi
     fi
-  done <<< "$FILELIST"
+  done < ./temp_cksum_md.txt
 
   if [[ "$COUNT_CHANGE" == 0 ]];then
     echo -e "  $BLUE*$RESET There is no changes!"

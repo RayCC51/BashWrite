@@ -2,12 +2,14 @@ name: Build the blog
 
 on:
   push:
+    branches:
+      - main
     paths:
       - 'write/**'
       - 'assets/**'
       - 'bw.sh'
   workflow_dispatch:
-  
+
 permissions:
   contents: write
 
@@ -21,10 +23,29 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # The script retrieves previously created files from the gh-pages branch to avoid doing the same work twice.
       - name: Build
         run: |
           chmod +x bw.sh
-          ./bw.sh b
+          git fetch origin gh-pages:gh-pages 
+          git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          git config --global user.name "${GITHUB_ACTOR}"
+          if git show-ref --verify --quiet refs/heads/gh-pages; then
+            echo "::group::In gh-pages branch"
+            git checkout gh-pages
+            git merge main --allow-unrelated-histories         
+            ./bw.sh b
+            git add .
+            git commit -m "Build with BashWrite action"
+            echo "::endgroup::"
+            
+            echo "::group::In main branch"
+            git checkout main
+            git merge gh-pages --allow-unrelated-histories
+            echo "::endgroup::"
+          else
+            ./bw.sh b
+          fi
           
       - name: gh-pages
         uses: peaceiris/actions-gh-pages@v4
