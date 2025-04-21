@@ -973,6 +973,14 @@ frontmatter() {
   if [ -z "$TITLE" ]; then
     TITLE="New post $DATE"
   fi
+
+  # Fix <,> to &lt; &gt;
+  TITLE=${TITLE//</\&lt;}
+  TITLE=${TITLE//>/\&gt;}
+  DESCRIPTION=${DESCRIPTION//</\&lt;}
+  DESCRIPTION=${DESCRIPTION//>/\&gt;}
+  TAGS=${TAGS//</\&lt;}
+  TAGS=${TAGS//>/\&gt;}
 }
 
 # Converting markdown files
