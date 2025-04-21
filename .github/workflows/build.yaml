@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
   
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -22,11 +22,20 @@ jobs:
         run: |
           chmod +x bw.sh
           ./bw.sh b
-
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v4
-        if: github.ref == 'refs/heads/main'
+          
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: .
-          publish_branch: published
+          path: '.'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      # - name: gh-pages
+      #   uses: peaceiris/actions-gh-pages@v4
+      #   if: github.ref == 'refs/heads/main'
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     publish_dir: .
