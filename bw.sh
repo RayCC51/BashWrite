@@ -840,7 +840,7 @@ update_file_list() {
 # $1: TAGS(tags are seperated by whitespce)
 update_tags_list() {
   local TAGS="$1"
-  local FILE="taglist.txt"
+  local FILE="./checksum/taglist.txt"
   local tag_line=""
   
   # Make taglist.txt
@@ -923,18 +923,19 @@ get_file_stat() {
 # $1: Removed file path
 remove_file() {
   local FILE_PATH="$1"
+  local taglist='./checksum/taglist.txt'
   
   rm "$NEW_PATH"
 
   # Remove tags
   if [[ "$OSTYPE" == "darwin"* ]]; then
     # mac os
-    sed -i '' -e "s/ $NEW_PATH//g" taglist.txt
-    sed -i '' '/^[^ ]*$/d' taglist.txt
+    sed -i '' -e "s/ $NEW_PATH//g" $taglist
+    sed -i '' '/^[^ ]*$/d' $taglist
   else
     # linux
-    sed -i -e "s/ $NEW_PATH//g" taglist.txt
-    sed -i '/^[^ ]*$/d' taglist.txt
+    sed -i -e "s/ $NEW_PATH//g" $taglist
+    sed -i '/^[^ ]*$/d' $taglist
   fi
 
   echo -e "  $RED-[Remove]$RESET $NEW_PATH"
@@ -1098,7 +1099,7 @@ make_all_tags() {
     count=$(( $(echo "$line" | wc -w) - 1 ))
       
     HTML_ALL_TAGS+="$first_word $count\n"
-  done < taglist.txt
+  done < ./checksum/taglist.txt
 
   # Sort tags by abc order
   HTML_ALL_TAGS=$(echo -e "$HTML_ALL_TAGS" | sort)
