@@ -39,10 +39,10 @@ CUSTOM_HTML_HEAD=""
 #
 
 # script info
-_SCRIPT_NAME="BashWrite"
-_SCRIPT_VERSION="1.0.3"
-_SCRIPT_FILE_NAME="bw.sh"
-_SCRIPT_SITE="https://github.com/raycc51/bashwrite"
+_SCRIPT_NAME='BashWrite'
+_SCRIPT_VERSION='1.1.0'
+_SCRIPT_FILE_NAME='bw.sh'
+_SCRIPT_SITE='https://github.com/raycc51/bashwrite'
 
 # echo colors
 RED='\e[31m'
@@ -696,7 +696,7 @@ echo "$MOD"
 
 # Make folder structure.
 make_directory() {
-  local folders=("posts" "tags" "write" "assets")
+  local folders=("posts" "tags" "write" "assets" "checksum")
 
   for folder in "${folders[@]}"; do
     if [ ! -d "$folder" ]; then
@@ -704,21 +704,13 @@ make_directory() {
     fi
   done
 
-  # Copy taglist.txt for find diffrence.   
-  if [[ -e taglist.txt ]]; then
-    cp taglist.txt taglist-old.txt
+  # Copy taglist.txt for find diffrence. 
+  if [[ -e ./checksum/taglist.txt ]]; then
+    cp ./checksum/taglist.txt taglist-old.txt
   else
-    touch taglist.txt
+    touch ./checksum/taglist.txt
     touch taglist-old.txt
-  fi
-  
-  if [[ ! -e build.txt ]]; then
-    touch build.txt
-  fi
-  
-  if [[ ! -e filelist.txt ]]; then
-    touch filelist.txt
-  fi
+  fi  
 }
 
 # Make robots.txt
@@ -1117,24 +1109,29 @@ make_all_tags() {
 
 # Make every tag pages
 make_tag_pages() {
-  local tag=""
-  local links=""
-  local HTML_ALL_POSTS=""
-  local MD_PATH=""
-  
-  # Find removed tag
-  local REMOVED_TAG=$(grep -F -x -v -f "taglist.txt" "taglist-old.txt")
+  local tag=''
+  local links=''
+  local new='./checksum/taglist.txt'
+  local old='taglist-old.txt'
 
+  # Find removed tag
+  local REMOVED_TAG=$(grep -Fxv -f $new $old)
+  local remove_lines=''
+  
   if [ -n "$REMOVED_TAG" ]; then
     while IFS= read -r line; do
       tag=$(echo "$line" | awk '{print $1}')
       rm "./tags/$tag.html"
-      grep -v ">$tag</a>" "all-tags.html" > temp_file && mv temp_file "all-tags.html"
+      remove_lines="$(grep ">$tag</a>" all-tags.html)$'\n'"
     done <<< "$REMOVED_TAG"
   fi
 
+  echo "$remove_lines" | grep -Fvx -f all-tags.html > all-tags.html
+
   # Find updated or added tag
-  local UPDATED_TAG=$(grep -Fv -x -f <(cat taglist-old.txt) taglist.txt)
+  local UPDATED_TAG=$(grep -Fvx -f $old $new)
+  local MD_PATH=""
+  local HTML_ALL_POSTS=""
   reset_var
 
   if [ -n "$UPDATED_TAG" ]; then
@@ -1296,41 +1293,37 @@ make_index_html() {
 
 # Copy assets in write/ to posts/
 copy_assets() {
-  find ./write/ -type f ! -name "*.md" -exec sh -c '
-    for file; do
-      echo "$file $(date -d @"$(stat --format="%Y" "$file")" +%Y%m%d%H%M%S)";
-    done
-  ' sh {} + | sed -E '
-    s/^\.\/write/\.\/posts/
-  ' > temp_asset_write.txt
+  local new='./temp_cksum_asset.txt'
+  local prev='./checksum/cksum_asset.txt'
 
-  find ./posts/ -type f ! -name "*.html" -exec sh -c '
-    for file; do
-      echo "$file $(date -d @"$(stat --format="%Y" "$file")" +%Y%m%d%H%M%S)";
-    done
-  ' sh {} + > temp_asset_post.txt
+  if [ ! -e "$prev" ]; then
+    touch "$prev"
+  fi
 
-  local REMOVED_ASSET=$(grep -F -x -v -f "temp_asset_write.txt" "temp_asset_post.txt")
+  find ./write/ -type f ! -name "*.md" -exec cksum {} \; > $new
+
+  # Find remoced assets and remove them
+  local REMOVED_ASSET=$(grep -Fvx -f $new $prev)
 
   if [ -n "$REMOVED_ASSET" ]; then
-    while IFS=' ' read -r file_path mod_date; do
+    while IFS=' ' read -r checksum file_size file_path; do
     rm "$file_path"
     done <<< "$REMOVED_ASSET"
   fi
 
-  local NEW_ASSET=$(grep -Fv -x -f <(cat temp_asset_post.txt) temp_asset_write.txt)
-  local origin_path=''
+  # Find updated or added asset
+  local NEW_ASSET=$(grep -Fvx -f $prev $new)
+  local new_path=''
 
   if [ -n "$NEW_ASSET" ]; then
-    while IFS=' ' read -r file_path mod_date; do
-      origin_path=$(echo "$file_path" | sed 's/^\.\/posts/\.\/write/')
+    while IFS=' ' read -r checksum file_size file_path; do
+      new_path=$(echo "$file_path" | sed 's/^\.\/write/\.\/posts/')
       mkdir -p "$(dirname "$file_path")"
-      cp -p "$origin_path" "$file_path"
+      cp "$file_path" "$new_path"
     done <<< "$NEW_ASSET"
   fi
 
-  rm temp_asset_write.txt
-  rm temp_asset_post.txt
+  mv $new $prev
 
   if [[ -n "$REMOVED_ASSET" || -n "$NEW_ASSET" ]]; then
     echo -e "  $BLUE+$RESET Copy assets in write/ to posts/"
@@ -1341,12 +1334,16 @@ copy_assets() {
 #
 # Rebuild if this script is modified
 build_rebuild() {
-  local script_mod_time=$(date -r "$_SCRIPT_FILE_NAME" +%Y%m%d%H%M%S)
-  local prev_mod_time=$(cat build.txt)
-  
-  if [[ "$script_mod_time" != "$prev_mod_time" ]]; then
+  local prev_txt='./checksum/cksum_script.txt'
+  if [ ! -e $prev_txt ]; then                         touch $prev_txt
+  fi
+
+  local new=$(cksum "$_SCRIPT_FILE_NAME")
+  local prev=$(cat $prev_txt)
+
+  if [[ "$new" != "$prev" ]]; then
     echo "rebuild"
-    echo "$script_mod_time" > build.txt
+    echo "$new" > $prev_txt
   else
     echo "build"
   fi
@@ -1392,9 +1389,7 @@ elif [[ "$ARG" == b* || "$ARG" == r* || "$ARG" == B* || "$ARG" == R* ]]; then
   make_directory
 
   # Check this script is modified. 
-  if [[ ! "$ARG" == r* ]]; then
-    ARG=$(build_rebuild)
-  fi
+  ARG=$(build_rebuild)
 
   echo -e "Run $GREEN$_SCRIPT_NAME$RESET $_SCRIPT_VERSION [$ARG]"
 

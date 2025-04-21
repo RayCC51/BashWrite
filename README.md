@@ -54,19 +54,17 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 
 ### Automatically generated: Do not edit these files
 
+- checksum/ - Checksum list of markdowns, tags, assets and script.
 - posts/
 - tags/
 - 404.html
 - all-posts.html - Contain every posts.
 - all-tags.html - Contain every tags.
-- build.txt - Contain the main script last updated date for check build or rebuild. 
-- filelist.txt - Contain list of posts, and modified date.
 - index.html
 - robots.txt
 - rss.xml
 - style.css
 - sitemap.xml
-- taglist.txt - Contain list of  tags and links.
 
 ### Automatically generated: User edit these files
 
