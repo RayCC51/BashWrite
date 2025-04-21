@@ -1143,7 +1143,7 @@ make_tag_pages() {
     done <<< "$REMOVED_TAG"
   fi
 
-  echo "$remove_lines" | grep -Fvx -f all-tags.html > all-tags.html
+  grep -Fvx -f <(echo "$remove_lines") all-tags.html > temp && mv temp all-tags.html
 
   # Find updated or added tag
   local UPDATED_TAG=$(grep -Fvx -f $old $new)
