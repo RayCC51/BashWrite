@@ -1,8 +1,8 @@
-sample ./posts/markdown/markdown-sample.html ./posts/about-frontmatter.html ./posts/images/index.html
+sample ./posts/markdown/markdown-sample.html ./posts/about-frontmatter.html ./posts/images/index.html ./posts/frontmatter.html
 md ./posts/markdown/markdown-sample.html
 html ./posts/markdown/markdown-sample.html
-frontmatter ./posts/about-frontmatter.html
-blog ./posts/about-frontmatter.html ./posts/images/index.html
+frontmatter ./posts/about-frontmatter.html ./posts/frontmatter.html
+blog ./posts/about-frontmatter.html ./posts/images/index.html ./posts/frontmatter.html
 image ./posts/images/index.html
 github ./posts/github-action/index.html
 action ./posts/github-action/index.html
