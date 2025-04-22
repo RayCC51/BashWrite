@@ -6,7 +6,7 @@
   <link>https://raycc51.github.io/BashWrite</link>
   <description>raycc's blog</description>
   <language>en</language>
-  <pubDate>Tue, 22 Apr 2025 03:09:00 +0000</pubDate>
+  <pubDate>Tue, 22 Apr 2025 04:19:54 +0000</pubDate>
   <copyright>© 2025 raycc</copyright>
   <atom:link href="https://raycc51.github.io/BashWrite/rss.xml" rel="self" type="application/rss+xml" />
 
@@ -14,14 +14,6 @@
   <title>testing post</title>
     <link>https://raycc51.github.io/BashWrite/posts/test5.html</link>
     <guid>https://raycc51.github.io/BashWrite/posts/test5.html</guid>
-    <description></description>
-    <pubDate>Tue, 22 Apr 2025 00:00:00 +0000</pubDate>
-</item>
-
-<item>
-  <title>New post 2025-04-22</title>
-    <link>https://raycc51.github.io/BashWrite/posts/test4.html$</link>
-    <guid>https://raycc51.github.io/BashWrite/posts/test4.html$</guid>
     <description></description>
     <pubDate>Tue, 22 Apr 2025 00:00:00 +0000</pubDate>
 </item>
@@ -47,6 +39,14 @@
     <link>https://raycc51.github.io/BashWrite/posts/markdown/markdown-sample.html</link>
     <guid>https://raycc51.github.io/BashWrite/posts/markdown/markdown-sample.html</guid>
     <description>Testing markdown to html converter. </description>
+    <pubDate>Thu, 17 Apr 2025 00:00:00 +0000</pubDate>
+</item>
+
+<item>
+  <title>Publish on Gihub Pages with github actions</title>
+    <link>https://raycc51.github.io/BashWrite/posts/github-action/</link>
+    <guid>https://raycc51.github.io/BashWrite/posts/github-action/</guid>
+    <description>How to publish the blog on Github Pages</description>
     <pubDate>Thu, 17 Apr 2025 00:00:00 +0000</pubDate>
 </item>
 

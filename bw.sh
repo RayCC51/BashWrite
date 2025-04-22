@@ -784,17 +784,6 @@ make_404_html() {
   echo -e "  $BLUE+$RESET 404.html"
 }
 
-# Make imutable resources.
-#
-# If there is resources, then ignore.
-make_resource() {
-  echo -e "$BLUE*$RESET Make resources..."
-  make_style_css
-  make_robots_txt
-  make_sitemap_xml
-  make_404_html
-}
-
 # Make markdown file list
 # 
 # checksum file_size file_path
@@ -813,7 +802,7 @@ make_list() {
 
     if [ -n "$removed_md" ]; then
       while IFS=' ' read -r checksum file_size file_path; do
-        temp_removed+="\n000 $file_size $file_path$"
+        temp_removed=$(printf "%s\n" "$temp_removed" "000 $file_size $file_path")
       done <<< "$removed_md"
 
       echo "$temp_removed" >> $new
@@ -906,10 +895,10 @@ get_file_stat() {
 
   if [ -z "$old_checksum" ]; then
     echo 'N'
-  elif [[ "$file_checksum" != "$old_checksum" ]]; then
-    echo 'U'
   elif [[ "$file_checksum" == '000' ]]; then
     echo 'R'
+  elif [[ "$file_checksum" != "$old_checksum" ]]; then
+    echo 'U'
   else
     echo 'C'
   fi
@@ -930,11 +919,11 @@ remove_file() {
   # Remove tags
   if [[ "$OSTYPE" == "darwin"* ]]; then
     # mac os
-    sed -i '' -e "s/ $NEW_PATH//g" $taglist
+    sed -i '' -e "s| $NEW_PATH||g" $taglist
     sed -i '' '/^[^ ]*$/d' $taglist
   else
     # linux
-    sed -i -e "s/ $NEW_PATH//g" $taglist
+    sed -i -e "s| $NEW_PATH||g" $taglist
     sed -i '/^[^ ]*$/d' $taglist
   fi
 
@@ -1069,7 +1058,7 @@ group_list() {
 # Make all-posts.html
 #
 # List of every posts link
-make_all_posts() {
+make_all_posts_html() {
   local HTML_ALL_POSTS=""
 
   HTML_ALL_POSTS=$(group_list "$ALL_POSTS")
@@ -1093,7 +1082,7 @@ make_all_posts() {
 # Make all-tags.html
 #
 # Contain every tag page link in tags/
-make_all_tags() {
+make_all_tags_html() {
   local HTML_ALL_TAGS=""
 
   # Find all tags and counts
@@ -1409,11 +1398,6 @@ elif [[ "$ARG" == b* || "$ARG" == r* || "$ARG" == B* || "$ARG" == R* ]]; then
   ARG=$(build_rebuild)
 
   echo -e "Run $GREEN$_SCRIPT_NAME$RESET $_SCRIPT_VERSION [$ARG]"
-
-  # Rebuild
-  if [[ "$ARG" == r* ]]; then
-    make_resource
-  fi
   
   make_list
 
@@ -1461,8 +1445,12 @@ elif [[ "$ARG" == b* || "$ARG" == r* || "$ARG" == B* || "$ARG" == R* ]]; then
     update_file_list
 
     echo -e "$BLUE*$RESET Make resources..."
-    make_all_posts
-    make_all_tags
+    make_style_css
+    make_robots_txt
+    make_sitemap_xml
+    make_404_html
+    make_all_posts_html
+    make_all_tags_html
     make_index_html
     make_tag_pages 
   fi
