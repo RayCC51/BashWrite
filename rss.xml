@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+
+<channel>
+  <title>bashwrite blog</title>
+  <link>https://raycc51.github.io/BashWrite</link>
+  <description>raycc's blog</description>
+  <language>en</language>
+  <pubDate>Tue, 22 Apr 2025 03:09:00 +0000</pubDate>
+  <copyright>© 2025 raycc</copyright>
+  <atom:link href="https://raycc51.github.io/BashWrite/rss.xml" rel="self" type="application/rss+xml" />
+
+<item>
+  <title>testing post</title>
+    <link>https://raycc51.github.io/BashWrite/posts/test5.html</link>
+    <guid>https://raycc51.github.io/BashWrite/posts/test5.html</guid>
+    <description></description>
+    <pubDate>Tue, 22 Apr 2025 00:00:00 +0000</pubDate>
+</item>
+
+<item>
+  <title>New post 2025-04-22</title>
+    <link>https://raycc51.github.io/BashWrite/posts/test4.html$</link>
+    <guid>https://raycc51.github.io/BashWrite/posts/test4.html$</guid>
+    <description></description>
+    <pubDate>Tue, 22 Apr 2025 00:00:00 +0000</pubDate>
+</item>
+
+<item>
+  <title>Images in the posts</title>
+    <link>https://raycc51.github.io/BashWrite/posts/images/</link>
+    <guid>https://raycc51.github.io/BashWrite/posts/images/</guid>
+    <description>How to include images in the posts</description>
+    <pubDate>Sun, 20 Apr 2025 00:00:00 +0000</pubDate>
+</item>
+
+<item>
+  <title>md2html bug list</title>
+    <link>https://raycc51.github.io/BashWrite/posts/markdown/md4html-bug.html</link>
+    <guid>https://raycc51.github.io/BashWrite/posts/markdown/md4html-bug.html</guid>
+    <description>I don't know how to solve these bugs...</description>
+    <pubDate>Thu, 17 Apr 2025 00:00:00 +0000</pubDate>
+</item>
+
+<item>
+  <title>Markdown sample</title>
+    <link>https://raycc51.github.io/BashWrite/posts/markdown/markdown-sample.html</link>
+    <guid>https://raycc51.github.io/BashWrite/posts/markdown/markdown-sample.html</guid>
+    <description>Testing markdown to html converter. </description>
+    <pubDate>Thu, 17 Apr 2025 00:00:00 +0000</pubDate>
+</item>
+
+</channel>
+</rss>
+
