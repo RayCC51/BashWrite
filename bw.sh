@@ -2,7 +2,7 @@
 start_time=$(date +%s%N)
 
 
-### Edit these settings.
+### Edit these configs.
 BLOG_NAME="bashwrite blog"
 AUTHOR_NAME="raycc"
 BASE_URL="https://raycc51.github.io/BashWrite/"
