@@ -917,8 +917,8 @@ get_file_stat() {
 
 # Remove file
 #
-  # User remove markdown file, 
-# then script remove html file, ...
+# User remove markdown file, 
+# then script remove html file, tag, and more. 
 #
 # $1: Removed file path
 remove_file() {
