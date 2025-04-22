@@ -27,22 +27,20 @@ jobs:
       - name: Build
         run: |
           chmod +x bw.sh
-          git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-          git config --global user.name "${GITHUB_ACTOR}"
+          
           if git show-ref --verify --quiet refs/heads/gh-pages; then
-            echo "::group::In gh-pages branch"
-            git fetch origin gh-pages:gh-pages 
-            git checkout gh-pages
-            git merge main --allow-unrelated-histories         
-            ./bw.sh b
-            git add .
-            git commit -m "Build with BashWrite action"
-            echo "::endgroup::"
+            git checkout gh-pages -- checksum
             
-            echo "::group::In main branch"
-            git checkout main
-            git merge gh-pages --allow-unrelated-histories
-            echo "::endgroup::"
+            echo '++++++ ls'
+            ls
+            echo '++++++ cksum'
+            cksum bw.sh
+            echo '++++++ cksum_script'
+            cat checksum/cksum_script.txt
+            echo '++++++'
+            
+            
+            ./bw.sh b
           else
             ./bw.sh b
           fi
