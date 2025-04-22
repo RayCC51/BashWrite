@@ -30,7 +30,7 @@ jobs:
 
           if git ls-remote --exit-code --heads origin gh-pages; then
             git fetch origin gh-pages
-            git checkout gh-pages -- checksum
+            git checkout origin/gh-pages -- checksum
             
             echo '++++++ ls'
             ls
