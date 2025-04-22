@@ -40,7 +40,7 @@ CUSTOM_HTML_HEAD=""
 
 # script info
 _SCRIPT_NAME='BashWrite'
-_SCRIPT_VERSION='1.1.2'
+_SCRIPT_VERSION='1.1.3'
 _SCRIPT_FILE_NAME='bw.sh'
 _SCRIPT_SITE='https://github.com/raycc51/bashwrite'
 
