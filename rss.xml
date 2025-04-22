@@ -6,9 +6,17 @@
   <link>https://raycc51.github.io/BashWrite</link>
   <description>raycc's blog</description>
   <language>en</language>
-  <pubDate>Tue, 22 Apr 2025 02:47:43 +0000</pubDate>
+  <pubDate>Tue, 22 Apr 2025 02:49:30 +0000</pubDate>
   <copyright>© 2025 raycc</copyright>
   <atom:link href="https://raycc51.github.io/BashWrite/rss.xml" rel="self" type="application/rss+xml" />
+
+<item>
+  <title>testing post</title>
+    <link>https://raycc51.github.io/BashWrite/posts/new.html</link>
+    <guid>https://raycc51.github.io/BashWrite/posts/new.html</guid>
+    <description></description>
+    <pubDate>Tue, 22 Apr 2025 00:00:00 +0000</pubDate>
+</item>
 
 <item>
   <title>Images in the posts</title>
@@ -39,14 +47,6 @@
     <link>https://raycc51.github.io/BashWrite/posts/github-action/</link>
     <guid>https://raycc51.github.io/BashWrite/posts/github-action/</guid>
     <description>How to publish the blog on Github Pages</description>
-    <pubDate>Thu, 17 Apr 2025 00:00:00 +0000</pubDate>
-</item>
-
-<item>
-  <title>Frontmatter</title>
-    <link>https://raycc51.github.io/BashWrite/posts/frontmatter.html</link>
-    <guid>https://raycc51.github.io/BashWrite/posts/frontmatter.html</guid>
-    <description>About frontmatter</description>
     <pubDate>Thu, 17 Apr 2025 00:00:00 +0000</pubDate>
 </item>
 
