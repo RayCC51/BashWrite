@@ -43,7 +43,9 @@ jobs:
             echo '++++++ cksum'
             cksum bw.sh
             echo '++++++ cksum_script'
-            cat checksum/cksum_script.txt
+            if [ -e checksum/cksum_script.txt ]; then
+              cat checksum/cksum_script.txt
+            fi
             echo '++++++'
             
             
