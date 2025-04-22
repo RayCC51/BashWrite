@@ -6,23 +6,15 @@
   <link>https://raycc51.github.io/BashWrite</link>
   <description>raycc's blog</description>
   <language>en</language>
-  <pubDate>Tue, 22 Apr 2025 02:43:32 +0000</pubDate>
+  <pubDate>Tue, 22 Apr 2025 02:47:43 +0000</pubDate>
   <copyright>© 2025 raycc</copyright>
   <atom:link href="https://raycc51.github.io/BashWrite/rss.xml" rel="self" type="application/rss+xml" />
-
-<item>
-  <title>New post 2025-04-22</title>
-    <link>https://raycc51.github.io/BashWrite/posts/about-frontmatter.html$$</link>
-    <guid>https://raycc51.github.io/BashWrite/posts/about-frontmatter.html$$</guid>
-    <description></description>
-    <pubDate>Tue, 22 Apr 2025 00:00:00 +0000</pubDate>
-</item>
 
 <item>
   <title>Images in the posts</title>
     <link>https://raycc51.github.io/BashWrite/posts/images/</link>
     <guid>https://raycc51.github.io/BashWrite/posts/images/</guid>
-    <description></description>
+    <description>How to include images in the posts</description>
     <pubDate>Sun, 20 Apr 2025 00:00:00 +0000</pubDate>
 </item>
 
@@ -30,7 +22,7 @@
   <title>md2html bug list</title>
     <link>https://raycc51.github.io/BashWrite/posts/markdown/md4html-bug.html</link>
     <guid>https://raycc51.github.io/BashWrite/posts/markdown/md4html-bug.html</guid>
-    <description></description>
+    <description>I don't know how to solve these bugs...</description>
     <pubDate>Thu, 17 Apr 2025 00:00:00 +0000</pubDate>
 </item>
 
@@ -38,7 +30,7 @@
   <title>Markdown sample</title>
     <link>https://raycc51.github.io/BashWrite/posts/markdown/markdown-sample.html</link>
     <guid>https://raycc51.github.io/BashWrite/posts/markdown/markdown-sample.html</guid>
-    <description></description>
+    <description>Testing markdown to html converter. </description>
     <pubDate>Thu, 17 Apr 2025 00:00:00 +0000</pubDate>
 </item>
 
@@ -46,7 +38,15 @@
   <title>Publish on Gihub Pages with github actions</title>
     <link>https://raycc51.github.io/BashWrite/posts/github-action/</link>
     <guid>https://raycc51.github.io/BashWrite/posts/github-action/</guid>
-    <description></description>
+    <description>How to publish the blog on Github Pages</description>
+    <pubDate>Thu, 17 Apr 2025 00:00:00 +0000</pubDate>
+</item>
+
+<item>
+  <title>Frontmatter</title>
+    <link>https://raycc51.github.io/BashWrite/posts/frontmatter.html</link>
+    <guid>https://raycc51.github.io/BashWrite/posts/frontmatter.html</guid>
+    <description>About frontmatter</description>
     <pubDate>Thu, 17 Apr 2025 00:00:00 +0000</pubDate>
 </item>
 
