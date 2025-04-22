@@ -23,7 +23,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Get files in gs-pages
+      - name: Get files in gh-pages
         run: | 
           if git ls-remote --exit-code --heads origin gh-pages; then
             git fetch origin gh-pages
@@ -37,7 +37,6 @@ jobs:
       - name: Build
         run: |
           chmod +x bw.sh
-          
           ./bw.sh b
       
       - name: gh-pages
