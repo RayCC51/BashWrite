@@ -23,20 +23,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Build
-        run: |
-          chmod +x bw.sh
-          
+      - name: Get files in gs-pages
+        run: | 
           if git ls-remote --exit-code --heads origin gh-pages; then
             git fetch origin gh-pages
-            git checkout origin/gh-pages -- checksum
+            # git checkout origin/gh-pages -- checksum
             git checkout origin/gh-pages -- posts
             git checkout origin/gh-pages -- tags
             git checkout origin/gh-pages -- all-posts.html
             git checkout origin/gh-pages -- all-tags.html
           fi
           
+      - name: Build
+        run: |
+          chmod +x bw.sh
+          
           ./bw.sh b
+      
       - name: gh-pages
         uses: peaceiris/actions-gh-pages@v4
         if: github.ref == 'refs/heads/main'
