@@ -813,7 +813,7 @@ make_list() {
 
     if [ -n "$removed_md" ]; then
       while IFS=' ' read -r checksum file_size file_path; do
-        temp_removed+="$'\n'000 $file_size $file_path$"
+        temp_removed+="\n000 $file_size $file_path$"
       done <<< "$removed_md"
 
       echo "$temp_removed" >> $new
