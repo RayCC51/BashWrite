@@ -49,8 +49,7 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 ### Download from repo
 
 - bw.sh
-- readme.md
-- .github/ - Download this file if you want to use github pages.
+- .github/ - Download this folder if you want to use github pages.
 
 ### Automatically generated: Do not edit these files
 

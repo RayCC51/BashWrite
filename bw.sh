@@ -40,7 +40,7 @@ CUSTOM_HTML_HEAD=""
 
 # script info
 _SCRIPT_NAME='BashWrite'
-_SCRIPT_VERSION='1.1.0'
+_SCRIPT_VERSION='1.1.2'
 _SCRIPT_FILE_NAME='bw.sh'
 _SCRIPT_SITE='https://github.com/raycc51/bashwrite'
 
@@ -840,7 +840,7 @@ update_file_list() {
 # $1: TAGS(tags are seperated by whitespce)
 update_tags_list() {
   local TAGS="$1"
-  local FILE="taglist.txt"
+  local FILE="./checksum/taglist.txt"
   local tag_line=""
   
   # Make taglist.txt
@@ -923,18 +923,19 @@ get_file_stat() {
 # $1: Removed file path
 remove_file() {
   local FILE_PATH="$1"
+  local taglist='./checksum/taglist.txt'
   
   rm "$NEW_PATH"
 
   # Remove tags
   if [[ "$OSTYPE" == "darwin"* ]]; then
     # mac os
-    sed -i '' -e "s/ $NEW_PATH//g" taglist.txt
-    sed -i '' '/^[^ ]*$/d' taglist.txt
+    sed -i '' -e "s/ $NEW_PATH//g" $taglist
+    sed -i '' '/^[^ ]*$/d' $taglist
   else
     # linux
-    sed -i -e "s/ $NEW_PATH//g" taglist.txt
-    sed -i '/^[^ ]*$/d' taglist.txt
+    sed -i -e "s/ $NEW_PATH//g" $taglist
+    sed -i '/^[^ ]*$/d' $taglist
   fi
 
   echo -e "  $RED-[Remove]$RESET $NEW_PATH"
@@ -973,6 +974,17 @@ frontmatter() {
   if [ -z "$TITLE" ]; then
     TITLE="New post $DATE"
   fi
+
+  # Fix <,> to &lt; &gt;
+  TITLE=${TITLE//</\&lt;}
+  TITLE=${TITLE//>/\&gt;}
+  DESCRIPTION=${DESCRIPTION//</\&lt;}
+  DESCRIPTION=${DESCRIPTION//>/\&gt;}
+
+  # Only allow alphabets, numbers and dash underscore in tags
+  TAGS=$(echo "$TAGS" | sed 's/[^ a-zA-Z0-9_-]//g')
+  # Remove duplicated tags
+  TAGS=$(echo "$TAGS" | tr ' ' '\n' | awk '!seen[$0]++' | tr '\n' ' ')
 }
 
 # Converting markdown files
@@ -1090,7 +1102,7 @@ make_all_tags() {
     count=$(( $(echo "$line" | wc -w) - 1 ))
       
     HTML_ALL_TAGS+="$first_word $count\n"
-  done < taglist.txt
+  done < ./checksum/taglist.txt
 
   # Sort tags by abc order
   HTML_ALL_TAGS=$(echo -e "$HTML_ALL_TAGS" | sort)
@@ -1135,7 +1147,7 @@ make_tag_pages() {
     done <<< "$REMOVED_TAG"
   fi
 
-  echo "$remove_lines" | grep -Fvx -f all-tags.html > all-tags.html
+  grep -Fvx -f <(echo "$remove_lines") all-tags.html > temp && mv temp all-tags.html
 
   # Find updated or added tag
   local UPDATED_TAG=$(grep -Fvx -f $old $new)
@@ -1254,7 +1266,6 @@ make_index_html() {
     
     _DESCRIPTION=$(awk -F'"' '/description/{print $4; exit}' ${_PATH})
 
-    # todo
     _NEW_PATH=$(echo "$_NEW_PATH" | sed 's/index.html$//')
 
     if [ "$isShowRecent" = "true" ]; then
@@ -1364,10 +1375,11 @@ show_help() {
 ${BLUE}version${RESET}: $_SCRIPT_VERSION
 ${BLUE}site${RESET}: $_SCRIPT_SITE
 
-Commands: ${YELLOW}./$_SCRIPT_FILE_NAME${RESET} [Argument]
-  [Argument] =
-    ${YELLOW}h${RESET}    : (h)elp. Show this dialog.
-    ${YELLOW}b${RESET}    : (b)uild. Build new, updated posts, tag posts and homepage.
+Commands: 
+  ${YELLOW}./$_SCRIPT_FILE_NAME$ h{RESET}
+      (h)elp. Show this dialog.
+  ${YELLOW}./$_SCRIPT_FILE_NAME$ b{RESET}
+      (b)uild. Build the blog. It automatically decides whether to update the post or create all files anew.
 
 First to do:
   ${BLUE}1.$RESET Open $YELLOW$_SCRIPT_FILE_NAME$RESET and edit config. 
