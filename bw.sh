@@ -120,11 +120,10 @@ body > header {
   border-bottom: 1px solid var(--main-theme);
 }
 
-body > header h3 a {
-  color: var(--main-theme);
-}
-
-body > header h3 a:visited {
+body > header h3 a,
+body > header h3 a:visited,
+.dark body > header h3 a
+{
   color: var(--main-theme) !important;
 }
 
@@ -137,12 +136,10 @@ body > header li {
   margin-left: 1em;
 }
 
-body > header a {
+body > header a,
+body > header a:visited,
+.dark body > header a {
   text-decoration: none;
-  color: var(--font-color);
-}
-
-body > header a:visited {
   color: var(--font-color) !important;
 }
 
