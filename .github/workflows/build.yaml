@@ -35,8 +35,6 @@ jobs:
             git checkout origin/gh-pages -- tags
             git checkout origin/gh-pages -- all-posts.html
             git checkout origin/gh-pages -- all-tags.html
-
-            rm -rf checksum
             
             echo '++++++ ls'
             ls
