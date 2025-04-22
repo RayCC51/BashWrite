@@ -27,6 +27,7 @@ jobs:
       - name: Build
         run: |
           chmod +x bw.sh
+          git fetch origin gh-pages
           
           if git show-ref --verify --quiet refs/heads/gh-pages; then
             git checkout gh-pages -- checksum
