@@ -210,7 +210,7 @@ td {
   text-decoration: none;
   text-align: center;
   line-height: 3em;
-  opacity: 0.6;
+  opacity: 0.7;
 }
 
 img {
@@ -218,7 +218,7 @@ img {
 }
 
 .recent-description {
-  opacity: 0.6;
+  opacity: 0.8;
 }
 
 .align-left {text-align: left;}
@@ -1246,7 +1246,7 @@ make_index_html() {
   local RECENT_POSTS=$(echo "$ALL_POSTS" | sort -r -k1,1 | head -n "$RECENT_POSTS_COUNT")
   local HTML_RECENT_POSTS="<hr>
 <div id=\"recent-posts\">
-  <h4>Recent posts</h4>
+  <h3>Recent posts</h3>
   <ul>"
 
   make_rss_xml "I"
