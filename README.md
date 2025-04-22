@@ -1,22 +1,34 @@
 # BashWrite - [demo](https://raycc51.github.io/BashWrite/)
 
-Pure bash script for make a blog. 
+![screenshot](bashwrite_screenshot.png)
 
-No dependencies. 
-
-It support extended markdown from [mattcone/markdown-guide](https://github.com/mattcone/markdown-guide)
+Single, pure bash script for make your blog. 
 
 Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
+
+## Features
+
+- No dependencies
+- Support extended Markdown with [mattcone/markdown-guide](https://github.com/mattcone/markdown-guide)
+- Darkmode
+- Tags page
+- Recent posts
+- RSS
+- Github action for github pages
+
+### Limits
+
+- Hard to customizing
+- [Markdown to html converter](https://github.com/RayCC51/md2html) is not perfect - [bug list](https://raycc51.github.io/BashWrite/posts/markdown/md4html-bug.html)
 
 ## Quick start
 
 ### Install
 
-1. Download `bw.sh` from [Release page](https://github.com/RayCC51/BashWrite/releases).
-2. Make your blog directory. 
-3. Move `bw.sh` to your blog directory. 
-4. Open `bw.sh`, edit config data and save the file.
-5. Open *terminal*, change directory to your blog path and run `./bw.sh b`
+1. Download `bw.sh` - [Release page](https://github.com/RayCC51/BashWrite/releases).
+2. Open `bw.sh`, edit settings and save the file.
+3. Open *terminal*, and run `./bw.sh b`
+4. Then your blog will be generated in `./`
 
 ### Write new posts
 
@@ -36,13 +48,8 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 
 ## Commands
 
-`./bw.sh h`
-
-    Show help dialog. 
-    
-`./bw.sh b`
-
-    Build blog. 
+- `./bw.sh h` : Show help dialog.   
+- `./bw.sh b` : Build blog. 
 
 ## About directory structure
 
@@ -65,7 +72,7 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 - style.css
 - sitemap.xml
 
-### Automatically generated: User edit these files
+### Create these folders yourself, and work only within these folders
 
-- write/ - Write your markdowns in this folder.
+- write/ - Write your markdowns in this folder. You can also add assets needed for the posting.
 - assets/ - Add any assets in this folder. 
