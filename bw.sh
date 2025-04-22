@@ -1354,18 +1354,14 @@ copy_assets() {
 #
 # Rebuild if this script is modified
 build_rebuild() {
-  local prev_txt='./checksum/cksum_script.txt'
-  if [ ! -e $prev_txt ]; then                         touch $prev_txt
-  fi
-
+  local prev='./checksum/cksum_script.txt'
   local new=$(cksum "$_SCRIPT_FILE_NAME")
-  local prev=$(cat $prev_txt)
-
-  if [[ "$new" != "$prev" ]]; then
-    echo "rebuild"
-    echo "$new" > $prev_txt
+  
+  if [ ! -e $prev ] || [[ "$new" != $(cat $prev) ]]; then
+    echo "$new" > $prev
+    echo 'rebuild'
   else
-    echo "build"
+    echo 'build'
   fi
 }
 
@@ -1414,14 +1410,8 @@ elif [[ "$ARG" == b* || "$ARG" == r* || "$ARG" == B* || "$ARG" == R* ]]; then
 
   echo -e "Run $GREEN$_SCRIPT_NAME$RESET $_SCRIPT_VERSION [$ARG]"
 
-  # Clear old tags list when rebuild
+  # Rebuild
   if [[ "$ARG" == r* ]]; then
-    echo -n > taglist-old.txt
-  fi
-  
-  # Build default files.
-  # When rebuild or there is no file.
-  if [[ "$ARG" == r* ]] || [[ ! -f "style.css" ]] || [[ ! -f "robots.txt" ]] || [[ ! -f "sitemap.xml" ]]; then
     make_resource
   fi
   
