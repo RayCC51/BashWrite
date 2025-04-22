@@ -40,7 +40,7 @@ CUSTOM_HTML_HEAD=""
 
 # script info
 _SCRIPT_NAME='BashWrite'
-_SCRIPT_VERSION='1.1.0'
+_SCRIPT_VERSION='1.1.2'
 _SCRIPT_FILE_NAME='bw.sh'
 _SCRIPT_SITE='https://github.com/raycc51/bashwrite'
 
@@ -980,8 +980,11 @@ frontmatter() {
   TITLE=${TITLE//>/\&gt;}
   DESCRIPTION=${DESCRIPTION//</\&lt;}
   DESCRIPTION=${DESCRIPTION//>/\&gt;}
-  TAGS=${TAGS//</\&lt;}
-  TAGS=${TAGS//>/\&gt;}
+
+  # Only allow alphabets, numbers and dash underscore in tags
+  TAGS=$(echo "$TAGS" | sed 's/[^ a-zA-Z0-9_-]//g')
+  # Remove duplicated tags
+  TAGS=$(echo "$TAGS" | tr ' ' '\n' | awk '!seen[$0]++' | tr '\n' ' ')
 }
 
 # Converting markdown files
@@ -1263,7 +1266,6 @@ make_index_html() {
     
     _DESCRIPTION=$(awk -F'"' '/description/{print $4; exit}' ${_PATH})
 
-    # todo
     _NEW_PATH=$(echo "$_NEW_PATH" | sed 's/index.html$//')
 
     if [ "$isShowRecent" = "true" ]; then
@@ -1373,10 +1375,11 @@ show_help() {
 ${BLUE}version${RESET}: $_SCRIPT_VERSION
 ${BLUE}site${RESET}: $_SCRIPT_SITE
 
-Commands: ${YELLOW}./$_SCRIPT_FILE_NAME${RESET} [Argument]
-  [Argument] =
-    ${YELLOW}h${RESET}    : (h)elp. Show this dialog.
-    ${YELLOW}b${RESET}    : (b)uild. Build new, updated posts, tag posts and homepage.
+Commands: 
+  ${YELLOW}./$_SCRIPT_FILE_NAME$ h{RESET}
+      (h)elp. Show this dialog.
+  ${YELLOW}./$_SCRIPT_FILE_NAME$ b{RESET}
+      (b)uild. Build the blog. It automatically decides whether to update the post or create all files anew.
 
 First to do:
   ${BLUE}1.$RESET Open $YELLOW$_SCRIPT_FILE_NAME$RESET and edit config. 
