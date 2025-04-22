@@ -965,15 +965,20 @@ frontmatter() {
   fi
 
   # Fix <,> to &lt; &gt;
-  TITLE=${TITLE//</\&lt;}
-  TITLE=${TITLE//>/\&gt;}
-  DESCRIPTION=${DESCRIPTION//</\&lt;}
-  DESCRIPTION=${DESCRIPTION//>/\&gt;}
-
-  # Only allow alphabets, numbers and dash underscore in tags
-  TAGS=$(echo "$TAGS" | sed 's/[^ a-zA-Z0-9_-]//g')
-  # Remove duplicated tags
-  TAGS=$(echo "$TAGS" | tr ' ' '\n' | awk '!seen[$0]++' | tr '\n' ' ')
+  if [ -n "$TITLE" ]; then
+    TITLE=${TITLE//</\&lt;}
+    TITLE=${TITLE//>/\&gt;}
+  fi
+  if [ -n "$DESCRIPTION" ]; then
+    DESCRIPTION=${DESCRIPTION//</\&lt;}
+    DESCRIPTION=${DESCRIPTION//>/\&gt;}
+  fi
+  if [ -n "$TAGS" ];then
+    # Only allow alphabets, numbers and dash underscore in tags
+    TAGS=$(echo "$TAGS" | sed 's/[^ a-zA-Z0-9_-]//g')
+    # Remove duplicated tags
+    TAGS=$(echo "$TAGS" | tr ' ' '\n' | awk '!seen[$0]++' | tr '\n' ' ')
+  fi
 }
 
 # Converting markdown files
