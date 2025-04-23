@@ -28,6 +28,10 @@ jobs:
           if git ls-remote --exit-code --heads origin gh-pages; then
             git fetch origin gh-pages
 
+            echo "ls-tree"
+            git ls-tree -r origin/gh-pages --name-only
+            echo "++++++"
+
             check_item=(
               "checksum/"
               "posts/"
@@ -36,8 +40,13 @@ jobs:
               "all-tags.html"
             )
             for item in "${check_file[@]}"; do
+
+              echo "item: $item"
+              
               if git ls-tree -r origin/gh-pages --name-only | grep -q "^$item$"; then
                 git checkout origin/gh-pages -- $item
+
+                echo "checkout! $item"
               fi
             done    
           fi
