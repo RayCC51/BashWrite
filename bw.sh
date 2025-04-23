@@ -1201,11 +1201,12 @@ copy_assets() {
   find ./write/ -type f ! -name "*.md" -exec cksum {} \; > $new
 
   # Find remoced assets and remove them
-  local REMOVED_ASSET=$(grep -Fvx -f $new $prev)
+  local REMOVED_ASSET=$(awk 'NR==FNR{a[$3]; next} !($3 in a)' $new $prev)
 
   if [ -n "$REMOVED_ASSET" ]; then
     while IFS=' ' read -r checksum file_size file_path; do
-    rm "$file_path"
+      file_path=${file_path/.\/write/.\/posts}
+      rm "$file_path"
     done <<< "$REMOVED_ASSET"
   fi
 
