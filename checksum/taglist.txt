@@ -1,0 +1,11 @@
+sample ./posts/frontmatter.html ./posts/images/index.html ./posts/markdown/markdown-sample.html
+frontmatter ./posts/frontmatter.html
+blog ./posts/frontmatter.html ./posts/images/index.html
+image ./posts/images/index.html
+md ./posts/markdown/markdown-sample.html
+html ./posts/markdown/markdown-sample.html
+github ./posts/github-action/index.html
+action ./posts/github-action/index.html
+pages ./posts/github-action/index.html
+ghpages ./posts/github-action/index.html
+publish ./posts/github-action/index.html
