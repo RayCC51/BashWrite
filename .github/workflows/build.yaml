@@ -39,7 +39,7 @@ jobs:
               all-posts.html
               all-tags.html
             )
-            for item in "${check_file[@]}"; do
+            for item in "${check_item[@]}"; do
 
               echo "item: $item"
               
