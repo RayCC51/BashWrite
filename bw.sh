@@ -1080,17 +1080,8 @@ make_tag_pages() {
 # Make rss.xml
 #
 # Using rss 2.0
-# Depend on recent post in make_index_html()
-# So rss contain RECENT_POST_COUNT posts only
-#
-# $1: status: "I"nit rss, "E"nd file, "A"dd item
-# $2: title
-# $3: page link http://.../...html
-# $4: description
-# $5: pubDate yyyy-mm-dd
 make_rss_xml() {
-  if [ "$1" = "I" ]; then
-    echo "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>
+  echo "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>
 <rss version=\"2.0\" xmlns:atom=\"http://www.w3.org/2005/Atom\">
 
 <channel>
@@ -1103,93 +1094,90 @@ make_rss_xml() {
   <atom:link href=\"$BASE_URL/rss.xml\" rel=\"self\" type=\"application/rss+xml\" />
 " > rss.xml
 
-  elif [ "$1" = "E" ]; then
-    echo "</channel>
-</rss>
-" >> rss.xml
-    echo -e "  $BLUE+$RESET rss.xml"
+  local recent10=$(echo "$ALL_POSTS" | sort -r -k1,1 | head -n 10)
+  local _url=''
+  local _title=''
+  local _path=''
+  local rss_date=''
+  local article=''
 
-  elif [ "$1" = "A" ]; then
-    local title="$2"
-    local page_link="$3"
-    local description="$4"
-    local pubDate=$(date -d "$5" +"%a, %d %b %Y 00:00:00 +0000")
+  # line = date url title
+  while IFS= read -r line; do
+    rss_date=$(date -d "$(echo "$line" | awk '{print $1}')" +"%a, %d %b %Y 00:00:00 GMT")
+    _url=$(echo "$line" | awk '{print $2}')
+    words=($line)
+    _title="${words[@]:2}"
+    _path=${_url/"$BASE_URL"/.}
+    article=$(sed -n '/<main>/,/<\/main>/p' "$_path")
 
     echo "<item>
-  <title>$title</title>
-    <link>$page_link</link>
-    <guid>$page_link</guid>
-    <description>$description</description>
-    <pubDate>$pubDate</pubDate>
+  <title>$_title</title>
+  <link>$_url</link>
+  <guid>$_url</guid>
+  <description><![CDATA[
+    $article
+  ]]></description>
+  <pubDate>$rss_date</pubDate>
 </item>
 " >> rss.xml
-  fi
+  done <<< "$recent10"
+
+  echo "</channel>
+</rss>
+" >> rss.xml
+
+  echo -e "  $BLUE+$RESET rss.xml"
 }
 
 # Make index.html
 #
 # It contains: PROFILE, resent posts
 make_index_html() {
-  local isShowRecent=true
-  if [ "$RECENT_POSTS_COUNT" -eq 0 ]; then
-    RECENT_POSTS_COUNT=5
-    isShowRecent=false
-  fi
-  
-  local RECENT_POSTS=$(echo "$ALL_POSTS" | sort -r -k1,1 | head -n "$RECENT_POSTS_COUNT")
-  local HTML_RECENT_POSTS="<hr>
+  if [ "$RECENT_POSTS_COUNT" -gt 0 ]; then
+    local RECENT_POSTS=$(echo "$ALL_POSTS" | sort -r -k1,1 | head -n "$RECENT_POSTS_COUNT")
+    local HTML_RECENT_POSTS=''
+
+    if [ -n "$RECENT_POSTS" ]; then
+      HTML_RECENT_POSTS="<hr>
 <div id=\"recent-posts\">
   <h3>Recent posts</h3>
   <ul>"
 
-  make_rss_xml "I"
+    while IFS=' ' read -r _DATE _URL _TITLE; do
+      _PATH=".$(echo "${_URL}" | awk -F"$BASE_URL" '{print $2}')"
+      _DESCRIPTION=$(awk -F'"' '/description/{print $4; exit}' ${_PATH})
+      _URL=$(echo "$_URL" | sed 's/index.html$//')
 
-  while IFS=' ' read -r _DATE _NEW_PATH _TITLE; do
-    _PATH=$(echo "${_NEW_PATH}" | awk -F"$BASE_URL" '{print $2}')
-    _PATH=".$_PATH"
-    
-    _DESCRIPTION=$(awk -F'"' '/description/{print $4; exit}' ${_PATH})
-
-    _NEW_PATH=$(echo "$_NEW_PATH" | sed 's/index.html$//')
-
-    if [ "$isShowRecent" = "true" ]; then
       HTML_RECENT_POSTS+="
 <li>
-  <p><time>${_DATE}</time> <a href=\"${_NEW_PATH}\">${_TITLE}</a></p>
+  <p><time>${_DATE}</time> <a href=\"${_URL}\">${_TITLE}</a></p>
 "
-      if [ -n "$_DESCRIPTION" ]; then 
+      if [ -n "$_DESCRIPTION" ]; then
         HTML_RECENT_POSTS+="  <p class=\"recent-description\">${_DESCRIPTION}</p>
 "
       fi
       HTML_RECENT_POSTS+="</li>
 "
-    fi
+    done <<< "$RECENT_POSTS"
 
-    # RSS
-    make_rss_xml "A" "$_TITLE" "$_NEW_PATH" "$_DESCRIPTION" "$_DATE"
-    
-  done <<< "$RECENT_POSTS"
-  
-  HTML_RECENT_POSTS+="
+    HTML_RECENT_POSTS+="
   </ul>
 </div>"
-
-  make_rss_xml "E"
+    fi
+  fi
 
   reset_var
   TITLE="$BLOG_NAME"
   DESCRIPTION="$AUTHOR_NAME's $BLOG_NAME"
   NEW_PATH="./index.html"
-  
+
   make_before > "$NEW_PATH"
   echo "<div id=\"profile\">" >> index.html
   md2html "$PROFILE" >> "$NEW_PATH"
   echo "</div>" >> "$NEW_PATH"
-  
-  if [ "$isShowRecent" = "true" ]; then
-    echo "$HTML_RECENT_POSTS" >> index.html
-  fi
-  
+
+  echo "$HTML_RECENT_POSTS" >> index.html
+
   make_after >> "$NEW_PATH"
 
   echo -e "  $BLUE+$RESET index.html"
@@ -1347,6 +1335,7 @@ elif [[ "$ARG" == b* || "$ARG" == r* || "$ARG" == B* || "$ARG" == R* ]]; then
     make_all_posts_html
     make_all_tags_html
     make_index_html
+    make_rss_xml
     make_tag_pages 
   fi
 
