@@ -33,17 +33,17 @@ jobs:
             echo "++++++"
 
             check_item=(
-              "checksum/"
-              "posts/"
-              "tags/"
-              "all-posts.html"
-              "all-tags.html"
+              checksum/
+              posts/
+              tags/
+              all-posts.html
+              all-tags.html
             )
             for item in "${check_file[@]}"; do
 
               echo "item: $item"
               
-              if git ls-tree -r origin/gh-pages --name-only | grep -q "^$item$"; then
+              if git ls-tree -r origin/gh-pages --name-only | grep -q "^$item"; then
                 git checkout origin/gh-pages -- $item
 
                 echo "checkout! $item"
