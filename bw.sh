@@ -399,49 +399,63 @@ MOD=$(echo "$MOD" | sed -E '
   s/\[(.*)\]\((.*)\)/<a href="\2">\1<\/a>/g
 ')
 
-# li
-# for seperate ul and ol, use il tag for ol
+# ul ol li
+LI() {
 MOD=$(echo "$MOD" | sed -E '
-  s/^( {4}*)[-*+] (.*)/<ul>\n\1<li>\2<\/li>\n<\/ul>/
-  
-  s/^( {4}*)[0-9]+\. (.*)/<ol>\n\1<il>\2<\/il>\n<\/ol>/
-')
-
-# clean duplicated ul ol
-MOD=$(echo "$MOD" | sed -E '
-  /^( {4}*)<\/[uo]l>$/ {
-    N
-    /( {4}*)<\/([uo]l)>\n\1<\2>/d
-  }
-')
-
-# indented ul ol
-MOD=$(echo "$MOD" | sed -E '
-  s/^( {4}+)(<li>.*)$/\1<li><ul>\n\1\2\n\1<\/ul><\/li>/
-  
-  s/^( {4}+)(<il>.*)$/\1<il><ol>\n\1\2\n\1<\/ol><\/il>/
-')
-
-# clean duplicated indented ul ol
-MOD=$(echo "$MOD" | sed -E '
-  /^( {4}*)<\/[uo]l><\/[il]{2}>$/ {
-    N
-    /^( {4}*)<\/[uo]l><\/[il]{2}>\n\1<[il]{2}><[uo]l>$/d
-  }
-')
-
-# restore il to li
-MOD=$(echo "$MOD" | sed -E '
-  s/il>/li>/g
-')
-
-# fix indented list
-MOD=$(echo "$MOD" | sed -E '
-  /<\/li>$/ {
+  /^[-+*] / {
+    i\<ul>
+    $ a\<\/ul>
     :a
+    n
+    $ a\<\/ul>
+    /^[-+*] |^ {4}/ ba
+    i\<\/ul>
+  }
+')
+
+MOD=$(echo "$MOD" | sed -E '
+  /^[0-9]+\. / {
+    i\<ol>
+    $ a\<\/ol>
+    :a
+    n
+    $ a\<\/ol>
+    /^[0-9]+\. |^ {4}/ ba
+    i\<\/ol>
+  }
+')
+
+MOD=$(echo "$MOD" | sed -E '
+  /^<ul>$/,/^<\/ul>$/ {
+    s/^[-+*] (.*)$/<li>\1<\/li>/
+    s/^ {4}(.*)/<li>\n\1\n<\/li>/
+  }
+  /^<ol>$/,/^<\/ol>$/ {
+    s/^[0-9]+\. (.*)$/<li>\1<\/li>/
+    s/^ {4}(.*)/<li>\n\1\n<\/li>/
+  }
+')
+
+MOD=$(echo "$MOD" | sed -E '
+  /^<\/li>$/ {
     N
-    /<\/li>$/ ba
-    s/<\/li>\n {4}<li>(<[uo]l>)$/\1/
+    /^<\/li>\n<li>$/d
+  }
+')
+}
+
+while echo "$MOD" | grep -qE '^[-+*] |^[0-9]+\. '; do
+  LI
+done
+
+MOD=$(echo "$MOD" | sed -E '
+  /^<[uo]l>$/,/^<\/[uo]l>$/ {
+    /<\/li>$/ {
+      :a
+      N
+      /<\/li>$/ ba
+      s/<\/li>\n<li>$//
+    }
   }
 ')
 

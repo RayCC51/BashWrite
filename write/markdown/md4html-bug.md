@@ -10,42 +10,6 @@ tag: md html sample bug fixme
 
 ## List
 
-### More than 2 level indented list
-
-- 0 normal
-    - 1 indented with 4 space
-        - 2 this is not working
-            - 3 this too
-    - 1
-- 0 ...
-
-```md
-- 0 normal
-    - 1 indented with 4 space
-        - 2 this is not working
-            - 3 this too
-    - 1
-- 0 ...
-```
-
-### Mixed ul ol list
-
-1. this
-    - is
-2. okay
-
-- this is
-    1. not okay
-
-```md
-1. this
-    - is
-2. okay
-
-- this is
-    1. not okay
-```
-
 ### Other elements insides list
 
 - list
