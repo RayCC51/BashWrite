@@ -40,7 +40,7 @@ CUSTOM_HTML_HEAD=""
 
 # script info
 _SCRIPT_NAME='BashWrite'
-_SCRIPT_VERSION='1.1.3'
+_SCRIPT_VERSION='1.1.4'
 _SCRIPT_FILE_NAME='bw.sh'
 _SCRIPT_SITE='https://github.com/raycc51/bashwrite'
 
@@ -703,25 +703,16 @@ make_list() {
   if [ ! -e $old ]; then
     touch $old
   else
-    local removed_md=$(grep -Fxv -f $new $old)
     local temp_removed=''
-
-    if [ -n "$removed_md" ]; then
-      while IFS=' ' read -r checksum file_size file_path; do
-        temp_removed=$(printf "%s\n" "$temp_removed" "000 $file_size $file_path")
-      done <<< "$removed_md"
-
+    while IFS=' ' read -r _c _s file_path; do
+      if [ -n "$file_path" ] && ! grep -qF $file_path $new; then
+        temp_removed+="000 000 $file_path"$'\n'
+      fi
+    done < $old
+    if [ -n "$temp_removed" ]; then
       echo "$temp_removed" >> $new
     fi
   fi
-}
-
-# Update new file list
-#
-# Remove removed file lines starts with 000
-update_file_list() {  
-  grep -v '^000 ' ./temp_cksum_md.txt > ./checksum/cksum_md.txt
-  rm ./temp_cksum_md.txt
 }
 
 # Update taglist.txt
@@ -747,7 +738,6 @@ update_tags_list() {
   TAGS=$(echo "$TAGS" | xargs | tr '[:upper:]' '[:lower:]')
   
   for tag in $TAGS; do 
-  
     tag_line=$(grep "^$tag " "$FILE")
 
     if [ -z "$tag_line" ]; then
@@ -1341,7 +1331,9 @@ elif [[ "$ARG" == b* || "$ARG" == r* || "$ARG" == B* || "$ARG" == R* ]]; then
   if [[ "$COUNT_CHANGE" == 0 ]];then
     echo -e "  $BLUE*$RESET There is no changes!"
   else
-    update_file_list
+    # update cksum_md.txt
+    grep -v '^000 ' ./temp_cksum_md.txt > ./checksum/cksum_md.txt
+    rm ./temp_cksum_md.txt
 
     echo -e "$BLUE*$RESET Make resources..."
     make_style_css

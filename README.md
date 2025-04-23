@@ -1,6 +1,6 @@
 # BashWrite - [demo](https://raycc51.github.io/BashWrite/)
 
-![screenshot](bashwrite_screenshot.png)
+![screenshot](screenshot.png)
 
 Single, pure bash script for make your blog. 
 
