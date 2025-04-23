@@ -6,7 +6,7 @@
   <link>https://raycc51.github.io/BashWrite</link>
   <description>raycc's blog</description>
   <language>en</language>
-  <pubDate>Wed, 23 Apr 2025 10:37:24 +0000</pubDate>
+  <pubDate>Wed, 23 Apr 2025 11:44:25 +0000</pubDate>
   <copyright>© 2025 raycc</copyright>
   <atom:link href="https://raycc51.github.io/BashWrite/rss.xml" rel="self" type="application/rss+xml" />
 
@@ -600,8 +600,7 @@ your_blog/
 <li>Go to the your blog repository settings.</li>
 <p><li>Settings -&gt; Code and automation - Pages -&gt; Build and deployment</p>
 <ul>
-<li>Source: Deploy from a branch</li>
-<li>Branch: gh-pages /(root)</li>
+<li>Source: Github actions</li>
 </ul>
 </li>
 <li>Save the settings.</li>

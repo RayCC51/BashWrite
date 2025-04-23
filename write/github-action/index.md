@@ -32,7 +32,6 @@ your_blog/
 0. Push any files in your blog repository, or just run a github action. Then *gh-pages* branch will be created automatically.
 1. Go to the your blog repository settings.
 2. Settings -> Code and automation - Pages -> Build and deployment
-    - Source: Deploy from a branch
-    - Branch: gh-pages /(root)
+    - Source: Github actions
 3. Save the settings.
 4. Your site is live at *https://YOUR-NAME.github.io/* or *https://YOUR-NAME.github.io/REPO-NAME/*
