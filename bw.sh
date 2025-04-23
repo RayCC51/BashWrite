@@ -322,7 +322,7 @@ MOD=$(echo "$MOD" | sed -E '
 
 # html br
 MOD=$(echo "$MOD" | sed -E '
-  s/&lt;(br)&gt;/<\1>/
+  s/&lt;br ?\/?&gt;/<br>/
 ')
 
 # blockquote
