@@ -10,14 +10,10 @@ on:
       - 'bw.sh'
   workflow_dispatch:
 
-permissions:
-  contents: write
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-
 jobs:
   build:
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -28,10 +24,6 @@ jobs:
           if git ls-remote --exit-code --heads origin gh-pages; then
             git fetch origin gh-pages
 
-            echo "ls-tree"
-            git ls-tree -r origin/gh-pages --name-only
-            echo "++++++"
-
             check_item=(
               checksum/
               posts/
@@ -40,13 +32,9 @@ jobs:
               all-tags.html
             )
             for item in "${check_item[@]}"; do
-
-              echo "item: $item"
               
               if git ls-tree -r origin/gh-pages --name-only | grep -q "^$item"; then
                 git checkout origin/gh-pages -- $item
-
-                echo "checkout! $item"
               fi
             done    
           fi
@@ -55,10 +43,22 @@ jobs:
         run: |
           chmod +x bw.sh
           ./bw.sh b
-      
-      - name: gh-pages
-        uses: peaceiris/actions-gh-pages@v4
-        if: github.ref == 'refs/heads/main'
+
+      - name: Upload static files as artifact
+        id: deployment
+        uses: actions/upload-pages-artifact@v3 
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: .
+          path: .
+  deploy:
+    needs: build
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
