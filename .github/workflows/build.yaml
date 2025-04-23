@@ -28,23 +28,15 @@ jobs:
           if git ls-remote --exit-code --heads origin gh-pages; then
             git fetch origin gh-pages
 
-            check_folder=(
-              checksum
-              posts
-              tags
-            )
-            for item in "${check_folder[@]}"; do
-              if [ -d $item ]; then
-                git checkout origin/gh-pages -- $item
-              fi
-            done
-            
-            check_file=(
-              all-posts.html
-              all-tags.html
+            check_item=(
+              "checksum/"
+              "posts/"
+              "tags/"
+              "all-posts.html"
+              "all-tags.html"
             )
             for item in "${check_file[@]}"; do
-              if [ -e $item ]; then
+              if git ls-tree -r origin/gh-pages --name-only | grep -q "^$item$"; then
                 git checkout origin/gh-pages -- $item
               fi
             done    
