@@ -6,48 +6,538 @@
   <link>https://raycc51.github.io/BashWrite</link>
   <description>raycc's blog</description>
   <language>en</language>
-  <pubDate>Tue, 22 Apr 2025 14:01:31 +0000</pubDate>
+  <pubDate>Wed, 23 Apr 2025 05:56:54 +0000</pubDate>
   <copyright>© 2025 raycc</copyright>
   <atom:link href="https://raycc51.github.io/BashWrite/rss.xml" rel="self" type="application/rss+xml" />
 
 <item>
   <title>Images in the posts</title>
-    <link>https://raycc51.github.io/BashWrite/posts/images/</link>
-    <guid>https://raycc51.github.io/BashWrite/posts/images/</guid>
-    <description>How to include images in the posts</description>
-    <pubDate>Sun, 20 Apr 2025 00:00:00 +0000</pubDate>
+  <link>https://raycc51.github.io/BashWrite/posts/images/index.html</link>
+  <guid>https://raycc51.github.io/BashWrite/posts/images/index.html</guid>
+  <description><![CDATA[
+        <main>
+
+<p>You can use markdown to include the images. </p>
+
+<h3>1. Prepare images. </h3>
+
+<figure>
+  <img src="screenshot.png" alt="screenshot.png">
+  <figcaption>screenshot.png</figcaption>
+</figure>
+
+<h3>2. Put your images in...</h3>
+
+<pre><code>
+your-blog-directory/
+├─ write/
+│  ├─ new-post/           &lt;&lt;&lt; New!
+│  │  ├─ index.md         &lt;&lt;&lt; New!
+│  │  ├─ screenshot.png   &lt;&lt;&lt; New!
+├─ bw.sh
+</code></pre>
+
+<p>Create a new folder under the <code>write/</code> folder. It’s best to name the folder after the title of the new post you will write.</p>
+
+<p>Try to keep only 1 markdown file per folder if possible. This will make file management easier.</p>
+
+<p>Name the markdown file <code>index.md</code>. This way, you can have a clean URL.</p>
+
+<p>Also, include any images you want to put in this folder.</p>
+
+<h3>3. Write markdown.</h3>
+
+<figure>
+  <img src="screenshot.png" alt="screenshot">
+  <figcaption>screenshot</figcaption>
+</figure>
+
+<pre><code class="language-md">
+![screenshot](screenshot.png)
+</code></pre>
+
+    </main>
+  ]]></description>
+  <pubDate>Sun, 20 Apr 2025 00:00:00 GMT</pubDate>
 </item>
 
 <item>
   <title>md2html bug list</title>
-    <link>https://raycc51.github.io/BashWrite/posts/markdown/md4html-bug.html</link>
-    <guid>https://raycc51.github.io/BashWrite/posts/markdown/md4html-bug.html</guid>
-    <description>I don't know how to solve these bugs...</description>
-    <pubDate>Thu, 17 Apr 2025 00:00:00 +0000</pubDate>
+  <link>https://raycc51.github.io/BashWrite/posts/markdown/md4html-bug.html</link>
+  <guid>https://raycc51.github.io/BashWrite/posts/markdown/md4html-bug.html</guid>
+  <description><![CDATA[
+    
+  ]]></description>
+  <pubDate>Thu, 17 Apr 2025 00:00:00 GMT</pubDate>
 </item>
 
 <item>
   <title>Markdown sample</title>
-    <link>https://raycc51.github.io/BashWrite/posts/markdown/markdown-sample.html</link>
-    <guid>https://raycc51.github.io/BashWrite/posts/markdown/markdown-sample.html</guid>
-    <description>Testing markdown to html converter. </description>
-    <pubDate>Thu, 17 Apr 2025 00:00:00 +0000</pubDate>
+  <link>https://raycc51.github.io/BashWrite/posts/markdown/markdown-sample.html</link>
+  <guid>https://raycc51.github.io/BashWrite/posts/markdown/markdown-sample.html</guid>
+  <description><![CDATA[
+        <main>
+
+<h1>Pure markdown</h1>
+
+<pre><code class="language-md">
+# Pure markdown
+</code></pre>
+
+<h2>h2</h2>
+
+<pre><code class="language-md">
+## h2
+</code></pre>
+
+<h3>h3</h3>
+
+<pre><code class="language-md">
+### h3
+</code></pre>
+
+<h4>h4</h4>
+
+<pre><code class="language-md">
+#### h4
+</code></pre>
+
+<h5>h5</h5>
+
+<pre><code class="language-md">
+##### h5
+</code></pre>
+
+<h6>h6</h6>
+
+<pre><code class="language-md">
+###### h6
+</code></pre>
+
+<p>hello 
+world</p>
+
+<pre><code class="language-md">
+hello 
+world
+</code></pre>
+
+<p>two blank</p>
+
+<p>line break </p>
+
+<pre><code class="language-md">
+two blank  
+line break
+</code></pre>
+
+<p class="indented">indented p</p>
+
+<pre><code class="language-md">
+    indented p
+</code></pre>
+
+<p>italic <em>em</em></p>
+
+<pre><code class="language-md">
+italic *em*
+</code></pre>
+
+<p>bold <strong>strong</strong></p>
+
+<pre><code class="language-md">
+bold **strong**
+</code></pre>
+
+<p>italic and bold <strong><em>em strong</em></strong></p>
+
+<pre><code class="language-md">
+italic and bold ***em strong***
+</code></pre>
+
+<p>escape: \ . | # ! * + - \_ ( { [ \&lt; ``</p>
+
+<pre><code class="language-md">
+escape: \\ \. \| \# \! \* \+ \- \_ \( \{ \[ \&lt; ``
+</code></pre>
+
+<p>`escape <code>backtick</code> in code`</p>
+
+<pre><code class="language-md">
+``escape `backtick` in code``
+</code></pre>
+
+<hr>
+
+<pre><code class="language-md">
+---
+</code></pre>
+
+<hr>
+
+<pre><code class="language-md">
+***
+</code></pre>
+
+<hr>
+
+<pre><code class="language-md">
+___
+</code></pre>
+
+
+<ul>
+<li>unordered ul</li>
+<p><li>list li</p>
+<ul>
+<li>indented</li>
+</ul>
+</li>
+<li>list</li>
+</ul>
+
+<pre><code class="language-md">
+- unordered ul
+- list li
+    - indented
+- list
+</code></pre>
+
+<ol>
+<li>ordered ol</li>
+<p><li>list li</p>
+<ol>
+<li>indented</li>
+</ol>
+</li>
+<li>list</li>
+</ol>
+
+<pre><code class="language-md">
+1. ordered ol
+2. list li
+    1. indented
+4. list
+</code></pre>
+
+<ol>
+<p><li>mixed</p>
+<ul>
+<li>ul</li>
+</ul>
+</li>
+<li>ol</li>
+</ol>
+
+<pre><code class="language-md">
+1. mixed
+    - ul
+2. ol
+</code></pre>
+
+<blockquote>
+<p>block quote</p>
+
+<p>blockquote</p>
+
+<blockquote>
+<p>indented</p>
+</blockquote>
+
+<p>blockquote</p>
+</blockquote>
+
+<pre><code class="language-md">
+&gt; block quote
+&gt;
+&gt; blockquote
+&gt;
+&gt; &gt; indented
+&gt;
+&gt; blockquote
+</code></pre>
+
+<a href="https://example.com">Link a</a>
+
+<pre><code class="language-md">
+[Link a](https://example.com)
+</code></pre>
+
+<a href="https://example.com">https://example.com</a>
+
+<pre><code class="language-md">
+&lt;https://example.com&gt;
+</code></pre>
+
+<figure>
+  <img src="https://place-hold.it/100x100" alt="img">
+  <figcaption>img</figcaption>
+</figure>
+
+<pre><code class="language-md">
+![img](https://place-hold.it/100x100)
+</code></pre>
+
+<figure>
+  <img src="https://place-hold.it/100x100" alt="img alt" title="title">
+  <figcaption>img alt</figcaption>
+</figure>
+
+<pre><code class="language-md">
+![img alt](https://place-hold.it/100x100 "title")
+</code></pre>
+
+<p>inline <code>code</code></p>
+
+<pre><code class="language-md">
+inline `code`
+</code></pre>
+
+<pre><code>
+plain code block
+\ . | # ! * + - _ ( ) { } [ ] &lt; &gt; ''
+</code></pre>
+
+<pre><code class="language-md">
+```
+plain code block
+\ . | # ! * + - _ ( ) { } [ ] &lt; &gt; ''
+```
+</code></pre>
+
+<pre><code class="language-python">
+print("python")
+</code></pre>
+
+<pre><code class="language-md">
+```python
+print("python")
+```
+</code></pre>
+
+
+<h1>Extended markdown</h1>
+
+<p>strikethrough <del>del</del></p>
+
+<pre><code class="language-md">
+strikethrough &lt;sub>~del~&lt;/sub>
+</code></pre>
+
+<p>highlight <mark>mark</mark></p>
+
+<pre><code class="language-md">
+highlight ==mark==
+</code></pre>
+
+<p><sub>sub</sub> script</p>
+
+<pre><code class="language-md">
+&lt;sub>sub&lt;/sub> script
+</code></pre>
+
+<p><sup>sup</sup>er script</p>
+
+<pre><code class="language-md">
+^sup^er script
+</code></pre>
+
+<ul>
+<li><input type="checkbox" disabled> checked box ul li</li>
+<li><input type="checkbox" checked disabled> input type="checkbox" checked disabled</li>
+</ul>
+
+<pre><code class="language-md">
+- [ ] checked box ul li
+- [x] input type="checkbox" checked disabled
+</code></pre>
+
+<h3 id="extened"><a href="#extened">heading with id </a> 🔗</h3>
+
+<pre><code class="language-md">
+### heading with id {#extened}
+</code></pre>
+
+<table>
+<thead>
+<tr>
+    <th>ttt</th>
+    <th>aaa</th>
+    <th>bbb</th>
+    <th>lll</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+    <td>.</td>
+    <td>l</td>
+    <td>c</td>
+    <td>r</td>
+</tr>
+</tbody>
+</table>
+
+<pre><code class="language-md">
+|ttt|aaa|bbb|lll|
+|---|:--|:-:|--:|
+|.|l|c|r|
+</code></pre>
+
+<dl>
+    <dt>dl</dt>
+    <dd>definition list</dd>
+    <dt>dt</dt>
+    <dd>definition</dd>
+    <dd>data</dd>
+</dl>
+
+<pre><code class="language-md">
+dl
+: definition list
+
+dt
+: definition
+: data
+</code></pre>
+
+<p>foot<sup><a class="footnote" id="fn-1" href="#footnote-1">1</a></sup> note<sup><a class="footnote" id="fn-note" href="#footnote-note">note</a></sup> sup a</p>
+
+<p>[<a class="footnote" id="footnote-1" href="#fn-1">1</a>]: first foot note</p>
+
+<p>[<a class="footnote" id="footnote-note" href="#fn-note">note</a>]: long</p>
+
+<pre><code class="language-md">
+foot[^1] note[^note] sup a
+
+[^1]: first foot note
+
+[^note]: long
+</code></pre>
+
+<h1>HTML Tags</h1>
+
+<!-- comment -->
+
+<pre><code class="language-md">
+&lt;!-- comment --&gt;
+</code></pre>
+
+<br>
+
+<pre><code class="language-md">
+&lt;br&gt;
+</code></pre>
+
+<details>
+<summary>details and summary</summary>
+<p>open</p>
+
+<p>and</p>
+
+<p>close</p>
+
+<p>paragraph</p>
+</details>
+
+<pre><code class="language-md">
+&lt;details&gt;
+&lt;summary&gt;details and summary&lt;/summary&gt;
+open
+
+and
+
+close
+
+paragraph
+&lt;/details&gt;
+</code></pre>
+
+    </main>
+  ]]></description>
+  <pubDate>Thu, 17 Apr 2025 00:00:00 GMT</pubDate>
 </item>
 
 <item>
   <title>Publish on Gihub Pages with github actions</title>
-    <link>https://raycc51.github.io/BashWrite/posts/github-action/</link>
-    <guid>https://raycc51.github.io/BashWrite/posts/github-action/</guid>
-    <description>How to publish the blog on Github Pages</description>
-    <pubDate>Thu, 17 Apr 2025 00:00:00 +0000</pubDate>
+  <link>https://raycc51.github.io/BashWrite/posts/github-action/index.html</link>
+  <guid>https://raycc51.github.io/BashWrite/posts/github-action/index.html</guid>
+  <description><![CDATA[
+        <main>
+
+<h2>Download github action</h2>
+
+<ol>
+<li>Download <code>.github/workflows/build.yaml</code> in <a href="https://github.com/raycc51/bashwrite">Github</a></li>
+<li>Put the <code>build.yaml</code> in your <code>your-blog-path/.github/workflows/</code></li>
+</ol>
+
+<h3>Directory</h3>
+
+<pre><code>
+your_blog/
+├─ .github/           &lt;&lt;&lt; New!
+│  ├─ workflows/      &lt;&lt;&lt; New!
+│  │  ├─ build.yaml   &lt;&lt;&lt; New!
+├─ write/
+│  ├─ post1.md
+│  ├─ post2.md
+├─ bw.sh
+</code></pre>
+
+<h2>Settings in github.com</h2>
+
+<figure>
+  <img src="pages-setting.png" alt="setting image">
+  <figcaption>setting image</figcaption>
+</figure>
+
+<ol>
+<li>Push any files in your blog repository, or just run a github action. Then <em>gh-pages</em> branch will be created automatically.</li>
+<li>Go to the your blog repository settings.</li>
+<p><li>Settings -&gt; Code and automation - Pages -&gt; Build and deployment</p>
+<ul>
+<li>Source: Deploy from a branch</li>
+<li>Branch: gh-pages /(root)</li>
+</ul>
+</li>
+<li>Save the settings.</li>
+<li>Your site is live at <em>https://YOUR-NAME.github.io/</em> or <em>https://YOUR-NAME.github.io/REPO-NAME/</em></li>
+</ol>
+
+    </main>
+  ]]></description>
+  <pubDate>Thu, 17 Apr 2025 00:00:00 GMT</pubDate>
 </item>
 
 <item>
   <title>Frontmatter</title>
-    <link>https://raycc51.github.io/BashWrite/posts/frontmatter.html</link>
-    <guid>https://raycc51.github.io/BashWrite/posts/frontmatter.html</guid>
-    <description>About frontmatter</description>
-    <pubDate>Thu, 17 Apr 2025 00:00:00 +0000</pubDate>
+  <link>https://raycc51.github.io/BashWrite/posts/frontmatter.html</link>
+  <guid>https://raycc51.github.io/BashWrite/posts/frontmatter.html</guid>
+  <description><![CDATA[
+        <main>
+
+<pre><code>
+---
+title: Frontmatter
+description: About frontmatter
+date: 2025-04-17
+lastmod: 2025-04-22
+tags: sample frontmatter blog
+draft: false
+---
+</code></pre>
+
+<p>This is a yaml-like syntax. </p>
+
+<p>There must always be a <strong>space</strong> after the <strong><em>colon(:)</em></strong>. </p>
+
+<p><code>date</code> and <code>lastmod</code> must always be written in the format <em>yyyy-mm-dd</em>. </p>
+
+<p>Tags are separated by spaces. Tags must only use alphabets, numbers, dashes(-), and underscores(_). Duplicate tags will be ignored.</p>
+
+    </main>
+  ]]></description>
+  <pubDate>Thu, 17 Apr 2025 00:00:00 GMT</pubDate>
 </item>
 
 </channel>
