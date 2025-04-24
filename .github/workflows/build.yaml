@@ -26,8 +26,8 @@ jobs:
           if git ls-remote --exit-code --heads origin gh-pages; then
             git fetch origin gh-pages
 
-              # checksum/
             check_item=(
+              checksum/
               posts/
               tags/
               all-posts.html
