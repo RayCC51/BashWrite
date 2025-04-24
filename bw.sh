@@ -639,7 +639,7 @@ echo "$MOD"
 
 # Make folder structure.
 make_directory() {
-  local folders=("posts" "tags" "write" "assets" "checksum")
+  local folders=("posts" "tags" "write" "assets" "checksum" "backup")
 
   for folder in "${folders[@]}"; do
     if [ ! -d "$folder" ]; then
@@ -1267,6 +1267,22 @@ copy_assets() {
   fi
 }
 
+# Make backup .tar.gz
+make_backup() {
+  local backup_list=$(ls -v ./backup/*.tar.gz 2>/dev/null)
+  local backup_count=$(echo "$backup_list" | wc -l)
+
+  # Remove old backups
+  if [ "$backup_count" -gt 14 ]; then
+    echo "$backup_list" | head -n $(($backup_count - 14)) | while read -r file; do
+      rm "./backup/$file"
+    done
+  fi
+
+  # Create backups
+  tar -czf "./backup/backup_$(date +%Y%m%d_%H%M%S).tar.gz" ./bw.sh ./write ./assets
+}
+
 # Check build or rebuild
 #
 # Rebuild if this script is modified
@@ -1388,6 +1404,7 @@ elif [[ "$ARG" == b* || "$ARG" == r* || "$ARG" == B* || "$ARG" == R* ]]; then
 
   copy_assets
   rm taglist-old.txt
+  make_backup
   
   echo -e "Done in $YELLOW$(( ($(date +%s%N) - start_time) / 1000000 ))${RESET}ms!"
 else
