@@ -1406,6 +1406,9 @@ elif [[ "$ARG" == b* || "$ARG" == r* || "$ARG" == B* || "$ARG" == R* ]]; then
   copy_assets
   rm taglist-old.txt
   make_backup
+
+  # Remove empty folders
+  find ./posts -type d -empty -delete
   
   echo -e "Done in $YELLOW$(( ($(date +%s%N) - start_time) / 1000000 ))${RESET}ms!"
 else
