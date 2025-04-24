@@ -1,13 +1,14 @@
 #!/bin/bash
 start_time=$(date +%s%N)
 
+# Find comments that start with ### and modify the variables below them.
 
-### Edit these configs.
+### Default settings
 BLOG_NAME="bashwrite blog"
 AUTHOR_NAME="raycc"
 BASE_URL="https://raycc51.github.io/BashWrite/"
 
-### Your blog theme color. Write in hex code #rrggbb
+### Your blog's main theme color. Write in hex code #rrggbb
 MAIN_COLOR="#CAD926"
 
 ### <html lang="$LANG">
@@ -34,7 +35,7 @@ You can find the source of this blog in the [Github](https://github.com/RayCC51/
 #   </head>
 # </html> 
 ### in every html files.
-### You can add your css or js in this line. 
+### You can add your css or js. 
 CUSTOM_HTML_HEAD=""
 
 ### Write your own HTML code.
@@ -48,7 +49,7 @@ CUSTOM_HTML_HEAD=""
 #   </article>
 #   <footer></footer>
 # </body>
-### only in posts.
+### only in the posts.
 ### You can add comments, banner, footer, or other things.
 CUSTOM_HTML_ARTICLE_FOOTER=""
 
@@ -149,7 +150,7 @@ details {border-top: 1px solid var(--main-theme); border-bottom: 1px solid var(-
   echo -e "  $BLUE+$RESET style.css"
 }
 
-# Make html that comes Before the CONTENS
+# Make html that comes before the CONTENS
 make_before() {
   local OUTPUT="<!DOCTYPE html>
 <html lang=\"$LANG\">
@@ -222,11 +223,11 @@ make_before() {
 
 # Make html that comes After the CONTENTS
 #
-# $1 : trigger for include CUSTOM_HTML_ARTICLE_FOOTER
+# $1 : If it is not empty, make_after includes the CUSTOM_HTML_ARTICLE_FOOTET variable.
 make_after() {
-  local is_footer="$1"
   local html_footer=''
-  if [ -n "$is_footer" ]; then
+  
+  if [ -n "$1" ]; then
     html_footer="<footer id=\"custom-html\">
       $CUSTOM_HTML_ARTICLE_FOOTER
     </footer>"
@@ -245,16 +246,15 @@ make_after() {
 }
 
 
-# Fix config that user make mistake
-fix_config() {
+# Fix the user's incorrect settings
+fix_setting() {
   # Check THEME_COLOR is hex code color
   if [[ ! "$MAIN_COLOR" =~ ^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$ ]]; then
-    echo -e "$RED!$RESET THEME_COLOR is not hex code color!"
-    echo "  $_SCRIPT_FILE_NAME line:11"
+    echo -e "$RED!$RESET THEME_COLOR is not hex code color! [line:12]"
     MAIN_COLOR="#CAD926"
   fi
   
-  # Remove slash in BASE_URL
+  # Remove last slash in BASE_URL
   if [[ "$BASE_URL" == */ ]]; then
     BASE_URL="${BASE_URL%/}"
   fi
@@ -264,18 +264,16 @@ fix_config() {
     BASE_URL="http://$BASE_URL"
   fi
 
-  # Fixing file/folder name with whitezspace
+  # Fixing file/folder name with whitespace
   find . -depth -name "* *" | while IFS= read -r file; do
     new_name=$(echo "$file" | tr ' ' '_')
       
     mv "$file" "$new_name"
   done
-  
 }
 
 # Markdown to HTML converter
 md2html() {
-# input
 MOD="$1"
 
 # escape < > &
@@ -342,37 +340,29 @@ MOD=$(echo "$MOD" | sed -E '
   }
 ')
 
-# details summary html
+# html
+# details summary, comment, br
 MOD=$(echo "$MOD" | sed -E '
   s/&lt;(\/?details)&gt;/<\1>/
   s/&lt;(\/?summary)&gt;/<\1>/g
-')
-
-# html comment
-MOD=$(echo "$MOD" | sed -E '
-  s/&lt;(!-- .* --)&gt;/<\1>/
-')
-
-# html br
-MOD=$(echo "$MOD" | sed -E '
+  s/&lt;(!-- .* --)&gt;/<\1>/  
   s/&lt;br ?\/?&gt;/<br>/
 ')
 
 # blockquote
 BLOCKQUOTE() {
   MOD=$(echo "$MOD" | sed -E '
-  s/^&gt; ?(.*)/<blockquote>\n\1\n<\/blockquote>/
-')
+    s/^&gt; ?(.*)/<blockquote>\n\1\n<\/blockquote>/
+  ')
 
   MOD=$(echo "$MOD" | sed -E '
-  /^<\/blockquote>$/ {
-    N
-    /<\/blockquote>\n<blockquote>/d
-  }
-')
+    /^<\/blockquote>$/ {
+      N
+      /<\/blockquote>\n<blockquote>/d
+    }
+  ')
 }
 
-# indented blockquote
 while echo "$MOD" | grep -q '^&gt;'; do
   BLOCKQUOTE
 done
@@ -404,7 +394,7 @@ MOD=$(echo "$MOD" | sed -E '
   s/\[\^([^]]+)\]/<sup><a class="footnote" id="fn-\1" href="#footnote-\1">\1<\/a><\/sup>/g
 ')
 
-# bold italic code
+# em strong  code
 MOD=$(echo "$MOD" | sed -E '   
   s/(^|[^\\*])\*([^*]*[^\\*])\*([^*]|$)/\1<em>\2<\/em>\3/g
    s/(^|[^\\*])\*\*([^*]*[^\\*])\*\*([^*]|$)/\1<strong>\2<\/strong>\3/g
@@ -436,47 +426,47 @@ MOD=$(echo "$MOD" | sed -E '
 
 # ul ol li
 LI() {
-MOD=$(echo "$MOD" | sed -E '
-  /^[-+*] / {
-    i\<ul>
-    $ a\<\/ul>
-    :a
-    n
-    $ a\<\/ul>
-    /^[-+*] |^ {4}/ ba
-    i\<\/ul>
-  }
-')
+  MOD=$(echo "$MOD" | sed -E '
+    /^[-+*] / {
+      i\<ul>
+      $ a\<\/ul>
+      :a
+      n
+      $ a\<\/ul>
+      /^[-+*] |^ {4}/ ba
+      i\<\/ul>
+    }
+  ')
 
-MOD=$(echo "$MOD" | sed -E '
-  /^[0-9]+\. / {
-    i\<ol>
-    $ a\<\/ol>
-    :a
-    n
-    $ a\<\/ol>
-    /^[0-9]+\. |^ {4}/ ba
-    i\<\/ol>
-  }
-')
+  MOD=$(echo "$MOD" | sed -E '
+    /^[0-9]+\. / {
+      i\<ol>
+      $ a\<\/ol>
+      :a
+      n
+      $ a\<\/ol>
+      /^[0-9]+\. |^ {4}/ ba
+      i\<\/ol>
+    }
+  ')
 
-MOD=$(echo "$MOD" | sed -E '
-  /^<ul>$/,/^<\/ul>$/ {
-    s/^[-+*] (.*)$/<li>\1<\/li>/
-    s/^ {4}(.*)/<li>\n\1\n<\/li>/
-  }
-  /^<ol>$/,/^<\/ol>$/ {
-    s/^[0-9]+\. (.*)$/<li>\1<\/li>/
-    s/^ {4}(.*)/<li>\n\1\n<\/li>/
-  }
-')
+  MOD=$(echo "$MOD" | sed -E '
+    /^<ul>$/,/^<\/ul>$/ {
+      s/^[-+*] (.*)$/<li>\1<\/li>/
+      s/^ {4}(.*)/<li>\n\1\n<\/li>/
+    }
+    /^<ol>$/,/^<\/ol>$/ {
+      s/^[0-9]+\. (.*)$/<li>\1<\/li>/
+      s/^ {4}(.*)/<li>\n\1\n<\/li>/
+    }
+  ')
 
-MOD=$(echo "$MOD" | sed -E '
-  /^<\/li>$/ {
-    N
-    /^<\/li>\n<li>$/d
-  }
-')
+  MOD=$(echo "$MOD" | sed -E '
+    /^<\/li>$/ {
+      N
+      /^<\/li>\n<li>$/d
+    }
+  ')
 }
 
 while echo "$MOD" | grep -qE '^[-+*] |^[0-9]+\. '; do
@@ -543,7 +533,7 @@ MOD=$(echo "$MOD" | sed -E '
   /<thead>/,/<\/thead>/s/td>/th>/g
 ')
 
-# dt
+# dl dt
 MOD=$(echo "$MOD" | sed -E '
   /^[^:]/ {
     N
@@ -631,10 +621,8 @@ MOD=$(echo "$MOD" | sed -E '
   s/^\\:/:/
 ')
 
-# output
 echo "$MOD"
 }
-
 
 
 # Make folder structure.
@@ -713,20 +701,23 @@ make_sitemap_xml() {
 make_404_html() {
   reset_var
   TITLE="404 Page not found"
-  DESCRIPTION="404"
+  DESCRIPTION="404 page not found"
   NEW_PATH="./404.html"
 
-  make_before > 404.html
-  echo "<p>404 404 404 404</p>" >> 404.html
-  make_after >> 404.html
+  {
+    make_before
+    echo "<p>404?!</p>"
+    make_after
+  } > 404.html
 
   echo -e "  $BLUE+$RESET 404.html"
 }
 
 # Make markdown file list
 # 
-# checksum file_size file_path
-# For removed files, temparaly set the checksum as 000
+# Each lines has
+#   checksum file_size file_path
+# For removed files, set checksum as 000 temparaly
 make_list() {
   local new='./temp_cksum_md.txt'
   local old='./checksum/cksum_md.txt'
@@ -748,7 +739,7 @@ make_list() {
   fi
 }
 
-# Update taglist.txt
+# Update checksum/taglist.txt
 #
 # taglist.txt has lines like
 #   tag_name html_link_1 html_link_2 ...
@@ -807,14 +798,12 @@ update_tags_list() {
 
 # File status
 #
-# Save file status in FILESTATUS
-# Did markdown files are changed or removed?
 # Status: "U"pdated, "N"ew, "R"emoved,  no "C"hange
-# FILELIST has lastest file list
-# filelist.txt has previous file list
+# FILELIST has current file list
+# ckum_md.txt has previous file list
 # 
-# $1: a file path from FILELIST
-# $2: lastest updated date
+# $1: a file path
+# $2: checksum of $1
 # return: FILESTATUS
 get_file_stat() {
   local file_path="$1"
@@ -835,8 +824,7 @@ get_file_stat() {
 
 # Remove file
 #
-# User remove markdown file, 
-# then script remove html file, tag, and more. 
+# Remove html file and lines in all-posts.html, tag/*.html. 
 #
 # $1: Removed file path
 remove_file() {
@@ -859,7 +847,7 @@ remove_file() {
   echo -e "  $RED-[Remove]$RESET $NEW_PATH"
 }
 
-# Find frontmatter and get data
+# Get frontmatter from markdown
 #
 # $1: markdown file path
 frontmatter() {
@@ -885,7 +873,9 @@ frontmatter() {
   TAGS=$(echo "$FRONTMATTER" | awk -F': ' '/^tags:/{print $2}')
   DRAFT=$(echo "$FRONTMATTER" | awk -F': ' '/^draft:/{print $2}')
 
+  # Fixing frontmatters
   if [ -z "$DATE" ]; then
+    # Default date is today
     DATE=$(date +"%Y-%m-%d")
   fi
   
@@ -925,14 +915,15 @@ converting() {
   RESULTS=$(md2html "$CONTENTS")
 
   # Save html text in html file
-  make_before > $NEW_PATH
-  echo "$RESULTS" >> $NEW_PATH
-
-  if [ -n "$CUSTOM_HTML_ARTICLE_FOOTER" ]; then
-    make_after 1 >> $NEW_PATH
-  else
-    make_after >> $NEW_PATH
-  fi
+  {
+    make_before
+    echo "$RESULTS"
+    if [ -n "$CUSTOM_HTML_ARTICLE_FOOTER" ]; then
+      make_after 1
+    else
+      make_after
+    fi
+  } > $NEW_PATH
 
   local status=''
   case "$FILESTATUS" in
@@ -950,10 +941,9 @@ converting() {
   echo -e "  $BLUE+[$status]$RESET $NEW_PATH"
 }
 
-# Convert link list to html format with group by year-month
+# Convert link list to html format, grouped by year and month
 #
-# $1: string variable with format
-#   date url title
+# $1: list of (date url title)
 # return: html string
 group_list() {
   local ORIGIN="$1"
@@ -975,7 +965,8 @@ group_list() {
       RESULT+=$'\n'
       TEMP_DATE="${DATE:0:7}"
     fi
-      RESULT+="$DATE $URL $TITLE"$'\n'
+    
+    RESULT+="$DATE $URL $TITLE"$'\n'
   done <<< "$ORIGIN"
     
   # Wraping with html tag
@@ -988,6 +979,8 @@ group_list() {
       /<\/ul><\/li>\n<li>.*<ul>/d
     }
   ')
+
+  # Remove index.html in url
   RESULT=$(echo "$RESULT" | sed -E '
     s/(href=".*\/)index.html">/\1">/
   ')
@@ -999,22 +992,18 @@ group_list() {
 #
 # List of every posts link
 make_all_posts_html() {
-  local HTML_ALL_POSTS=""
-
-  HTML_ALL_POSTS=$(group_list "$ALL_POSTS")
-  
   reset_var
   TITLE="All Posts"
   DESCRIPTION="Every post links of $BLOG_NAME"
   NEW_PATH="./all-posts.html"
 
-  make_before > all-posts.html
   {
+    make_before
     echo "<ul>"
-    echo "$HTML_ALL_POSTS"
+    group_list "$ALL_POSTS"
     echo "</ul>" 
-  } >> all-posts.html
-  make_after >> all-posts.html
+    make_after
+  } > all-posts.html
 
   echo -e "  $BLUE+$RESET all-posts.html"
 }
@@ -1027,10 +1016,10 @@ make_all_tags_html() {
 
   # Find all tags and counts
   while IFS= read -r line; do
-    first_word=$(echo "$line" | awk '{print $1}')
+    tag=$(echo "$line" | awk '{print $1}')
     count=$(( $(echo "$line" | wc -w) - 1 ))
       
-    HTML_ALL_TAGS+="$first_word $count\n"
+    HTML_ALL_TAGS+="$tag $count\n"
   done < ./checksum/taglist.txt
 
   # Sort tags by abc order
@@ -1046,13 +1035,13 @@ make_all_tags_html() {
   DESCRIPTION="Every tags in $BLOG_NAME"
   NEW_PATH="./all-tags.html"
 
-  make_before > all-tags.html
   {
+    make_before
     echo "<ul>"
     echo "$HTML_ALL_TAGS"
     echo "</ul>" 
-  } >> all-tags.html
-  make_after >> all-tags.html
+    make_after
+  } > all-tags.html
 
   echo -e "  $BLUE+$RESET all-tags.html"
 }
@@ -1076,6 +1065,7 @@ make_tag_pages() {
     done <<< "$REMOVED_TAG"
   fi
 
+  # Remove removed tags
   grep -Fvx -f <(echo "$remove_lines") all-tags.html > temp && mv temp all-tags.html
 
   # Find updated or added tag
@@ -1102,20 +1092,18 @@ make_tag_pages() {
         fi
       done
 
-      HTML_ALL_POSTS=$(group_list "$HTML_ALL_POSTS")
-
       reset_var
       TITLE="$tag"
       DESCRIPTION="$tag tag in $BLOG_NAME"
       NEW_PATH="./tags/$tag.html"
   
-      make_before > "$NEW_PATH"
       {
+        make_before
         echo "<ul>"
-        echo "$HTML_ALL_POSTS"
+        group_list "$HTML_ALL_POSTS"
         echo "</ul>" 
-      } >> "$NEW_PATH"
-      make_after >> "$NEW_PATH"
+        make_after
+      } > "$NEW_PATH"
     done <<< "$UPDATED_TAG"
   
     echo -e "  $BLUE+$RESET tags/*.html"
@@ -1216,14 +1204,14 @@ make_index_html() {
   DESCRIPTION="$AUTHOR_NAME's $BLOG_NAME"
   NEW_PATH="./index.html"
 
-  make_before > "$NEW_PATH"
-  echo "<div id=\"profile\">" >> index.html
-  md2html "$PROFILE" >> "$NEW_PATH"
-  echo "</div>" >> "$NEW_PATH"
-
-  echo "$HTML_RECENT_POSTS" >> index.html
-
-  make_after >> "$NEW_PATH"
+  {
+    make_before
+    echo "<div id=\"profile\">"
+    md2html "$PROFILE"
+    echo "</div>"
+    echo "$HTML_RECENT_POSTS"
+    make_after 
+  } > "$NEW_PATH"
 
   echo -e "  $BLUE+$RESET index.html"
 }
@@ -1239,7 +1227,7 @@ copy_assets() {
 
   find ./write/ -type f ! -name "*.md" -exec cksum {} \; > $new
 
-  # Find remoced assets and remove them
+  # Find removed assets and remove them
   local REMOVED_ASSET=$(awk 'NR==FNR{a[$3]; next} !($3 in a)' $new $prev)
 
   if [ -n "$REMOVED_ASSET" ]; then
@@ -1312,7 +1300,7 @@ Commands:
       (b)uild. Build the blog. It automatically decides whether to update the post or create all files anew.
 
 First to do:
-  ${BLUE}1.$RESET Open $YELLOW$_SCRIPT_FILE_NAME$RESET and edit config. 
+  ${BLUE}1.$RESET Open $YELLOW$_SCRIPT_FILE_NAME$RESET and edit settings. 
   ${BLUE}2.$RESET Create a markdown file in $YELLOW./write/$RESET
     - Markdown files should starts with frontmatter. 
     $YELLOW---
@@ -1335,8 +1323,8 @@ First to do:
 ARG="$1"
 if [[ "$#" -eq 0 || "$ARG" == h* || "$ARG" == H* ]]; then
   show_help
-elif [[ "$ARG" == b* || "$ARG" == r* || "$ARG" == B* || "$ARG" == R* ]]; then
-  fix_config
+elif [[ "$ARG" == b* || "$ARG" == B* ]]; then
+  fix_setting
   make_directory
 
   # Check this script is modified. 
@@ -1347,6 +1335,7 @@ elif [[ "$ARG" == b* || "$ARG" == r* || "$ARG" == B* || "$ARG" == R* ]]; then
   make_list
 
   echo -e "$BLUE*$RESET Converting..."
+
   while IFS=' ' read -r checksum file_size file_path; do
     if [ -z $file_path ]; then
       continue
@@ -1374,9 +1363,9 @@ elif [[ "$ARG" == b* || "$ARG" == r* || "$ARG" == B* || "$ARG" == R* ]]; then
           update_tags_list "$TAGS"
         fi
         
-        # Build new updated posts
-        # Rebuild every posts
-        if [[ "$FILESTATUS" = "U" || "$FILESTATUS" = "N" || ( "$FILESTATUS" = "C" && "$ARG" == r* ) ]]; then
+        # Build new or updated posts
+        # Or rebuild every posts
+        if [[ ! ("$FILESTATUS" == "C" && "$ARG" == b*)  ]]; then
           converting "$file_path"
           COUNT_CHANGE=1
         fi
@@ -1392,15 +1381,24 @@ elif [[ "$ARG" == b* || "$ARG" == r* || "$ARG" == B* || "$ARG" == R* ]]; then
     rm ./temp_cksum_md.txt
 
     echo -e "$BLUE*$RESET Make resources..."
-    make_style_css
-    make_robots_txt
-    make_sitemap_xml
-    make_404_html
     make_all_posts_html
     make_all_tags_html
     make_index_html
     make_rss_xml
     make_tag_pages 
+
+    if [[ ! -e style.css || "$ARG" == r* ]]; then
+      make_style_css
+    fi
+    if [[ ! -e robots.txt || "$ARG" == r* ]]; then
+      make_robots_txt
+    fi
+    if [[ ! -e sitemap.xml || "$ARG" == r* ]]; then
+      make_sitemap_xml
+    fi
+    if [[ ! -e 404.html || "$ARG" == r* ]]; then
+      make_404_html
+    fi
   fi
 
   copy_assets
