@@ -99,10 +99,10 @@ make_style_css() {
 .dark a:visited {color: #9370DB;}
 body {color: var(--font-color); background-color: var(--background-color); max-width: 900px; margin: 0 auto; padding: 0 1em;}
 body > header {display: flex; justify-content: space-between; align-items: center; padding: 0 0.5em; border-bottom: 1px solid var(--main-theme);}
-body > header h3 a, body > header h3 a:visited, .dark body > header h3 a {color: var(--main-theme) !important;}
+body > header h3 a {color: var(--main-theme) !important;}
 body > header ul {display: flex;}
 body > header li {list-style: none; margin-left: 1em;}
-body > header a, body > header a:visited, .dark body > header a {text-decoration: none; color: var(--font-color) !important;}
+body > header a, h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {text-decoration: none; color: var(--font-color) !important;}
 body > footer {border-top: 1px solid var(--main-theme);}
 article > header {border-bottom: 2px solid var(--main-theme);}
 #meta-date, #meta-lastmod {color: var(--gray);}
@@ -356,7 +356,7 @@ MOD=$(echo "$MOD" | sed -E '
 
 # heading with id
 MOD=$(echo "$MOD" | sed -E '
-  s/^<h([1-6])>(.*) ?\{# ?(.*)\}<\/h\1>$/<h\1 id="\3"><a href="#\3">\2<\/a> 🔗<\/h\1>/
+  s/^<h([1-6])>(.*) ?\{# ?(.*)\}<\/h\1>$/<h\1 id="\3"><a href="#\3">\2 🔗<\/a><\/h\1>/
 ')
 
 # hr
