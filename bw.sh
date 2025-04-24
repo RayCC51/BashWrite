@@ -891,17 +891,18 @@ frontmatter() {
   
   if [ -z "$TITLE" ]; then
     TITLE="New post $DATE"
-  fi
-
-  # Fix <,> to &lt; &gt;
-  if [ -n "$TITLE" ]; then
+  else
+    # Fix <,> to &lt; &gt;
     TITLE=${TITLE//</\&lt;}
     TITLE=${TITLE//>/\&gt;}
   fi
+
   if [ -n "$DESCRIPTION" ]; then
+    # Fix <,> to &lt; &gt;
     DESCRIPTION=${DESCRIPTION//</\&lt;}
     DESCRIPTION=${DESCRIPTION//>/\&gt;}
   fi
+  
   if [ -n "$TAGS" ];then
     # Only allow alphabets, numbers and dash underscore in tags
     TAGS=$(echo "$TAGS" | sed 's/[^ a-zA-Z0-9_-]//g')
