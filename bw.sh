@@ -23,13 +23,35 @@ RECENT_POSTS_COUNT=5
 PROFILE="
 # Welcome to sample blog
 
-This blog source in [Github](https://github.com/RayCC51/BashWrite/tree/gh-pages)
+You can find the source of this blog in the [Github](https://github.com/RayCC51/BashWrite/tree/gh-pages)
 "
 
 ### Write your own HTML code. 
-### This variable will be includes inside the <html><head>Here!</head></html> in every html files.
+### This variable will be includes inside the 
+# <html>
+#   <head>
+#     Here!
+#   </head>
+# </html> 
+### in every html files.
 ### You can add your css or js in this line. 
 CUSTOM_HTML_HEAD=""
+
+### Write your own HTML code.
+### This will be includes inside the 
+# <body>
+#   <header></header>
+#   <article>
+#     <header></header>
+#     <main></main>
+#     Here!
+#   </article>
+#   <footer></footer>
+# </body>
+### only in posts.
+### You can add comments, banner, footer, or other things.
+CUSTOM_HTML_ARTICLE_FOOTER=""
+
 
 #
 #
@@ -199,9 +221,20 @@ make_before() {
 }
 
 # Make html that comes After the CONTENTS
+#
+# $1 : trigger for include CUSTOM_HTML_ARTICLE_FOOTER
 make_after() {
+  local is_footer="$1"
+  local html_footer=''
+  if [ -n "$is_footer" ]; then
+    html_footer="<footer id=\"custom-html\">
+      $CUSTOM_HTML_ARTICLE_FOOTER
+    </footer>"
+  fi
+  
   echo "
     </main>
+    $html_footer
   </article>
   <footer>
     <p>© $(date +%Y) ${AUTHOR_NAME}</p>
@@ -893,7 +926,12 @@ converting() {
   # Save html text in html file
   make_before > $NEW_PATH
   echo "$RESULTS" >> $NEW_PATH
-  make_after >> $NEW_PATH
+
+  if [ -n "$CUSTOM_HTML_ARTICLE_FOOTER" ]; then
+    make_after 1 >> $NEW_PATH
+  else
+    make_after >> $NEW_PATH
+  fi
 
   local status=''
   case "$FILESTATUS" in
