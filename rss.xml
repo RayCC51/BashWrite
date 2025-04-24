@@ -6,7 +6,7 @@
   <link>https://raycc51.github.io/BashWrite</link>
   <description>raycc's blog</description>
   <language>en</language>
-  <pubDate>Thu, 24 Apr 2025 00:14:28 +0000</pubDate>
+  <pubDate>Thu, 24 Apr 2025 00:39:08 +0000</pubDate>
   <copyright>© 2025 raycc</copyright>
   <atom:link href="https://raycc51.github.io/BashWrite/rss.xml" rel="self" type="application/rss+xml" />
 
@@ -425,7 +425,7 @@ print("python")
 <p>strikethrough <del>del</del></p>
 
 <pre><code class="language-md">
-strikethrough &lt;sub>~del~&lt;/sub>
+strikethrough ~~del~~
 </code></pre>
 
 <p>highlight <mark>mark</mark></p>
@@ -437,7 +437,7 @@ highlight ==mark==
 <p><sub>sub</sub> script</p>
 
 <pre><code class="language-md">
-&lt;sub>sub&lt;/sub> script
+~sub~ script
 </code></pre>
 
 <p><sup>sup</sup>er script</p>

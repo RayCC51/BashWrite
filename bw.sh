@@ -387,8 +387,8 @@ MOD=$(echo "$MOD" | sed -E '
 MOD=$(echo "$MOD" | sed -E '
   s/~~(.*)~~/<del>\1<\/del>/g
   s/==(.*)==/<mark>\1<\/mark>/g
-  s/~(.*)~/<sub>\1<\/sub>/g
   s/([^\\]?)\^(.*[^\\])\^/\1<sup>\2<\/sup>/g
+  s/([^\\]?)~(.*[^\\])~/\1<sub>\2<\/sub>/g
 ')
 
 # img, a
