@@ -1210,7 +1210,7 @@ make_index_html() {
   <ul>
 "
 
-    while IFS=';' read -r _order _date _url _title _description; do
+    while IFS='|' read -r _order _date _url _title _description; do
       if [ -z "$_date" ]; then
         continue
       fi
@@ -1400,7 +1400,7 @@ elif [[ "$ARG" == b* || "$ARG" == B* ]]; then
 
         # Update pinned posts list
         if [ -n "$PIN" ]; then
-          PINNED_POSTS+="$PIN;$DATE;$BASE_URL${NEW_PATH:1};$TITLE;$DESCRIPTION;"$'\n'
+          PINNED_POSTS+="$PIN|$DATE|$BASE_URL${NEW_PATH:1}|$TITLE|$DESCRIPTION|"$'\n'
         fi
 
         # Update tags list
