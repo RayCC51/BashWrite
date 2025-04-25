@@ -139,7 +139,7 @@ th {border-bottom: 2px solid var(--main-theme);}
 td {border-bottom: 1px solid var(--gray);}
 .indented {text-indent: 30px;}
 #toTop {position: fixed; bottom: 1em; right: 1em; width: 3em; height: 3em; background-color: var(--main-theme); color: white; border-radius: 50%; z-index: 5; text-decoration: none; text-align: center; line-height: 3em; opacity: 0.7;}
-img {max-width: 95%;}
+img, iframe {max-width: 95%;}
 .recent-description {opacity: 0.8;}
 .align-left {text-align: left;}
 .align-right {text-align: right;}
@@ -250,7 +250,7 @@ make_after() {
 fix_setting() {
   # Check THEME_COLOR is hex code color
   if [[ ! "$MAIN_COLOR" =~ ^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$ ]]; then
-    echo -e "$RED!$RESET THEME_COLOR is not hex code color! [line:12]"
+    echo -e "$RED!$RESET ${YELLOW}THEME_COLOR$RESET should be hex code color [line:12]"
     MAIN_COLOR="#CAD926"
   fi
   
@@ -341,12 +341,13 @@ MOD=$(echo "$MOD" | sed -E '
 ')
 
 # html
-# details summary, comment, br
+# details summary, comment, br, iframe
 MOD=$(echo "$MOD" | sed -E '
   s/&lt;(\/?details)&gt;/<\1>/
   s/&lt;(\/?summary)&gt;/<\1>/g
   s/&lt;(!-- .* --)&gt;/<\1>/  
   s/&lt;br ?\/?&gt;/<br>/
+  s/&lt;(iframe.*)&gt(.*)&lt;\/iframe&gt;/<\1>\2<\/iframe>/
 ')
 
 # blockquote
@@ -902,7 +903,7 @@ frontmatter() {
   fi
 
   if [ -n "$PIN" ] && [[ ! "$PIN" =~ ^[1-9][0-9]*$ ]]; then
-    echo -e "$RED!$RESET Frontmatter: ${YELLOW}pin$RESET should be a number: $file_path"
+    echo -e "$RED!$RESET Frontmatter: ${YELLOW}pin$RESET should be a number [$file_path]"
     PIN=''
   fi
 }
