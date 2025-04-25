@@ -959,30 +959,30 @@ converting() {
 
 # Convert link list to html format, grouped by year and month
 #
-# $1: list of (date url title)
+# $1: list of all posts
+#   date<url<title<description
 # return: html string
 group_list() {
   local origin="$1"
   local result=""
   local temp_date=""
-
-  # Sort by reverse chronicle
-  origin=$(echo "$origin" | grep -v '^$' | sort -k1,1r)
   
   # Group the posts by year-month
-  while IFS= read -r -a _line; do
-    yyyy_mm_dd="${_line[0]}"
-    url=$(echo "${_line[1]}" | sed 's/index.html$//')
-    title="${_line[@]:2}"
+  while IFS='<' read -r _date _url _title _d; do
+    if [ -z "$_date" ]; then
+      continue
+    fi
+
+    _url=$(echo "${_url}" | sed 's/index.html$//')
     
     if [ -z "$temp_date" ]; then
-      temp_date="${yyyy_mm_dd:0:7}"
-    elif [ "$temp_date" != "${yyyy_mm_dd:0:7}" ]; then
+      temp_date="${_date:0:7}"
+    elif [ "$temp_date" != "${_date:0:7}" ]; then
       result+=$'\n'
-      temp_date="${yyyy_mm_dd:0:7}"
+      temp_date="${_date:0:7}"
     fi
     
-    result+="$yyyy_mm_dd $url $title"$'\n'
+    result+="$_date $_url $_title"$'\n'
   done <<< "$origin"
     
   # Wraping with html tag
@@ -1142,25 +1142,22 @@ make_rss_xml() {
   <atom:link href=\"$BASE_URL/rss.xml\" rel=\"self\" type=\"application/rss+xml\" />
 " > rss.xml
 
-  local recent10=$(echo "$ALL_POSTS" | sort -r -k1,1 | head -n 10)
+  local recent10=$(echo "$ALL_POSTS" | head -n 10)
 
   # line = date url title
-  while IFS= read -r _line; do
-    rss_date=$(date -d "$(echo "$_line" | awk '{print $1}')" +"%a, %d %b %Y 00:00:00 GMT")
-    url=$(echo "$_line" | awk '{print $2}')
-    file_path=${url/"$BASE_URL"/.}
-    words=($_line)
-    title="${words[@]:2}"
+  while IFS='<' read -r _date _url _title _description; do
+    _date=$(date -d "$_date" +"%a, %d %b %Y 00:00:00 UTC")
+    file_path=${_url/"$BASE_URL"/.}
     article=$(sed -n '/<main>/,/<\/main>/p' "$file_path")
 
     echo "<item>
-  <title>$title</title>
-  <link>$url</link>
-  <guid>$url</guid>
+  <title>$_title</title>
+  <link>$_url</link>
+  <guid>$_url</guid>
   <description><![CDATA[
     $article
   ]]></description>
-  <pubDate>$rss_date</pubDate>
+  <pubDate>$_date</pubDate>
 </item>
 " >> rss.xml
   done <<< "$recent10"
@@ -1179,7 +1176,7 @@ make_index_html() {
   # Recent posts
   local html_recent_posts=''
   if [ "$RECENT_POSTS_COUNT" -gt 0 ]; then
-    local recent_posts=$(echo "$ALL_POSTS" | sort -r -k1,1 | head -n "$RECENT_POSTS_COUNT")
+    local recent_posts=$(echo "$ALL_POSTS" |  head -n "$RECENT_POSTS_COUNT")
 
     if [ -n "$recent_posts" ]; then
       html_recent_posts="<hr>
@@ -1187,17 +1184,15 @@ make_index_html() {
   <h3>⏰ Recent posts</h3>
   <ul>"
 
-    while IFS=' ' read -r _date _url _title; do
-      file_path=".$(echo "${_url}" | awk -F"$BASE_URL" '{print $2}')"
-      description=$(awk -F'"' '/description/{print $4; exit}' ${file_path})
+    while IFS='<' read -r _date _url _title _description; do
       _url=$(echo "$_url" | sed 's/index.html$//')
 
       html_recent_posts+="
 <li>
   <p><time>${_date}</time> <a href=\"${_url}\">${_title}</a></p>
 "
-      if [ -n "$description" ]; then
-        html_recent_posts+="  <p class=\"recent-description\">$description</p>
+      if [ -n "$_description" ]; then
+        html_recent_posts+="  <p class=\"recent-description\">$_description</p>
 "
       fi
       html_recent_posts+="</li>
@@ -1408,7 +1403,7 @@ elif [[ "$ARG" == b* || "$ARG" == B* ]]; then
       # Check draft is false
       if [ "$DRAFT" != "true" ] && [ "$DRAFT" != "True" ] && [ "$DRAFT" != "TRUE" ] && [ "$DRAFT" != "1" ]; then
         # Update file list
-        ALL_POSTS+="$DATE $BASE_URL${NEW_PATH:1} $TITLE"$'\n'
+        ALL_POSTS+="$DATE<$BASE_URL${NEW_PATH:1}<$TITLE<$DESCRIPTION"$'\n'
 
         # Update pinned posts list
         if [ -n "$PIN" ]; then
@@ -1433,10 +1428,13 @@ elif [[ "$ARG" == b* || "$ARG" == B* ]]; then
   if [[ "$COUNT_CHANGE" == 0 ]];then
     echo -e "  $BLUE*$RESET There is no changes!"
   else
-    # update cksum_md.txt
+    # Update cksum_md.txt
     grep -v '^000 ' ./temp_cksum_md.txt > ./checksum/cksum_md.txt
     rm ./temp_cksum_md.txt
 
+    # Sort posts by reverse chronical
+    ALL_POSTS=$(echo "$ALL_POSTS" | sort -r)
+    
     echo -e "$BLUE*$RESET Make resources..."
     make_index_html
     if [[ ! -e 404.html || "$ARG" == r* ]]; then
