@@ -635,10 +635,10 @@ make_directory() {
 
   # Copy taglist.txt for find diffrence. 
   if [[ -e ./checksum/taglist.txt ]]; then
-    cp ./checksum/taglist.txt taglist-old.txt
+    cp ./checksum/taglist.txt temp_taglist.txt
   else
     touch ./checksum/taglist.txt
-    touch taglist-old.txt
+    touch temp_taglist.txt
   fi  
 }
 
@@ -1045,15 +1045,15 @@ make_all_tags_html() {
 make_tag_pages() {
   local tag=''
   local links=''
-  local new='./checksum/taglist.txt'
-  local old='taglist-old.txt'
+  local old='./checksum/taglist.txt'
+  local new='temp_taglist.txt'
 
   # Find removed tag
-  local removed_tag=$(grep -Fxv -f $new $old)
+  local removed_tag=$(grep -Fxv -f $old $new)
   local remove_lines=''
   
   if [ -n "$removed_tag" ]; then
-    while IFS=' ' read -r _tag; do
+    while IFS=' ' read -r _tag _r; do
       rm "./tags/$_tag.html"
       remove_lines="$(grep ">$_tag</a>" all-tags.html)$'\n'"
     done <<< "$removed_tag"
@@ -1063,7 +1063,7 @@ make_tag_pages() {
   grep -Fvx -f <(echo "$remove_lines") all-tags.html > temp && mv temp all-tags.html
 
   # Find updated or added tag
-  local updated_tag=$(grep -Fvx -f $old $new)
+  local updated_tag=$(grep -Fvx -f $new $old)
   local md_path=""
   local html_all_posts=""
   reset_var
@@ -1253,7 +1253,7 @@ make_backup() {
   # Remove old backups
   if [ "$backup_count" -gt 14 ]; then
     echo "$backup_list" | head -n $(($backup_count - 14)) | while read -r _file; do
-      rm "./backup/$_file"
+      rm "$_file"
     done
   fi
 
@@ -1270,6 +1270,7 @@ build_rebuild() {
   
   if [ ! -e $old ] || [[ "$new" != $(cat $old) ]]; then
     echo "$new" > $old
+    echo -n > ./temp_taglist.txt
     echo 'rebuild'
   else
     echo 'build'
@@ -1370,28 +1371,27 @@ elif [[ "$ARG" == b* || "$ARG" == B* ]]; then
     rm ./temp_cksum_md.txt
 
     echo -e "$BLUE*$RESET Make resources..."
-    make_all_posts_html
-    make_all_tags_html
     make_index_html
-    make_rss_xml
-    make_tag_pages 
-
+    if [[ ! -e 404.html || "$ARG" == r* ]]; then
+      make_404_html
+    fi
     if [[ ! -e style.css || "$ARG" == r* ]]; then
       make_style_css
     fi
     if [[ ! -e robots.txt || "$ARG" == r* ]]; then
       make_robots_txt
     fi
+    make_rss_xml
     if [[ ! -e sitemap.xml || "$ARG" == r* ]]; then
       make_sitemap_xml
     fi
-    if [[ ! -e 404.html || "$ARG" == r* ]]; then
-      make_404_html
-    fi
+    make_all_posts_html
+    make_all_tags_html
+    make_tag_pages 
   fi
 
   copy_assets
-  rm taglist-old.txt
+  rm temp_taglist.txt
   make_backup
 
   # Remove empty folders
