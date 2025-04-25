@@ -60,6 +60,7 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 
 ### Automatically generated: Do not edit these files
 
+- backup/
 - checksum/ - Checksum list of markdowns, tags, assets and script.
 - posts/
 - tags/

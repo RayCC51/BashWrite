@@ -2,5 +2,5 @@
 4031850858 1029 ./write/markdown/md4html-bug.md
 4015323752 1088 ./write/github-action/index.md
 2305789411 192 ./write/copyright.md
-3864226465 570 ./write/frontmatter.md
+245863382 736 ./write/frontmatter.md
 1064161006 907 ./write/images/index.md

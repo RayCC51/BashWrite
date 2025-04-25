@@ -6,7 +6,7 @@
   <link>https://raycc51.github.io/BashWrite</link>
   <description>raycc's blog</description>
   <language>en</language>
-  <pubDate>Thu, 24 Apr 2025 01:01:38 +0000</pubDate>
+  <pubDate>Fri, 25 Apr 2025 06:08:45 +0000</pubDate>
   <copyright>© 2025 raycc</copyright>
   <atom:link href="https://raycc51.github.io/BashWrite/rss.xml" rel="self" type="application/rss+xml" />
 
@@ -456,7 +456,7 @@ highlight ==mark==
 - [x] input type="checkbox" checked disabled
 </code></pre>
 
-<h3 id="extened"><a href="#extened">heading with id  🔗</a></h3>
+<h3 id="extened">heading with id <a href="#extened"> 🔗</a></h3>
 
 <pre><code class="language-md">
 ### heading with id {#extened}
@@ -625,9 +625,9 @@ your_blog/
 title: Frontmatter
 description: About frontmatter
 date: 2025-04-17
-lastmod: 2025-04-22
+lastmod: 2025-04-24
 tags: sample frontmatter blog
-draft: false
+draft: true
 ---
 </code></pre>
 
@@ -638,6 +638,44 @@ draft: false
 <p><code>date</code> and <code>lastmod</code> must always be written in the format <em>yyyy-mm-dd</em>. </p>
 
 <p>Tags are separated by spaces. Tags must only use alphabets, numbers, dashes(-), and underscores(_). Duplicate tags will be ignored.</p>
+
+
+<table>
+<thead>
+<tr>
+    <th></th>
+    <th>Default vaule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+    <td>title</td>
+    <td>New post <code>yyyy-mm-dd</code></td>
+</tr>
+<tr>
+    <td>description</td>
+    <td>•</td>
+</tr>
+<tr>
+    <td>date</td>
+    <td><code>yyyy-mm-dd</code></td>
+</tr>
+<tr>
+    <td>lastmod</td>
+    <td>•</td>
+</tr>
+<tr>
+    <td>tags</td>
+    <td>•</td>
+</tr>
+<tr>
+    <td>draft</td>
+    <td><code>false</code></td>
+</tr>
+</tbody>
+</table>
+
+<p><code>yyyy-mm-dd</code> is build date.</p>
 
     </main>
   ]]></description>
