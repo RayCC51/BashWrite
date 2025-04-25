@@ -63,7 +63,7 @@ CUSTOM_HTML_ARTICLE_FOOTER=""
 
 # script info
 _SCRIPT_NAME='BashWrite'
-_SCRIPT_VERSION='1.1.5'
+_SCRIPT_VERSION='1.2.0'
 _SCRIPT_FILE_NAME='bw.sh'
 _SCRIPT_SITE='https://github.com/raycc51/bashwrite'
 
@@ -86,6 +86,8 @@ LASTMOD=""
 TAGS=""
 DRAFT=""
 COUNT_CHANGE=0
+PINNED_POSTS=''
+PIN=''
 
 reset_var() {
   FILESTATUS=""
@@ -870,6 +872,7 @@ frontmatter() {
   LASTMOD=$(echo "$frontmatter" | awk -F': ' '/^lastmod:/{print $2}')
   TAGS=$(echo "$frontmatter" | awk -F': ' '/^tags:/{print $2}')
   DRAFT=$(echo "$frontmatter" | awk -F': ' '/^draft:/{print $2}')
+  PIN=$(echo "$frontmatter" | awk -F': ' '/^pin:/{print $2}')
 
   # Fixing frontmatters
   if [ -z "$DATE" ]; then
@@ -896,6 +899,11 @@ frontmatter() {
     TAGS=$(echo "$TAGS" | sed 's/[^ a-zA-Z0-9_-]//g')
     # Remove duplicated tags
     TAGS=$(echo "$TAGS" | tr ' ' '\n' | awk '!seen[$0]++' | tr '\n' ' ')
+  fi
+
+  if [ -n "$PIN" ] && [[ ! "$PIN" =~ ^[1-9][0-9]*$ ]]; then
+    echo -e "$RED!$RESET Frontmatter: ${YELLOW}pin$RESET should be a number: $file_path"
+    PIN=''
   fi
 }
 
@@ -1155,14 +1163,15 @@ make_rss_xml() {
 #
 # It contains: PROFILE, resent posts
 make_index_html() {
+  # Recent posts
+  local html_recent_posts=''
   if [ "$RECENT_POSTS_COUNT" -gt 0 ]; then
     local recent_posts=$(echo "$ALL_POSTS" | sort -r -k1,1 | head -n "$RECENT_POSTS_COUNT")
-    local html_recent_posts=''
 
     if [ -n "$recent_posts" ]; then
       html_recent_posts="<hr>
 <div id=\"recent-posts\">
-  <h3>Recent posts</h3>
+  <h3>⏰ Recent posts</h3>
   <ul>"
 
     while IFS=' ' read -r _date _url _title; do
@@ -1188,6 +1197,44 @@ make_index_html() {
     fi
   fi
 
+  # Pinned posts
+  local html_pinned_posts=''
+  if [ -n "$PINNED_POSTS" ]; then
+    PINNED_POSTS=$(echo "$PINNED_POSTS" | sort -k1,1n)
+
+    html_pinned_posts+="
+<hr>
+<div id=\"pinned-posts\">
+  <h3>📌 Pinned posts</h3>
+  <ul>
+"
+
+    while IFS=';' read -r _order _date _url _title _description; do
+      if [ -z "$_date" ]; then
+        continue
+      fi
+
+      _url=$(echo "$_url" | sed 's/index.html$//')
+      html_pinned_posts+="
+<li>
+  <p><time>${_date}</time> <a href=\"${_url}\">${_title}</a></p>
+"
+      if [ -n "$_description" ]; then
+        html_pinned_posts+="  <p
+class=\"pinned-description\">$_description</p>
+"
+      fi
+      html_recent_posts+="</li>
+"
+    done <<< "$PINNED_POSTS"
+    
+    html_pinned_posts+="
+  </ul>
+</div>
+"
+  fi
+
+  # Make index.html
   reset_var
   TITLE="$BLOG_NAME"
   DESCRIPTION="$AUTHOR_NAME's $BLOG_NAME"
@@ -1198,6 +1245,7 @@ make_index_html() {
     echo "<div id=\"profile\">"
     md2html "$PROFILE"
     echo "</div>"
+    echo "$html_pinned_posts"
     echo "$html_recent_posts"
     make_after 
   } > "$NEW_PATH"
@@ -1300,10 +1348,11 @@ First to do:
     lastmod: 2025-05-02
     tags: tag1 tag2
     draft: false
+    pin: false
     ---$RESET
     - [date] and [lastmod](last modified date) should be yyyy-mm-dd format. 
     - [tags] are seperated with whitespace. 
-    - [description], [lastmod], [tags] and [draft] are option.
+    - [description], [lastmod], [tags] [draft] and [pin] are option.
   ${BLUE}3.$RESET Run ${YELLOW}./$_SCRIPT_FILE_NAME b$RESET
   ${BLUE}4.$RESET Now your posts are in ${YELLOW}./posts/$RESET
 "
@@ -1347,6 +1396,11 @@ elif [[ "$ARG" == b* || "$ARG" == B* ]]; then
       if [ "$DRAFT" != "true" ] && [ "$DRAFT" != "True" ] && [ "$DRAFT" != "TRUE" ] && [ "$DRAFT" != "1" ]; then
         # Update file list
         ALL_POSTS+="$DATE $BASE_URL${NEW_PATH:1} $TITLE"$'\n'
+
+        # Update pinned posts list
+        if [ -n "$PIN" ]; then
+          PINNED_POSTS+="$PIN;$DATE;$BASE_URL${NEW_PATH:1};$TITLE;$DESCRIPTION;"$'\n'
+        fi
 
         # Update tags list
         if [ -n "$TAGS" ]; then

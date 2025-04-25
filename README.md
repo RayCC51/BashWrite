@@ -42,6 +42,7 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
     lastmod: 2025-05-02
     tags: tags seperated by a whitespace
     draft: false
+    pin: 1
     ---
     ```
 3. Save your file and run `./bw.sh b`
