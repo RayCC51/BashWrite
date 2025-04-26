@@ -43,6 +43,7 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
     tags: tags seperated by a whitespace
     draft: false
     pin: 1
+    banner: image.png
     ---
     ```
 3. Save your file and run `./bw.sh b`

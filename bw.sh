@@ -63,7 +63,7 @@ CUSTOM_HTML_ARTICLE_FOOTER=""
 
 # script info
 _SCRIPT_NAME='BashWrite'
-_SCRIPT_VERSION='1.2.0'
+_SCRIPT_VERSION='v1.1.6'
 _SCRIPT_FILE_NAME='bw.sh'
 _SCRIPT_SITE='https://github.com/raycc51/bashwrite'
 
@@ -75,30 +75,33 @@ BLUE='\e[34m'
 RESET='\e[0m'
 
 # Some variables for scripting
-ALL_POSTS=""
-FILESTATUS=""
-CONTENTS=""
-NEW_PATH=""
-TITLE=""
-DESCRIPTION=""
-DATE=""
-LASTMOD=""
-TAGS=""
-DRAFT=""
+ALL_POSTS=''
+FILESTATUS=''
+CONTENTS=''
+NEW_PATH=''
+TITLE=''
+DESCRIPTION=''
+DATE=''
+LASTMOD=''
+TAGS=''
+DRAFT=''
+PIN=''
+BANNER=''
 COUNT_CHANGE=0
 PINNED_POSTS=''
-PIN=''
 
 reset_var() {
-  FILESTATUS=""
-  CONTENTS=""
-  NEW_PATH=""
-  TITLE=""
-  DESCRIPTION=""
-  DATE=""
-  LASTMOD=""
-  TAGS=""
-  DRAFT=""
+  FILESTATUS=''
+  CONTENTS=''
+  NEW_PATH=''
+  TITLE=''
+  DESCRIPTION=''
+  DATE=''
+  LASTMOD=''
+  TAGS=''
+  DRAFT=''
+  PIN=''
+  BANNER=''
 }
 
 # Make style.css
@@ -145,6 +148,7 @@ img, iframe {max-width: 95%;}
 .align-right {text-align: right;}
 .align-center {text-align: center;}
 details {border-top: 1px solid var(--main-theme); border-bottom: 1px solid var(--main-theme);}
+img#banner {max-height: 25vh; display: block; margin: 0 auto;}
 ' >> style.css
 
   echo -e "  $BLUE+$RESET style.css"
@@ -190,7 +194,14 @@ make_before() {
     </nav>
   </header>
   <article>
-    <header>
+    <header>"
+
+  if [ -n "$BANNER" ]; then
+    output+="
+    <img id=\"banner\" alt=\"banner image\" src=\"$BANNER\">"
+  fi
+  
+  output+="
       <h1 id=\"meta-title\">$TITLE</h1>"
 
   if [ -n "$DATE" ]; then
@@ -886,6 +897,7 @@ frontmatter() {
   TAGS=$(echo "$frontmatter" | awk -F': ' '/^tags:/{print $2}')
   DRAFT=$(echo "$frontmatter" | awk -F': ' '/^draft:/{print $2}')
   PIN=$(echo "$frontmatter" | awk -F': ' '/^pin:/{print $2}')
+  BANNER=$(echo "$frontmatter" | awk -F': ' '/^banner:/{print $2}')
 
   # Fixing frontmatters
   if [ -z "$DATE" ]; then
@@ -1374,6 +1386,7 @@ First to do:
     tags: tag1 tag2
     draft: false
     pin: false
+    banner: image.png
     ---$RESET
     - [date] and [lastmod](last modified date) should be yyyy-mm-dd format. 
     - [tags] are seperated with whitespace. 

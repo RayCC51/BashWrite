@@ -2,7 +2,7 @@
 title: Frontmatter
 description: About frontmatter
 date: 2025-04-17
-lastmod: 2025-04-24
+lastmod: 2025-04-26
 tags: sample frontmatter blog
 ---
 
@@ -11,10 +11,11 @@ tags: sample frontmatter blog
 title: Frontmatter
 description: About frontmatter
 date: 2025-04-17
-lastmod: 2025-04-24
+lastmod: 2025-04-26
 tags: sample frontmatter blog
 draft: true
 pin: 1
+banner: image.png
 ---
 ```
 
@@ -32,6 +33,8 @@ The `title` and `date` are required, while the rest are optional.
 
 If you want to pin a post, you need to enter a **natural number** in the `pin`. The smaller the number, the higher it will appear in the *pinned posts list*. For example, `pin: 1` will be at the top. If you do not want to pin a post, you can either leave it blank or delete the line.
 
+The `banner` image can use relative paths, absolute paths, and external links. 
+
 
 ||Default vaule|
 |---|---|
@@ -42,5 +45,6 @@ If you want to pin a post, you need to enter a **natural number** in the `pin`. 
 |tags|•|
 |draft|`false`|
 |pin|•|
+|banner|•|
 
 `yyyy-mm-dd` is build date.
