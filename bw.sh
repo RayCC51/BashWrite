@@ -439,8 +439,8 @@ MOD=$(echo "$MOD" | sed -E '
 
 # img, a
 MOD=$(echo "$MOD" | sed -E '
-  s/!\[(.*)\]\((.*) "(.*)"\)/<figure>\n  <img src="\2" alt="\1" title="\3">\n  <figcaption>\1<\/figcaption>\n<\/figure>/g
-  s/!\[(.*)\]\((.*)\)/<figure>\n  <img src="\2" alt="\1">\n  <figcaption>\1<\/figcaption>\n<\/figure>/g
+  s/!\[(.*)\]\((.*) "(.*)"\)/<figure>\n  <img src="\2" alt="\1" title="\3" loading="lazy">\n  <figcaption>\1<\/figcaption>\n<\/figure>/g
+  s/!\[(.*)\]\((.*)\)/<figure>\n  <img src="\2" alt="\1" loading="lazy">\n  <figcaption>\1<\/figcaption>\n<\/figure>/g
 
   s/&lt;(.*)&gt;/<a href="\1">\1<\/a>/g
   s/\[(.*)\]\((.*) "(.*)"\)/<a href="\2" title="\3">\1<\/a>/g
