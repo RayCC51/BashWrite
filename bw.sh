@@ -68,7 +68,7 @@ CUSTOM_HTML_ARTICLE_FOOTER=""
 
 # script info
 _SCRIPT_NAME='BashWrite'
-_SCRIPT_VERSION='v1.1.6'
+_SCRIPT_VERSION='v1.1.7'
 _SCRIPT_FILE_NAME='bw.sh'
 _SCRIPT_SITE='https://github.com/raycc51/bashwrite'
 
