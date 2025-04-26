@@ -4,6 +4,7 @@ description: How to include images in the posts
 date: 2025-04-20
 tags: sample blog image
 draft: false
+banner: https://place-hold.it/100x400
 ---
 
 You can use markdown to include the images. 

@@ -6,7 +6,7 @@
   <link>https://raycc51.github.io/BashWrite</link>
   <description>raycc's blog</description>
   <language>en</language>
-  <pubDate>Fri, 25 Apr 2025 06:08:45 +0000</pubDate>
+  <pubDate>Sat, 26 Apr 2025 04:02:39 +0000</pubDate>
   <copyright>© 2025 raycc</copyright>
   <atom:link href="https://raycc51.github.io/BashWrite/rss.xml" rel="self" type="application/rss+xml" />
 
@@ -22,7 +22,7 @@
 <h3>1. Prepare images. </h3>
 
 <figure>
-  <img src="screenshot.png" alt="screenshot.png">
+  <img src="screenshot.png" alt="screenshot.png" loading="lazy">
   <figcaption>screenshot.png</figcaption>
 </figure>
 
@@ -48,7 +48,7 @@ your-blog-directory/
 <h3>3. Write markdown.</h3>
 
 <figure>
-  <img src="screenshot.png" alt="screenshot">
+  <img src="screenshot.png" alt="screenshot" loading="lazy">
   <figcaption>screenshot</figcaption>
 </figure>
 
@@ -58,7 +58,7 @@ your-blog-directory/
 
     </main>
   ]]></description>
-  <pubDate>Sun, 20 Apr 2025 00:00:00 GMT</pubDate>
+  <pubDate>Sun, 20 Apr 2025 00:00:00 UTC</pubDate>
 </item>
 
 <item>
@@ -172,7 +172,7 @@ Footnote[^with].
 
     </main>
   ]]></description>
-  <pubDate>Thu, 17 Apr 2025 00:00:00 GMT</pubDate>
+  <pubDate>Thu, 17 Apr 2025 00:00:00 UTC</pubDate>
 </item>
 
 <item>
@@ -182,10 +182,10 @@ Footnote[^with].
   <description><![CDATA[
         <main>
 
-<h1>Pure markdown</h1>
+<h1>Pure markdown h1</h1>
 
 <pre><code class="language-md">
-# Pure markdown
+# Pure markdown h1
 </code></pre>
 
 <h2>h2</h2>
@@ -235,10 +235,10 @@ two blank
 line break
 </code></pre>
 
-<p class="indented">indented p</p>
+<p class="indented">4 space = indent</p>
 
 <pre><code class="language-md">
-    indented p
+    4 space = indent
 </code></pre>
 
 <p>italic <em>em</em></p>
@@ -259,7 +259,7 @@ bold **strong**
 italic and bold ***em strong***
 </code></pre>
 
-<p>escape: \ . | # ! * + - \_ ( { [ \&lt; ``</p>
+<p>escape: \ . | # ! * + - _ ( { [ \&lt; ``</p>
 
 <pre><code class="language-md">
 escape: \\ \. \| \# \! \* \+ \- \_ \( \{ \[ \&lt; ``
@@ -374,7 +374,7 @@ ___
 </code></pre>
 
 <figure>
-  <img src="https://place-hold.it/100x100" alt="img">
+  <img src="https://place-hold.it/100x100" alt="img" loading="lazy">
   <figcaption>img</figcaption>
 </figure>
 
@@ -383,7 +383,7 @@ ___
 </code></pre>
 
 <figure>
-  <img src="https://place-hold.it/100x100" alt="img alt" title="title">
+  <img src="https://place-hold.it/100x100" alt="img alt" title="title" loading="lazy">
   <figcaption>img alt</figcaption>
 </figure>
 
@@ -518,7 +518,7 @@ foot[^1] note[^note] sup a
 [^note]: long
 </code></pre>
 
-<h1>HTML Tags</h1>
+<h1>HTML Tag</h1>
 
 <!-- comment -->
 
@@ -556,9 +556,17 @@ paragraph
 &lt;/details&gt;
 </code></pre>
 
+<p>iframe</p>
+
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/jNQXAC9IVRw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>;</iframe>
+
+<pre><code class="language-md">
+&lt;iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/jNQXAC9IVRw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen&gt;&lt;/iframe&gt;
+</code></pre>
+
     </main>
   ]]></description>
-  <pubDate>Thu, 17 Apr 2025 00:00:00 GMT</pubDate>
+  <pubDate>Thu, 17 Apr 2025 00:00:00 UTC</pubDate>
 </item>
 
 <item>
@@ -591,7 +599,7 @@ your_blog/
 <h2>Settings in github.com</h2>
 
 <figure>
-  <img src="pages-setting.png" alt="setting image">
+  <img src="pages-setting.png" alt="setting image" loading="lazy">
   <figcaption>setting image</figcaption>
 </figure>
 
@@ -610,7 +618,7 @@ your_blog/
 
     </main>
   ]]></description>
-  <pubDate>Thu, 17 Apr 2025 00:00:00 GMT</pubDate>
+  <pubDate>Thu, 17 Apr 2025 00:00:00 UTC</pubDate>
 </item>
 
 <item>
@@ -625,9 +633,11 @@ your_blog/
 title: Frontmatter
 description: About frontmatter
 date: 2025-04-17
-lastmod: 2025-04-24
+lastmod: 2025-04-26
 tags: sample frontmatter blog
 draft: true
+pin: 1
+banner: image.png
 ---
 </code></pre>
 
@@ -635,9 +645,17 @@ draft: true
 
 <p>There must always be a <strong>space</strong> after the <strong><em>colon(:)</em></strong>. </p>
 
+<p>The <code>title</code> and <code>date</code> are required, while the rest are optional.</p>
+
+<br>
+
 <p><code>date</code> and <code>lastmod</code> must always be written in the format <em>yyyy-mm-dd</em>. </p>
 
-<p>Tags are separated by spaces. Tags must only use alphabets, numbers, dashes(-), and underscores(_). Duplicate tags will be ignored.</p>
+<p><code>tags</code> are separated by spaces. Tags must only use alphabets, numbers, dashes(-), and underscores(_). Duplicate tags will be ignored.</p>
+
+<p>If you want to pin a post, you need to enter a <strong>natural number</strong> in the <code>pin</code>. The smaller the number, the higher it will appear in the <em>pinned posts list</em>. For example, <code>pin: 1</code> will be at the top. If you do not want to pin a post, you can either leave it blank or delete the line.</p>
+
+<p>The <code>banner</code> image can use relative paths, absolute paths, and external links. </p>
 
 
 <table>
@@ -672,6 +690,14 @@ draft: true
     <td>draft</td>
     <td><code>false</code></td>
 </tr>
+<tr>
+    <td>pin</td>
+    <td>•</td>
+</tr>
+<tr>
+    <td>banner</td>
+    <td>•</td>
+</tr>
 </tbody>
 </table>
 
@@ -679,7 +705,7 @@ draft: true
 
     </main>
   ]]></description>
-  <pubDate>Thu, 17 Apr 2025 00:00:00 GMT</pubDate>
+  <pubDate>Thu, 17 Apr 2025 00:00:00 UTC</pubDate>
 </item>
 
 </channel>

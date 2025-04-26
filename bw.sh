@@ -63,7 +63,7 @@ CUSTOM_HTML_ARTICLE_FOOTER=""
 
 # script info
 _SCRIPT_NAME='BashWrite'
-_SCRIPT_VERSION='1.1.5'
+_SCRIPT_VERSION='v1.1.6'
 _SCRIPT_FILE_NAME='bw.sh'
 _SCRIPT_SITE='https://github.com/raycc51/bashwrite'
 
@@ -75,28 +75,33 @@ BLUE='\e[34m'
 RESET='\e[0m'
 
 # Some variables for scripting
-ALL_POSTS=""
-FILESTATUS=""
-CONTENTS=""
-NEW_PATH=""
-TITLE=""
-DESCRIPTION=""
-DATE=""
-LASTMOD=""
-TAGS=""
-DRAFT=""
+ALL_POSTS=''
+FILESTATUS=''
+CONTENTS=''
+NEW_PATH=''
+TITLE=''
+DESCRIPTION=''
+DATE=''
+LASTMOD=''
+TAGS=''
+DRAFT=''
+PIN=''
+BANNER=''
 COUNT_CHANGE=0
+PINNED_POSTS=''
 
 reset_var() {
-  FILESTATUS=""
-  CONTENTS=""
-  NEW_PATH=""
-  TITLE=""
-  DESCRIPTION=""
-  DATE=""
-  LASTMOD=""
-  TAGS=""
-  DRAFT=""
+  FILESTATUS=''
+  CONTENTS=''
+  NEW_PATH=''
+  TITLE=''
+  DESCRIPTION=''
+  DATE=''
+  LASTMOD=''
+  TAGS=''
+  DRAFT=''
+  PIN=''
+  BANNER=''
 }
 
 # Make style.css
@@ -137,12 +142,13 @@ th {border-bottom: 2px solid var(--main-theme);}
 td {border-bottom: 1px solid var(--gray);}
 .indented {text-indent: 30px;}
 #toTop {position: fixed; bottom: 1em; right: 1em; width: 3em; height: 3em; background-color: var(--main-theme); color: white; border-radius: 50%; z-index: 5; text-decoration: none; text-align: center; line-height: 3em; opacity: 0.7;}
-img {max-width: 95%;}
+img, iframe {max-width: 95%;}
 .recent-description {opacity: 0.8;}
 .align-left {text-align: left;}
 .align-right {text-align: right;}
 .align-center {text-align: center;}
 details {border-top: 1px solid var(--main-theme); border-bottom: 1px solid var(--main-theme);}
+img#banner {max-height: 25vh; display: block; margin: 0 auto;}
 ' >> style.css
 
   echo -e "  $BLUE+$RESET style.css"
@@ -188,7 +194,14 @@ make_before() {
     </nav>
   </header>
   <article>
-    <header>
+    <header>"
+
+  if [ -n "$BANNER" ]; then
+    output+="
+    <img id=\"banner\" alt=\"banner image\" src=\"$BANNER\">"
+  fi
+  
+  output+="
       <h1 id=\"meta-title\">$TITLE</h1>"
 
   if [ -n "$DATE" ]; then
@@ -248,7 +261,7 @@ make_after() {
 fix_setting() {
   # Check THEME_COLOR is hex code color
   if [[ ! "$MAIN_COLOR" =~ ^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$ ]]; then
-    echo -e "$RED!$RESET THEME_COLOR is not hex code color! [line:12]"
+    echo -e "$RED!$RESET ${YELLOW}THEME_COLOR$RESET should be hex code color [line:12]"
     MAIN_COLOR="#CAD926"
   fi
   
@@ -319,7 +332,8 @@ MOD=$(echo "$MOD" | sed -E '
     s/\[/\\\[/g
     s/\]/\\\]/g
     s/`/\\`/g
-    
+
+    s/_/\\_/g
     s/~/\\~/g
     s/=/\\=/g
     s/\^/\\^/g
@@ -339,12 +353,13 @@ MOD=$(echo "$MOD" | sed -E '
 ')
 
 # html
-# details summary, comment, br
+# details summary, comment, br, iframe
 MOD=$(echo "$MOD" | sed -E '
   s/&lt;(\/?details)&gt;/<\1>/
   s/&lt;(\/?summary)&gt;/<\1>/g
   s/&lt;(!-- .* --)&gt;/<\1>/  
   s/&lt;br ?\/?&gt;/<br>/
+  s/&lt;(iframe.*)&gt(.*)&lt;\/iframe&gt;/<\1>\2<\/iframe>/
 ')
 
 # blockquote
@@ -393,13 +408,23 @@ MOD=$(echo "$MOD" | sed -E '
 ')
 
 # em strong  code
-MOD=$(echo "$MOD" | sed -E '   
-  s/(^|[^\\*])\*([^*]*[^\\*])\*([^*]|$)/\1<em>\2<\/em>\3/g
-   s/(^|[^\\*])\*\*([^*]*[^\\*])\*\*([^*]|$)/\1<strong>\2<\/strong>\3/g
-   s/(^|[^\\])\*\*\*([^*]*[^\\*])\*\*\*/\1<strong><em>\2<\/em><\/strong>/g
-  s/(^|[^\\*])\*([^*]*[^\\*])\*([^*]|$)/\1<em>\2<\/em>\3/g
-   s/(^|[^\\*])\*\*([^*]*[^\\*])\*\*([^*]|$)/\1<strong>\2<\/strong>\3/g
-  
+MOD=$(echo "$MOD" | sed -E '
+  s/\\\*/\&ast;/g
+  s/\*\*\*([^*]+)\*\*\*/<strong><em>\1<\/em><\/strong>/g
+  s/\*\*([^*]+)\*\*/<strong>\1<\/strong>/g
+  s/(^|[^*])\*([^*]+)\*([^*]|$)/\1<em>\2<\/em>\3/g
+  s/\*\*\*([^*]+)\*\*\*/<strong><em>\1<\/em><\/strong>/g
+  s/\*\*([^*]+)\*\*/<strong>\1<\/strong>/g
+  s/\&ast;/\\*/g
+
+  s/\\_/\&und;/g
+  s/___([^_]+)___/<strong><em>\1<\/em><\/strong>/g
+  s/__([^_]+)__/<strong>\1<\/strong>/g
+  s/(^|[^_])_([^_]+)_([^_]|$)/\1<em>\2<\/em>\3/g
+  s/___([^_]+)___/<strong><em>\1<\/em><\/strong>/g
+  s/__([^_]+)__/<strong>\1<\/strong>/g
+  s/\&und;/\\_/g
+
   s/``(.*)``/\\`\1\\`/g
   s/(^|[^\\])`([^`]*[^\\])`/\1<code>\2<\/code>/g
 ')
@@ -414,8 +439,8 @@ MOD=$(echo "$MOD" | sed -E '
 
 # img, a
 MOD=$(echo "$MOD" | sed -E '
-  s/!\[(.*)\]\((.*) "(.*)"\)/<figure>\n  <img src="\2" alt="\1" title="\3">\n  <figcaption>\1<\/figcaption>\n<\/figure>/g
-  s/!\[(.*)\]\((.*)\)/<figure>\n  <img src="\2" alt="\1">\n  <figcaption>\1<\/figcaption>\n<\/figure>/g
+  s/!\[(.*)\]\((.*) "(.*)"\)/<figure>\n  <img src="\2" alt="\1" title="\3" loading="lazy">\n  <figcaption>\1<\/figcaption>\n<\/figure>/g
+  s/!\[(.*)\]\((.*)\)/<figure>\n  <img src="\2" alt="\1" loading="lazy">\n  <figcaption>\1<\/figcaption>\n<\/figure>/g
 
   s/&lt;(.*)&gt;/<a href="\1">\1<\/a>/g
   s/\[(.*)\]\((.*) "(.*)"\)/<a href="\2" title="\3">\1<\/a>/g
@@ -612,6 +637,7 @@ MOD=$(echo "$MOD" | sed -E '
   s/\\</\&lt;/g
   s/\\>/\&gt;/g
 
+  s/\\_/_/g
   s/\\`/`/g
   s/\\~/~/g
   s/\\=/=/g
@@ -870,11 +896,30 @@ frontmatter() {
   LASTMOD=$(echo "$frontmatter" | awk -F': ' '/^lastmod:/{print $2}')
   TAGS=$(echo "$frontmatter" | awk -F': ' '/^tags:/{print $2}')
   DRAFT=$(echo "$frontmatter" | awk -F': ' '/^draft:/{print $2}')
+  PIN=$(echo "$frontmatter" | awk -F': ' '/^pin:/{print $2}')
+  BANNER=$(echo "$frontmatter" | awk -F': ' '/^banner:/{print $2}')
 
   # Fixing frontmatters
   if [ -z "$DATE" ]; then
     # Default date is today
     DATE=$(date +"%Y-%m-%d")
+  else
+    # Check date is valid
+    if [[ $DATE =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]] && date -d "$DATE" >/dev/null 2>&1; then
+      :
+    else
+      echo -e "$RED!$RESET Frontmatter: ${YELLOW}date$RESET should be YYYY-MM-DD [$file_path]"
+      DATE=$(date +"%Y-%m-%d")
+    fi
+  fi
+
+  if [ -n "$LASTMOD" ]; then
+    if [[ $LASTMOD =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]] && date -d "$LASTMOD" >/dev/null 2>&1; then
+      :
+    else
+      echo -e "$RED!$RESET Frontmatter: ${YELLOW}lastmod$RESET should be YYYY-MM-DD [$file_path]"
+      LASTMOD=''
+    fi
   fi
   
   if [ -z "$TITLE" ]; then
@@ -896,6 +941,11 @@ frontmatter() {
     TAGS=$(echo "$TAGS" | sed 's/[^ a-zA-Z0-9_-]//g')
     # Remove duplicated tags
     TAGS=$(echo "$TAGS" | tr ' ' '\n' | awk '!seen[$0]++' | tr '\n' ' ')
+  fi
+
+  if [ -n "$PIN" ] && [[ ! "$PIN" =~ ^[1-9][0-9]*$ ]]; then
+    echo -e "$RED!$RESET Frontmatter: ${YELLOW}pin$RESET should be a number [$file_path]"
+    PIN=''
   fi
 }
 
@@ -938,30 +988,30 @@ converting() {
 
 # Convert link list to html format, grouped by year and month
 #
-# $1: list of (date url title)
+# $1: list of all posts
+#   date<url<title<description
 # return: html string
 group_list() {
   local origin="$1"
   local result=""
   local temp_date=""
-
-  # Sort by reverse chronicle
-  origin=$(echo "$origin" | grep -v '^$' | sort -k1,1r)
   
   # Group the posts by year-month
-  while IFS= read -r -a _line; do
-    yyyy_mm_dd="${_line[0]}"
-    url=$(echo "${_line[1]}" | sed 's/index.html$//')
-    title="${_line[@]:2}"
+  while IFS='<' read -r _date _url _title _d; do
+    if [ -z "$_date" ]; then
+      continue
+    fi
+
+    _url=$(echo "${_url}" | sed 's/index.html$//')
     
     if [ -z "$temp_date" ]; then
-      temp_date="${yyyy_mm_dd:0:7}"
-    elif [ "$temp_date" != "${yyyy_mm_dd:0:7}" ]; then
+      temp_date="${_date:0:7}"
+    elif [ "$temp_date" != "${_date:0:7}" ]; then
       result+=$'\n'
-      temp_date="${yyyy_mm_dd:0:7}"
+      temp_date="${_date:0:7}"
     fi
     
-    result+="$yyyy_mm_dd $url $title"$'\n'
+    result+="$_date $_url $_title"$'\n'
   done <<< "$origin"
     
   # Wraping with html tag
@@ -1121,25 +1171,22 @@ make_rss_xml() {
   <atom:link href=\"$BASE_URL/rss.xml\" rel=\"self\" type=\"application/rss+xml\" />
 " > rss.xml
 
-  local recent10=$(echo "$ALL_POSTS" | sort -r -k1,1 | head -n 10)
+  local recent10=$(echo "$ALL_POSTS" | head -n 10)
 
   # line = date url title
-  while IFS= read -r _line; do
-    rss_date=$(date -d "$(echo "$_line" | awk '{print $1}')" +"%a, %d %b %Y 00:00:00 GMT")
-    url=$(echo "$_line" | awk '{print $2}')
-    file_path=${url/"$BASE_URL"/.}
-    words=($_line)
-    title="${words[@]:2}"
+  while IFS='<' read -r _date _url _title _description; do
+    _date=$(date -d "$_date" +"%a, %d %b %Y 00:00:00 UTC")
+    file_path=${_url/"$BASE_URL"/.}
     article=$(sed -n '/<main>/,/<\/main>/p' "$file_path")
 
     echo "<item>
-  <title>$title</title>
-  <link>$url</link>
-  <guid>$url</guid>
+  <title>$_title</title>
+  <link>$_url</link>
+  <guid>$_url</guid>
   <description><![CDATA[
     $article
   ]]></description>
-  <pubDate>$rss_date</pubDate>
+  <pubDate>$_date</pubDate>
 </item>
 " >> rss.xml
   done <<< "$recent10"
@@ -1155,27 +1202,26 @@ make_rss_xml() {
 #
 # It contains: PROFILE, resent posts
 make_index_html() {
+  # Recent posts
+  local html_recent_posts=''
   if [ "$RECENT_POSTS_COUNT" -gt 0 ]; then
-    local recent_posts=$(echo "$ALL_POSTS" | sort -r -k1,1 | head -n "$RECENT_POSTS_COUNT")
-    local html_recent_posts=''
+    local recent_posts=$(echo "$ALL_POSTS" |  head -n "$RECENT_POSTS_COUNT")
 
     if [ -n "$recent_posts" ]; then
       html_recent_posts="<hr>
 <div id=\"recent-posts\">
-  <h3>Recent posts</h3>
+  <h3>⏰ Recent posts</h3>
   <ul>"
 
-    while IFS=' ' read -r _date _url _title; do
-      file_path=".$(echo "${_url}" | awk -F"$BASE_URL" '{print $2}')"
-      description=$(awk -F'"' '/description/{print $4; exit}' ${file_path})
+    while IFS='<' read -r _date _url _title _description; do
       _url=$(echo "$_url" | sed 's/index.html$//')
 
       html_recent_posts+="
 <li>
   <p><time>${_date}</time> <a href=\"${_url}\">${_title}</a></p>
 "
-      if [ -n "$description" ]; then
-        html_recent_posts+="  <p class=\"recent-description\">$description</p>
+      if [ -n "$_description" ]; then
+        html_recent_posts+="  <p class=\"recent-description\">$_description</p>
 "
       fi
       html_recent_posts+="</li>
@@ -1188,6 +1234,44 @@ make_index_html() {
     fi
   fi
 
+  # Pinned posts
+  local html_pinned_posts=''
+  if [ -n "$PINNED_POSTS" ]; then
+    PINNED_POSTS=$(echo "$PINNED_POSTS" | sort -k1,1n)
+
+    html_pinned_posts+="
+<hr>
+<div id=\"pinned-posts\">
+  <h3>📌 Pinned posts</h3>
+  <ul>
+"
+
+    while IFS='<' read -r _order _date _url _title _description; do
+      if [ -z "$_date" ]; then
+        continue
+      fi
+
+      _url=$(echo "$_url" | sed 's/index.html$//')
+      html_pinned_posts+="
+<li>
+  <p><time>${_date}</time> <a href=\"${_url}\">${_title}</a></p>
+"
+      if [ -n "$_description" ]; then
+        html_pinned_posts+="  <p
+class=\"pinned-description\">$_description</p>
+"
+      fi
+      html_recent_posts+="</li>
+"
+    done <<< "$PINNED_POSTS"
+    
+    html_pinned_posts+="
+  </ul>
+</div>
+"
+  fi
+
+  # Make index.html
   reset_var
   TITLE="$BLOG_NAME"
   DESCRIPTION="$AUTHOR_NAME's $BLOG_NAME"
@@ -1198,6 +1282,7 @@ make_index_html() {
     echo "<div id=\"profile\">"
     md2html "$PROFILE"
     echo "</div>"
+    echo "$html_pinned_posts"
     echo "$html_recent_posts"
     make_after 
   } > "$NEW_PATH"
@@ -1300,10 +1385,12 @@ First to do:
     lastmod: 2025-05-02
     tags: tag1 tag2
     draft: false
+    pin: false
+    banner: image.png
     ---$RESET
     - [date] and [lastmod](last modified date) should be yyyy-mm-dd format. 
     - [tags] are seperated with whitespace. 
-    - [description], [lastmod], [tags] and [draft] are option.
+    - [description], [lastmod], [tags] [draft] and [pin] are option.
   ${BLUE}3.$RESET Run ${YELLOW}./$_SCRIPT_FILE_NAME b$RESET
   ${BLUE}4.$RESET Now your posts are in ${YELLOW}./posts/$RESET
 "
@@ -1346,7 +1433,12 @@ elif [[ "$ARG" == b* || "$ARG" == B* ]]; then
       # Check draft is false
       if [ "$DRAFT" != "true" ] && [ "$DRAFT" != "True" ] && [ "$DRAFT" != "TRUE" ] && [ "$DRAFT" != "1" ]; then
         # Update file list
-        ALL_POSTS+="$DATE $BASE_URL${NEW_PATH:1} $TITLE"$'\n'
+        ALL_POSTS+="$DATE<$BASE_URL${NEW_PATH:1}<$TITLE<$DESCRIPTION"$'\n'
+
+        # Update pinned posts list
+        if [ -n "$PIN" ]; then
+          PINNED_POSTS+="$PIN<$DATE<$BASE_URL${NEW_PATH:1}<$TITLE<$DESCRIPTION<"$'\n'
+        fi
 
         # Update tags list
         if [ -n "$TAGS" ]; then
@@ -1366,10 +1458,13 @@ elif [[ "$ARG" == b* || "$ARG" == B* ]]; then
   if [[ "$COUNT_CHANGE" == 0 ]];then
     echo -e "  $BLUE*$RESET There is no changes!"
   else
-    # update cksum_md.txt
+    # Update cksum_md.txt
     grep -v '^000 ' ./temp_cksum_md.txt > ./checksum/cksum_md.txt
     rm ./temp_cksum_md.txt
 
+    # Sort posts by reverse chronical
+    ALL_POSTS=$(echo "$ALL_POSTS" | sort -r)
+    
     echo -e "$BLUE*$RESET Make resources..."
     make_index_html
     if [[ ! -e 404.html || "$ARG" == r* ]]; then

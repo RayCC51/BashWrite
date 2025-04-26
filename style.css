@@ -33,10 +33,11 @@ th {border-bottom: 2px solid var(--main-theme);}
 td {border-bottom: 1px solid var(--gray);}
 .indented {text-indent: 30px;}
 #toTop {position: fixed; bottom: 1em; right: 1em; width: 3em; height: 3em; background-color: var(--main-theme); color: white; border-radius: 50%; z-index: 5; text-decoration: none; text-align: center; line-height: 3em; opacity: 0.7;}
-img {max-width: 95%;}
+img, iframe {max-width: 95%;}
 .recent-description {opacity: 0.8;}
 .align-left {text-align: left;}
 .align-right {text-align: right;}
 .align-center {text-align: center;}
 details {border-top: 1px solid var(--main-theme); border-bottom: 1px solid var(--main-theme);}
+img#banner {max-height: 25vh; display: block; margin: 0 auto;}
 

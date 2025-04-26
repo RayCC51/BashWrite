@@ -39,7 +39,7 @@
     <header>
       <h1 id="meta-title">Frontmatter</h1>
       <p id="meta-date">Written in <time>2025-04-17</time></p>
-      <p id="meta-lastmod">Updated in <time>2025-04-24</time></p>
+      <p id="meta-lastmod">Updated in <time>2025-04-26</time></p>
       <p id="meta-tags">Tags: <a href="https://raycc51.github.io/BashWrite/tags/sample.html">sample</a> <a href="https://raycc51.github.io/BashWrite/tags/frontmatter.html">frontmatter</a> <a href="https://raycc51.github.io/BashWrite/tags/blog.html">blog</a> </p>
     </header>
     <main>
@@ -49,9 +49,11 @@
 title: Frontmatter
 description: About frontmatter
 date: 2025-04-17
-lastmod: 2025-04-24
+lastmod: 2025-04-26
 tags: sample frontmatter blog
 draft: true
+pin: 1
+banner: image.png
 ---
 </code></pre>
 
@@ -59,9 +61,17 @@ draft: true
 
 <p>There must always be a <strong>space</strong> after the <strong><em>colon(:)</em></strong>. </p>
 
+<p>The <code>title</code> and <code>date</code> are required, while the rest are optional.</p>
+
+<br>
+
 <p><code>date</code> and <code>lastmod</code> must always be written in the format <em>yyyy-mm-dd</em>. </p>
 
-<p>Tags are separated by spaces. Tags must only use alphabets, numbers, dashes(-), and underscores(_). Duplicate tags will be ignored.</p>
+<p><code>tags</code> are separated by spaces. Tags must only use alphabets, numbers, dashes(-), and underscores(_). Duplicate tags will be ignored.</p>
+
+<p>If you want to pin a post, you need to enter a <strong>natural number</strong> in the <code>pin</code>. The smaller the number, the higher it will appear in the <em>pinned posts list</em>. For example, <code>pin: 1</code> will be at the top. If you do not want to pin a post, you can either leave it blank or delete the line.</p>
+
+<p>The <code>banner</code> image can use relative paths, absolute paths, and external links. </p>
 
 
 <table>
@@ -95,6 +105,14 @@ draft: true
 <tr>
     <td>draft</td>
     <td><code>false</code></td>
+</tr>
+<tr>
+    <td>pin</td>
+    <td>•</td>
+</tr>
+<tr>
+    <td>banner</td>
+    <td>•</td>
 </tr>
 </tbody>
 </table>

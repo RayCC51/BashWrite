@@ -39,14 +39,15 @@
     <header>
       <h1 id="meta-title">Markdown sample</h1>
       <p id="meta-date">Written in <time>2025-04-17</time></p>
+      <p id="meta-lastmod">Updated in <time>2025-04-25</time></p>
       <p id="meta-tags">Tags: <a href="https://raycc51.github.io/BashWrite/tags/sample.html">sample</a> <a href="https://raycc51.github.io/BashWrite/tags/md.html">md</a> <a href="https://raycc51.github.io/BashWrite/tags/html.html">html</a> </p>
     </header>
     <main>
 
-<h1>Pure markdown</h1>
+<h1>Pure markdown h1</h1>
 
 <pre><code class="language-md">
-# Pure markdown
+# Pure markdown h1
 </code></pre>
 
 <h2>h2</h2>
@@ -96,10 +97,10 @@ two blank
 line break
 </code></pre>
 
-<p class="indented">indented p</p>
+<p class="indented">4 space = indent</p>
 
 <pre><code class="language-md">
-    indented p
+    4 space = indent
 </code></pre>
 
 <p>italic <em>em</em></p>
@@ -120,7 +121,7 @@ bold **strong**
 italic and bold ***em strong***
 </code></pre>
 
-<p>escape: \ . | # ! * + - \_ ( { [ \&lt; ``</p>
+<p>escape: \ . | # ! * + - _ ( { [ \&lt; ``</p>
 
 <pre><code class="language-md">
 escape: \\ \. \| \# \! \* \+ \- \_ \( \{ \[ \&lt; ``
@@ -235,7 +236,7 @@ ___
 </code></pre>
 
 <figure>
-  <img src="https://place-hold.it/100x100" alt="img">
+  <img src="https://place-hold.it/100x100" alt="img" loading="lazy">
   <figcaption>img</figcaption>
 </figure>
 
@@ -244,7 +245,7 @@ ___
 </code></pre>
 
 <figure>
-  <img src="https://place-hold.it/100x100" alt="img alt" title="title">
+  <img src="https://place-hold.it/100x100" alt="img alt" title="title" loading="lazy">
   <figcaption>img alt</figcaption>
 </figure>
 
@@ -379,7 +380,7 @@ foot[^1] note[^note] sup a
 [^note]: long
 </code></pre>
 
-<h1>HTML Tags</h1>
+<h1>HTML Tag</h1>
 
 <!-- comment -->
 
@@ -415,6 +416,14 @@ close
 
 paragraph
 &lt;/details&gt;
+</code></pre>
+
+<p>iframe</p>
+
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/jNQXAC9IVRw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>;</iframe>
+
+<pre><code class="language-md">
+&lt;iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/jNQXAC9IVRw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen&gt;&lt;/iframe&gt;
 </code></pre>
 
     </main>
