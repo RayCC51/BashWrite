@@ -891,6 +891,23 @@ frontmatter() {
   if [ -z "$DATE" ]; then
     # Default date is today
     DATE=$(date +"%Y-%m-%d")
+  else
+    # Check date is valid
+    if [[ $DATE =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]] && date -d "$DATE" >/dev/null 2>&1; then
+      :
+    else
+      echo -e "$RED!$RESET Frontmatter: ${YELLOW}date$RESET should be YYYY-MM-DD [$file_path]"
+      DATE=$(date +"%Y-%m-%d")
+    fi
+  fi
+
+  if [ -n "$LASTMOD" ]; then
+    if [[ $LASTMOD =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]] && date -d "$LASTMOD" >/dev/null 2>&1; then
+      :
+    else
+      echo -e "$RED!$RESET Frontmatter: ${YELLOW}lastmod$RESET should be YYYY-MM-DD [$file_path]"
+      LASTMOD=''
+    fi
   fi
   
   if [ -z "$TITLE" ]; then
