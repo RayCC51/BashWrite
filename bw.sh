@@ -35,8 +35,13 @@ You can find the source of this blog in the [Github](https://github.com/RayCC51/
 #   </head>
 # </html> 
 ### in every html files.
-### You can add your css or js. 
-CUSTOM_HTML_HEAD=""
+### You can add your css, js, or favicon. 
+CUSTOM_HTML_HEAD="
+<link rel=\"apple-touch-icon\" sizes=\"180x180\" href=\"/assets/favicon_io/apple-touch-icon.png\">
+<link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"/assets/favicon_io/favicon-32x32.png\">
+<link rel=\"icon\" type=\"image/png\" sizes=\"16x16\" href=\"/assets/favicon_io/favicon-16x16.png\">
+<link rel=\"manifest\" href=\"/assets/favicon_io/site.webmanifest\">
+"
 
 ### Write your own HTML code.
 ### This will be includes inside the 
@@ -50,7 +55,7 @@ CUSTOM_HTML_HEAD=""
 #   <footer></footer>
 # </body>
 ### only in the posts.
-### You can add comments, banner, footer, or other things.
+### You can add comments, banner, footer, or js.
 CUSTOM_HTML_ARTICLE_FOOTER=""
 
 
@@ -287,22 +292,15 @@ fix_setting() {
 md2html() {
 MOD="$1"
 
-# escape < > &
-MOD=$(echo "$MOD" | sed -E '
-  s/&/\&amp;/g
-  s/</\&lt;/g
-  s/>/\&gt;/g
-')
-
 # 4 backtick codeblock
 MOD=$(echo "$MOD" | sed -E '
   /^````/ {
     N
-    s/````(.*)\n```/```\1\n\\`\\`\\`/
+    s/````(.*)\n```/```\1\n\&backtick;\&backtick;\&backtick;/
   }
   /^```$/ {
     N
-    s/```\n````/\\`\\`\\`\n```/
+    s/```\n````/\&backtick;\&backtick;\&backtick;\n```/
   }
 ')
 
@@ -313,9 +311,13 @@ MOD=$(echo "$MOD" | sed -E '
     :a
     N
     /```$/!ba
+
+    s/</\&lt;/g
+    s/>/\&gt;/g
+        
     s/```([a-zA-Z0-9_]+)?\n/<pre><code class="language-\1">\n/
     s/```/<\/code><\/pre>/
-    s/ class="language-"//
+    s/(<pre><code) class="language-">/\1>/
 
     s/\\/\\\\/g
     s/\./\\\./g
@@ -323,24 +325,22 @@ MOD=$(echo "$MOD" | sed -E '
     s/#/\\#/g
     s/!/\\!/g
     s/\*/\\\*/g
-    s/\+/\\\+/g
+    s/_/\\_/g
     s/-/\\-/g
+    s/`/\\`/g
+    
     s/\(/\\\(/g
     s/\)/\\\)/g
     s/\{/\\\{/g
     s/\}/\\\}/g
     s/\[/\\\[/g
     s/\]/\\\]/g
-    s/`/\\`/g
 
-    s/_/\\_/g
-    s/~/\\~/g
-    s/=/\\=/g
-    s/\^/\\^/g
-    s/^:/\\:/
-    
-    s/&lt;/\\</g
-    s/&gt;/\\>/g
+    s/\+/\&plus;/g
+    s/~/\&tilde;/g
+    s/=/\&equal;/g
+    s/\^/\&caret;/g
+    s/^:/\&colon;/
   }
 ')
 
@@ -352,20 +352,34 @@ MOD=$(echo "$MOD" | sed -E '
   }
 ')
 
-# html
-# details summary, comment, br, iframe
+# escaping
 MOD=$(echo "$MOD" | sed -E '
-  s/&lt;(\/?details)&gt;/<\1>/
-  s/&lt;(\/?summary)&gt;/<\1>/g
-  s/&lt;(!-- .* --)&gt;/<\1>/  
-  s/&lt;br ?\/?&gt;/<br>/
-  s/&lt;(iframe.*)&gt(.*)&lt;\/iframe&gt;/<\1>\2<\/iframe>/
+  s/\\\\/\&backslash;/g
+  s/\\\*/\&asterisk;/g
+  s/\\\./\&dot;/g
+  s/\\\|/\&pipe;/g
+
+  s/\\`/\&backtick;/g
+  s/\\_/\&undnerscore;/g
+  s/\\#/\&sharp;/g
+  s/\\-/\&hyphen;/g
+  s/\\!/\&exclamation;/g
+
+  s/\\\{/\&curlyleft;/g
+  s/\\\}/\&curlyright;/g
+  s/\\\[/\&squareleft;/g
+  s/\\\]/\&squareright;/g
+  s/\\\(/\&roundleft;/g
+  s/\\\)/\&roundright;/g
+
+  s/\\</\&lt;/g
+  s/\\>/\&gt;/g
 ')
 
 # blockquote
 BLOCKQUOTE() {
   MOD=$(echo "$MOD" | sed -E '
-    s/^&gt; ?(.*)/<blockquote>\n\1\n<\/blockquote>/
+    s/^> ?(.*)/<blockquote>\n\1\n<\/blockquote>/
   ')
 
   MOD=$(echo "$MOD" | sed -E '
@@ -376,7 +390,7 @@ BLOCKQUOTE() {
   ')
 }
 
-while echo "$MOD" | grep -q '^&gt;'; do
+while echo "$MOD" | grep -q '^>'; do
   BLOCKQUOTE
 done
 
@@ -409,32 +423,36 @@ MOD=$(echo "$MOD" | sed -E '
 
 # em strong  code
 MOD=$(echo "$MOD" | sed -E '
-  s/\\\*/\&ast;/g
   s/\*\*\*([^*]+)\*\*\*/<strong><em>\1<\/em><\/strong>/g
   s/\*\*([^*]+)\*\*/<strong>\1<\/strong>/g
   s/(^|[^*])\*([^*]+)\*([^*]|$)/\1<em>\2<\/em>\3/g
   s/\*\*\*([^*]+)\*\*\*/<strong><em>\1<\/em><\/strong>/g
   s/\*\*([^*]+)\*\*/<strong>\1<\/strong>/g
-  s/\&ast;/\\*/g
 
-  s/\\_/\&und;/g
   s/___([^_]+)___/<strong><em>\1<\/em><\/strong>/g
   s/__([^_]+)__/<strong>\1<\/strong>/g
   s/(^|[^_])_([^_]+)_([^_]|$)/\1<em>\2<\/em>\3/g
   s/___([^_]+)___/<strong><em>\1<\/em><\/strong>/g
   s/__([^_]+)__/<strong>\1<\/strong>/g
-  s/\&und;/\\_/g
 
-  s/``(.*)``/\\`\1\\`/g
-  s/(^|[^\\])`([^`]*[^\\])`/\1<code>\2<\/code>/g
+  s/``(.*)``/\&backtick;\1\&backtick;/g
+  s/`([^`]*)`/<code>\1<\/code>/g
 ')
 
 # del, mark, sup, sub
 MOD=$(echo "$MOD" | sed -E '
   s/~~(.*)~~/<del>\1<\/del>/g
   s/==(.*)==/<mark>\1<\/mark>/g
-  s/([^\\]?)\^(.*[^\\])\^/\1<sup>\2<\/sup>/g
-  s/([^\\]?)~(.*[^\\])~/\1<sub>\2<\/sub>/g
+  s/\^(.*)\^/<sup>\1<\/sup>/g
+  s/~(.*)~/<sub>\1<\/sub>/g
+')
+
+
+# a, auto detect url
+MOD=$(echo "$MOD" | sed -E '
+  s/<((https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))>/<a href=\"\1\">\1<\/a>/
+
+  s/(^|[^\(">])(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))/\1<a href=\"\2\">\2<\/a>/
 ')
 
 # img, a
@@ -442,7 +460,6 @@ MOD=$(echo "$MOD" | sed -E '
   s/!\[(.*)\]\((.*) "(.*)"\)/<figure>\n  <img src="\2" alt="\1" title="\3" loading="lazy">\n  <figcaption>\1<\/figcaption>\n<\/figure>/g
   s/!\[(.*)\]\((.*)\)/<figure>\n  <img src="\2" alt="\1" loading="lazy">\n  <figcaption>\1<\/figcaption>\n<\/figure>/g
 
-  s/&lt;(.*)&gt;/<a href="\1">\1<\/a>/g
   s/\[(.*)\]\((.*) "(.*)"\)/<a href="\2" title="\3">\1<\/a>/g
   s/\[(.*)\]\((.*)\)/<a href="\2">\1<\/a>/g
 ')
@@ -617,32 +634,31 @@ MOD=$(echo "$MOD" | sed -E '
   }
 ')
 
-# return escape keys
+# return escaping
 MOD=$(echo "$MOD" | sed -E '
-  s/\\\\/\\/g
-  s/\\\./\./g
-  s/\\\|/\|/g
-  s/\\#/#/g
-  s/\\!/!/g
-  s/\\\*/\*/g
-  s/\\\+/\+/g
-  s/\\-/-/g
-  s/\\\(/\(/g
-  s/\\\)/\)/g
-  s/\\\{/\{/g
-  s/\\\}/\}/g
-  s/\\\[/\[/g
-  s/\\\]/\]/g
-  s/\\`/`/g
-  s/\\</\&lt;/g
-  s/\\>/\&gt;/g
+  s/\&backslash;/\\/g
+  s/\&asterisk;/\*/g
+  s/\&dot;/\./g
+  s/\&pipe;/\|/g
 
-  s/\\_/_/g
-  s/\\`/`/g
-  s/\\~/~/g
-  s/\\=/=/g
-  s/\\\^/^/g
-  s/^\\:/:/
+  s/\&backtick;/`/g
+  s/\&undnerscore;/_/g
+  s/\&sharp;/#/g
+  s/\&hyphen;/-/g
+  s/\&exclamation;/!/g
+
+  s/\&curlyleft;/{/g
+  s/\&curlyright;/}/g
+  s/\&squareleft;/[/g
+  s/\&squareright;/]/g
+  s/\&roundleft;/(/g
+  s/\&roundright;/)/g
+
+  s/\&plus;/+/g
+  s/\&tilde;/~/g
+  s/\&equal;/=/g
+  s/\&caret;/\^/g
+  s/^\&colon;/:/g
 ')
 
 echo "$MOD"

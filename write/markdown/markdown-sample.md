@@ -221,6 +221,12 @@ print("python")
 
 # Extended markdown
 
+https://www.example.com
+
+```md
+https://www.example.com
+```
+
 strikethrough ~~del~~
 
 ```md
@@ -311,6 +317,12 @@ foot[^1] note[^note] sup a
 
 ```md
 <br>
+```
+
+<b>html b tag</b>
+
+```md
+<b>html b tag</b>
 ```
 
 <details>

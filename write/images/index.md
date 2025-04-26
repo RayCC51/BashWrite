@@ -8,6 +8,8 @@ pin: 2
 banner: https://place-hold.it/100x400
 ---
 
+## Include images in posts
+
 You can use markdown to include the images. 
 
 ### 1. Prepare images. 
@@ -40,3 +42,21 @@ Also, include any images you want to put in this folder.
 ```md
 ![screenshot](screenshot.png)
 ```
+
+## Banner Image
+
+### 1. Prepare image or image link
+
+...
+
+
+### 2. Frontmatter
+
+```
+title: ...
+description: ...
+date: ...
+banner: https://place-hold.it/100x400
+```
+
+Put your image path or image url in `banner`. 

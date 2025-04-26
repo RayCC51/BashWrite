@@ -23,6 +23,11 @@
   </script>
 
   
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon_io/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon_io/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon_io/favicon-16x16.png">
+<link rel="manifest" href="/assets/favicon_io/site.webmanifest">
+
 </head>
 <body>
   <header>
@@ -57,13 +62,78 @@ banner: image.png
 ---
 </code></pre>
 
+<table>
+<thead>
+<tr>
+    <th></th>
+    <th>Required</th>
+    <th>Default vaule</th>
+    <th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+    <td>title</td>
+    <td>O</td>
+    <td>New post <code>yyyy-mm-dd</code></td>
+    <td>String</td>
+</tr>
+<tr>
+    <td>description</td>
+    <td>∆</td>
+    <td>•</td>
+    <td>String</td>
+</tr>
+<tr>
+    <td>date</td>
+    <td>O</td>
+    <td><code>yyyy-mm-dd</code></td>
+    <td>yyyy-mm-dd</td>
+</tr>
+<tr>
+    <td>lastmod</td>
+    <td>X</td>
+    <td>•</td>
+    <td>yyyy-mm-dd</td>
+</tr>
+<tr>
+    <td>tags</td>
+    <td>X</td>
+    <td>•</td>
+    <td>String</td>
+</tr>
+<tr>
+    <td>draft</td>
+    <td>X</td>
+    <td><code>false</code></td>
+    <td>bool</td>
+</tr>
+<tr>
+    <td>pin</td>
+    <td>X</td>
+    <td>•</td>
+    <td>int</td>
+</tr>
+<tr>
+    <td>banner</td>
+    <td>X</td>
+    <td>•</td>
+    <td>String</td>
+</tr>
+</tbody>
+</table>
+
+<p><code>yyyy-mm-dd</code> is build date.</p>
+
+<hr>
+
 <p>This is a yaml-like syntax. </p>
 
 <p>There must always be a <strong>space</strong> after the <strong><em>colon(:)</em></strong>. </p>
 
-<p>The <code>title</code> and <code>date</code> are required, while the rest are optional.</p>
+<p>The <code>title</code> and <code>date</code> are required, while the rest are optional. But I would like to include a <code>description</code> as much as possible.</p>
 
-<br>
+<hr>
 
 <p><code>date</code> and <code>lastmod</code> must always be written in the format <em>yyyy-mm-dd</em>. </p>
 
@@ -71,53 +141,7 @@ banner: image.png
 
 <p>If you want to pin a post, you need to enter a <strong>natural number</strong> in the <code>pin</code>. The smaller the number, the higher it will appear in the <em>pinned posts list</em>. For example, <code>pin: 1</code> will be at the top. If you do not want to pin a post, you can either leave it blank or delete the line.</p>
 
-<p>The <code>banner</code> image can use relative paths, absolute paths, and external links. </p>
-
-
-<table>
-<thead>
-<tr>
-    <th></th>
-    <th>Default vaule</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-    <td>title</td>
-    <td>New post <code>yyyy-mm-dd</code></td>
-</tr>
-<tr>
-    <td>description</td>
-    <td>•</td>
-</tr>
-<tr>
-    <td>date</td>
-    <td><code>yyyy-mm-dd</code></td>
-</tr>
-<tr>
-    <td>lastmod</td>
-    <td>•</td>
-</tr>
-<tr>
-    <td>tags</td>
-    <td>•</td>
-</tr>
-<tr>
-    <td>draft</td>
-    <td><code>false</code></td>
-</tr>
-<tr>
-    <td>pin</td>
-    <td>•</td>
-</tr>
-<tr>
-    <td>banner</td>
-    <td>•</td>
-</tr>
-</tbody>
-</table>
-
-<p><code>yyyy-mm-dd</code> is build date.</p>
+<p>The <code>banner</code> image can use relative paths, absolute paths, or external links. </p>
 
     </main>
     
