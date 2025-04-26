@@ -4,10 +4,11 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'write/**'
-      - 'assets/**'
-      - 'bw.sh'
+    paths-ignore:
+      - .gitignore
+      - .github/**
+      - README.md
+      - LICENSE
   workflow_dispatch:
 
 jobs:
