@@ -4,6 +4,8 @@
 
 Single, pure bash script for make your blog. 
 
+You can find more information in [demo](https://raycc51.github.io/BashWrite/) site. 
+
 Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 
 ## Features
@@ -11,10 +13,11 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 - No dependencies
 - Support extended Markdown with [mattcone/markdown-guide](https://github.com/mattcone/markdown-guide)
 - Darkmode
-- Tags page
+- Tags
 - Recent posts
+- Pinned posts
 - RSS
-- Github action for github pages
+- Github pages
 
 ### Limits
 
@@ -32,8 +35,8 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 
 ### Write new posts
 
-1. Write markdown file in *write/*.
-2. Markdown file should starts with frontmatter
+1. Write a markdown file in *write/*.
+2. The markdown file should starts with [frontmatter](https://raycc51.github.io/BashWrite/posts/frontmatter.html)
     ```
     ---
     title: My new post
@@ -47,6 +50,12 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
     ---
     ```
 3. Save your file and run `./bw.sh b`
+
+### Remove posts
+
+1. Remove a markdown file in *write/*
+2. Run `./bw.sh b`
+3. Then the script will delete files and links.
 
 ## Commands
 
@@ -63,12 +72,12 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 ### Automatically generated: Do not edit these files
 
 - backup/
-- checksum/ - Checksum list of markdowns, tags, assets and script.
+- checksum/ - Checksum list for compare the diffrence of files.
 - posts/
 - tags/
 - 404.html
-- all-posts.html - Contain every posts.
-- all-tags.html - Contain every tags.
+- all-posts.html - List of every posts.
+- all-tags.html - List of every tags.
 - index.html
 - robots.txt
 - rss.xml

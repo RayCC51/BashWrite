@@ -47,7 +47,7 @@ Also, include any images you want to put in this folder.
 
 ### 1. Prepare image or image link
 
-skip...
+...
 
 
 ### 2. Frontmatter
