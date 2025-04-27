@@ -36,6 +36,7 @@ You can find the source of this blog in the [Github](https://github.com/RayCC51/
 # </html> 
 ### in every html files.
 ### You can add your css, js, or favicon. 
+### Be careful! You need to escape some letters: \\ \' \" \$
 CUSTOM_HTML_HEAD="
 <link rel=\"apple-touch-icon\" sizes=\"180x180\" href=\"$BASE_URL/assets/favicon_io/apple-touch-icon.png\">
 <link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"$BASE_URL/assets/favicon_io/favicon-32x32.png\">
@@ -56,8 +57,24 @@ CUSTOM_HTML_HEAD="
 # </body>
 ### only in the posts.
 ### You can add comments, banner, footer, or js.
+### Be careful! You need to escape some letters: \\ \' \" \$
 CUSTOM_HTML_ARTICLE_FOOTER="
-<script src=\"https://giscus.app/client.js\" data-repo=\"RayCC51/BashWrite\" data-repo-id=\"R_kgDOOQp0-w\" data-category=\"Announcements\" data-category-id=\"DIC_kwDOOQp0-84CpMGk\" data-mapping=\"pathname\" data-strict=\"0\" data-reactions-enabled=\"1\" data-emit-metadata=\"0\" data-input-position=\"top\" data-theme=\"preferred_color_scheme\" data-lang=\"en\" data-loading=\"lazy\" crossorigin=\"anonymous\" async> </script>
+<script src=\"https://giscus.app/client.js\" 
+  data-repo=\"RayCC51/BashWrite\" 
+  data-repo-id=\"R_kgDOOQp0-w\" 
+  data-category=\"Announcements\" 
+  data-category-id=\"DIC_kwDOOQp0-84CpMGk\" 
+  data-mapping=\"pathname\" 
+  data-strict=\"0\" 
+  data-reactions-enabled=\"1\" 
+  data-emit-metadata=\"0\" 
+  data-input-position=\"top\" 
+  data-theme=\"preferred_color_scheme\" 
+  data-lang=\"en\" 
+  data-loading=\"lazy\" 
+  crossorigin=\"anonymous\" 
+  async> 
+</script>
 "
 
 
@@ -72,7 +89,7 @@ CUSTOM_HTML_ARTICLE_FOOTER="
 _SCRIPT_NAME='BashWrite'
 _SCRIPT_VERSION='v1.1.7'
 _SCRIPT_FILE_NAME='bw.sh'
-_SCRIPT_SITE='https://github.com/raycc51/bashwrite'
+_SCRIPT_SITE='https://github.com/RayCC51/BashWrite'
 
 # echo colors
 RED='\e[31m'
@@ -1406,32 +1423,32 @@ build_rebuild() {
 # Command line help text
 show_help() {
   echo -e "$GREEN$_SCRIPT_NAME$RESET
-${BLUE}version${RESET}: $_SCRIPT_VERSION
-${BLUE}site${RESET}: $_SCRIPT_SITE
+${BLUE}version$RESET: $_SCRIPT_VERSION
+${BLUE}site$RESET: $_SCRIPT_SITE
 
 Commands: 
-  ${YELLOW}./$_SCRIPT_FILE_NAME$ h{RESET}
+  $YELLOW./$_SCRIPT_FILE_NAME h$RESET
       (h)elp. Show this dialog.
-  ${YELLOW}./$_SCRIPT_FILE_NAME$ b{RESET}
+  $YELLOW./$_SCRIPT_FILE_NAME b$RESET
       (b)uild. Build the blog. It automatically decides whether to update the post or create all files anew.
 
 First to do:
   ${BLUE}1.$RESET Open $YELLOW$_SCRIPT_FILE_NAME$RESET and edit settings. 
   ${BLUE}2.$RESET Create a markdown file in $YELLOW./write/$RESET
     - Markdown files should starts with frontmatter. 
-    $YELLOW---
-    title: New post
-    description: Description of this post.
-    date: 2025-02-05
-    lastmod: 2025-05-02
-    tags: tag1 tag2
-    draft: false
-    pin: false
-    banner: image.png
-    ---$RESET
+$YELLOW---
+title: New post
+description: Description of this post.
+date: 2025-02-05
+lastmod: 2025-05-02
+tags: tag1 tag2
+draft: false
+pin: 3
+banner: image.png
+---$RESET
     - [date] and [lastmod](last modified date) should be yyyy-mm-dd format. 
     - [tags] are seperated with whitespace. 
-    - [description], [lastmod], [tags] [draft] and [pin] are option.
+    - [description], [lastmod], [tags] [draft], [pin] and [banner] are option.
   ${BLUE}3.$RESET Run ${YELLOW}./$_SCRIPT_FILE_NAME b$RESET
   ${BLUE}4.$RESET Now your posts are in ${YELLOW}./posts/$RESET
 "
