@@ -3,8 +3,8 @@ title: Frontmatter
 description: About frontmatter
 date: 2025-04-17
 lastmod: 2025-04-26
-tags: sample frontmatter blog
-pin: 1
+tags: sample frontmatter blog tutorial
+pin: 3
 ---
 
 ```

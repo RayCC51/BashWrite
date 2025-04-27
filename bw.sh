@@ -57,7 +57,7 @@ CUSTOM_HTML_HEAD="
 ### only in the posts.
 ### You can add comments, banner, footer, or js.
 CUSTOM_HTML_ARTICLE_FOOTER="
-<script src=\"https://giscus.app/client.js\" data-repo=\"RayCC51/BashWrite\" data-repo-id=\"R_kgDOOQp0-w\" data-category=\"Announcements\" data-category-id=\"DIC_kwDOOQp0-84CpMGk\" data-mapping=\"pathname\" data-strict=\"0\" data-reactions-enabled=\"1\" data-emit-metadata=\"0\" data-input-position=\"top\" data-theme=\"light\" data-lang=\"en\" data-loading=\"lazy\" crossorigin=\"anonymous\" async> </script>
+<script src=\"https://giscus.app/client.js\" data-repo=\"RayCC51/BashWrite\" data-repo-id=\"R_kgDOOQp0-w\" data-category=\"Announcements\" data-category-id=\"DIC_kwDOOQp0-84CpMGk\" data-mapping=\"pathname\" data-strict=\"0\" data-reactions-enabled=\"1\" data-emit-metadata=\"0\" data-input-position=\"top\" data-theme=\"preferred_color_scheme\" data-lang=\"en\" data-loading=\"lazy\" crossorigin=\"anonymous\" async> </script>
 "
 
 
