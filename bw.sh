@@ -16,7 +16,7 @@ LANG="en"
 
 ### How many recent posts should be shown on the homepage.
 ### Set it to 0 to hide recent posts.
-RECENT_POSTS_COUNT=5
+RECENT_POSTS_COUNT=10
 
 ### Write your profile in Markdown syntax.
 ### This paragraph will be included in the homepage of your blog.
@@ -37,10 +37,10 @@ You can find the source of this blog in the [Github](https://github.com/RayCC51/
 ### in every html files.
 ### You can add your css, js, or favicon. 
 CUSTOM_HTML_HEAD="
-<link rel=\"apple-touch-icon\" sizes=\"180x180\" href=\"/assets/favicon_io/apple-touch-icon.png\">
-<link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"/assets/favicon_io/favicon-32x32.png\">
-<link rel=\"icon\" type=\"image/png\" sizes=\"16x16\" href=\"/assets/favicon_io/favicon-16x16.png\">
-<link rel=\"manifest\" href=\"/assets/favicon_io/site.webmanifest\">
+<link rel=\"apple-touch-icon\" sizes=\"180x180\" href=\"$BASE_URL/assets/favicon_io/apple-touch-icon.png\">
+<link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"$BASE_URL/assets/favicon_io/favicon-32x32.png\">
+<link rel=\"icon\" type=\"image/png\" sizes=\"16x16\" href=\"$BASE_URL/assets/favicon_io/favicon-16x16.png\">
+<link rel=\"manifest\" href=\"$BASE_URL/assets/favicon_io/site.webmanifest\">
 "
 
 ### Write your own HTML code.
@@ -56,7 +56,9 @@ CUSTOM_HTML_HEAD="
 # </body>
 ### only in the posts.
 ### You can add comments, banner, footer, or js.
-CUSTOM_HTML_ARTICLE_FOOTER=""
+CUSTOM_HTML_ARTICLE_FOOTER="
+<script src=\"https://giscus.app/client.js\" data-repo=\"RayCC51/BashWrite\" data-repo-id=\"R_kgDOOQp0-w\" data-category=\"Announcements\" data-category-id=\"DIC_kwDOOQp0-84CpMGk\" data-mapping=\"pathname\" data-strict=\"0\" data-reactions-enabled=\"1\" data-emit-metadata=\"0\" data-input-position=\"top\" data-theme=\"light\" data-lang=\"en\" data-loading=\"lazy\" crossorigin=\"anonymous\" async> </script>
+"
 
 
 #

@@ -88,3 +88,8 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 
 - write/ - Write your markdowns in this folder. You can also add assets needed for the posting.
 - assets/ - Add any assets in this folder. 
+
+## Contributing
+
+1. I am always welcome to any issues pointing out my English spelling or grammar since I am not very good at English. 
+2. There are no specific contributing rules. Feel free to leave issues or send pull requests, and I will handle them accordingly.
