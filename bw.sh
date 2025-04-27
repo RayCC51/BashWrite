@@ -307,7 +307,6 @@ MOD=$(echo "$MOD" | sed -E '
 ')
 
 # codeblock
-# escape markdown symbols temparely
 MOD=$(echo "$MOD" | sed -E '
   /^```/ {
     :a
@@ -321,6 +320,30 @@ MOD=$(echo "$MOD" | sed -E '
     s/```/<\/code><\/pre>/
     s/(<pre><code) class="language-">/\1>/
 
+    s/`/\\`/g
+  }
+')
+
+# inline code
+MOD=$(echo "$MOD" | sed -E '
+  s/\\`/\&backtick;/g
+
+  /``(.*)``/ {
+    s/`/\&backtick;/g
+    s/\&backtick;\&backtick;/`/g
+  }
+
+  /`[^`]+`/ {
+    s/</\&lt;/g
+    s/>/\&gt;/g
+
+    s/`([^`]+)`/<code>\1<\/code>/g
+  }
+')
+
+# escaping in code
+MOD=$(echo "$MOD" | sed -E '
+  /<code>/, /<\/code>/ {
     s/\\/\\\\/g
     s/\./\\\./g
     s/\|/\\\|/g
@@ -329,7 +352,6 @@ MOD=$(echo "$MOD" | sed -E '
     s/\*/\\\*/g
     s/_/\\_/g
     s/-/\\-/g
-    s/`/\\`/g
     
     s/\(/\\\(/g
     s/\)/\\\)/g
@@ -360,6 +382,7 @@ MOD=$(echo "$MOD" | sed -E '
   s/\\\*/\&asterisk;/g
   s/\\\./\&dot;/g
   s/\\\|/\&pipe;/g
+  s/\\\+/\&plus;/g
 
   s/\\`/\&backtick;/g
   s/\\_/\&undnerscore;/g

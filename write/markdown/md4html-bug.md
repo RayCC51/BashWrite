@@ -8,6 +8,16 @@ tag: md html sample bug fixme
 
 [md2html](https://github.com/RayCC51/md2html)
 
+## Inline code
+
+### Escaping backtick in inline code
+
+`\``
+
+```md
+`\``
+```
+
 ## List
 
 ### Other elements insides list
