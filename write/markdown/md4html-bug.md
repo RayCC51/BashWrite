@@ -46,20 +46,6 @@ tag: md html sample bug fixme
 - list
 ```
 
-## Table
-
-### Alignment
-
-|table|table|table|table|
-|---|:-:|:--|--:|
-|!|!|!|!|
-
-```md
-|table|table|table|table|
-|---|:-:|:--|--:|
-|!|!|!|!|
-```
-
 ## Footnote
 
 ### Footnote link with space

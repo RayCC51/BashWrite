@@ -572,47 +572,44 @@ MOD=$(echo "$MOD" | sed -E '
   s/^<li>\[x\]/<li><input type="checkbox" checked disabled>/
 ')
 
-# table tr
 MOD=$(echo "$MOD" | sed -E '
-  /^\|(.*\|)+$/ {
-    s/^/<table>\n<tr>/ 
-    s/$/<\/tr>\n<\/table>/
+  /^\|.*\|$/ {
+    i\<table>\n  <thead>
+    s/^\|(.*)\|$/<tr>\n<th>\1<\/th>\n<\/tr>/
+    s/\|/<\/th>\n<th>/g
+    :a
+    s/ {2,}//g
+
+    /^[ |:-]+$/ {
+      s/-+/--/g
+      s/:-+/:-/g
+      s/-+:/-:/g
+      s/:-+:/::/g
+      h
+      s/\|[ |:-]+\|/  <\/thead>\n  <tbody>/
+    }
+
+    /^\|.*\|$/ {                                                        G
+      s/\n//
+      s/^/<tr>\n/
+      s/$/\n<\/tr>/
+
+      :t
+      s/\n\|([^|]+)(.*)\|\|([^|]+)(.*)/\n\1\3\n\2\|\4/
+      tt
+
+      s/\n\|\|\n/\n/
+      s/([[:print:]]*)--/<td>\1<\/td>/g
+      s/([[:print:]]*):-/<td class=\"align-left\">\1<\/td>/g
+      s/([[:print:]]*)-:/<td class=\"align-right\">\1<\/td>/g
+      s/([[:print:]]*)::/<td class=\"align-center\">\1<\/td>/g
+    }
+
+    n
+    $ a\  </tbody>\n</table>
+    /\|$/ ba
+    i\  </tbody>\n</table>
   }
-')
-
-# clean duplicated table
-MOD=$(echo "$MOD" | sed -E '
-  /^<\/table>$/ {
-    N
-    /^<\/table>\n<table>$/d
-  }
-')
-
-# thead tbody seperator
-MOD=$(echo "$MOD" | sed -E '
-  /^<table>$/,/^<\/table>$/ {
-    s/^<tr>[|:-]+<\/tr>$/<\/thead>\n<tbody>/
-  }
-')
-
-# td
-MOD=$(echo "$MOD" | sed -E '
-  /^<tr>/ {
-    s/^<tr>\|/<tr>\n    <td>/
-    s/\|<\/tr>$/<\/td>\n<\/tr>/
-    s/\|/<\/td>\n    <td>/g
-  }
-')
-
-# thead tbody
-MOD=$(echo "$MOD" | sed -E '
-  /^<table>$/ a\<thead>
-  /^<\/table>$/ i\<\/tbody>
-')
-
-# td -> th
-MOD=$(echo "$MOD" | sed -E '
-  /<thead>/,/<\/thead>/s/td>/th>/g
 ')
 
 # dl dt
