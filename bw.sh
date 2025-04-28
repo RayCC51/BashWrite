@@ -36,11 +36,14 @@ You can find the source of this blog in the [Github](https://github.com/RayCC51/
 # </html> 
 ### in every html files.
 ### You can add your css, js, or favicon. 
+### Be careful! You need to escape some letters: \\ \' \" \$
 CUSTOM_HTML_HEAD="
 <link rel=\"apple-touch-icon\" sizes=\"180x180\" href=\"$BASE_URL/assets/favicon_io/apple-touch-icon.png\">
 <link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"$BASE_URL/assets/favicon_io/favicon-32x32.png\">
 <link rel=\"icon\" type=\"image/png\" sizes=\"16x16\" href=\"$BASE_URL/assets/favicon_io/favicon-16x16.png\">
 <link rel=\"manifest\" href=\"$BASE_URL/assets/favicon_io/site.webmanifest\">
+
+<script src=\"$BASE_URL/assets/codecopy.js\" defer></script>
 "
 
 ### Write your own HTML code.
@@ -56,8 +59,24 @@ CUSTOM_HTML_HEAD="
 # </body>
 ### only in the posts.
 ### You can add comments, banner, footer, or js.
+### Be careful! You need to escape some letters: \\ \' \" \$
 CUSTOM_HTML_ARTICLE_FOOTER="
-<script src=\"https://giscus.app/client.js\" data-repo=\"RayCC51/BashWrite\" data-repo-id=\"R_kgDOOQp0-w\" data-category=\"Announcements\" data-category-id=\"DIC_kwDOOQp0-84CpMGk\" data-mapping=\"pathname\" data-strict=\"0\" data-reactions-enabled=\"1\" data-emit-metadata=\"0\" data-input-position=\"top\" data-theme=\"light\" data-lang=\"en\" data-loading=\"lazy\" crossorigin=\"anonymous\" async> </script>
+<script src=\"https://giscus.app/client.js\" 
+  data-repo=\"RayCC51/BashWrite\" 
+  data-repo-id=\"R_kgDOOQp0-w\" 
+  data-category=\"Announcements\" 
+  data-category-id=\"DIC_kwDOOQp0-84CpMGk\" 
+  data-mapping=\"pathname\" 
+  data-strict=\"0\" 
+  data-reactions-enabled=\"1\" 
+  data-emit-metadata=\"0\" 
+  data-input-position=\"top\" 
+  data-theme=\"preferred_color_scheme\" 
+  data-lang=\"en\" 
+  data-loading=\"lazy\" 
+  crossorigin=\"anonymous\" 
+  async> 
+</script>
 "
 
 
@@ -70,9 +89,9 @@ CUSTOM_HTML_ARTICLE_FOOTER="
 
 # script info
 _SCRIPT_NAME='BashWrite'
-_SCRIPT_VERSION='v1.1.7'
+_SCRIPT_VERSION='v1.1.8'
 _SCRIPT_FILE_NAME='bw.sh'
-_SCRIPT_SITE='https://github.com/raycc51/bashwrite'
+_SCRIPT_SITE='https://github.com/RayCC51/BashWrite'
 
 # echo colors
 RED='\e[31m'
@@ -307,29 +326,41 @@ MOD=$(echo "$MOD" | sed -E '
 ')
 
 # codeblock
-# escape markdown symbols temparely
 MOD=$(echo "$MOD" | sed -E '
   /^```/ {
     :a
     N
     /```$/!ba
-
+    
     s/</\&lt;/g
     s/>/\&gt;/g
-        
-    s/```([a-zA-Z0-9_]+)?\n/<pre><code class="language-\1">\n/
-    s/```/<\/code><\/pre>/
-    s/(<pre><code) class="language-">/\1>/
+    
+    s/```([a-zA-Z0-9_]+)?\n/<div class="code-container">\n<pre><code class="language-\1">\n/
+    s/```/<\/code><\/pre>\n<\/div>/
+    s/(<pre><code class="language-)">/\1plaintext">/
 
+    s/`/\\`/g
+  }
+')
+
+# inline code
+MOD=$(echo "$MOD" | sed -E '
+  s/\\`/\&backtick;/g
+
+  s/`([^`]+)`/<code>\1<\/code>/g
+')
+
+# escaping in code
+MOD=$(echo "$MOD" | sed -E '
+  /<pre>/, /<\/pre>/ {
     s/\\/\\\\/g
     s/\./\\\./g
     s/\|/\\\|/g
     s/#/\\#/g
     s/!/\\!/g
     s/\*/\\\*/g
-    s/_/\\_/g
     s/-/\\-/g
-    s/`/\\`/g
+    s/_/\\_/g
     
     s/\(/\\\(/g
     s/\)/\\\)/g
@@ -343,14 +374,8 @@ MOD=$(echo "$MOD" | sed -E '
     s/=/\&equal;/g
     s/\^/\&caret;/g
     s/^:/\&colon;/
-  }
-')
 
-# fixing codeblock for p
-MOD=$(echo "$MOD" | sed -E '
-  /^<pre>/,/<\/pre>$/ {
-    s/^/</
-    s/$/>/
+    s/^(.*)$/<<\1>>/
   }
 ')
 
@@ -360,6 +385,7 @@ MOD=$(echo "$MOD" | sed -E '
   s/\\\*/\&asterisk;/g
   s/\\\./\&dot;/g
   s/\\\|/\&pipe;/g
+  s/\\\+/\&plus;/g
 
   s/\\`/\&backtick;/g
   s/\\_/\&undnerscore;/g
@@ -381,134 +407,65 @@ MOD=$(echo "$MOD" | sed -E '
 # blockquote
 BLOCKQUOTE() {
   MOD=$(echo "$MOD" | sed -E '
-    s/^> ?(.*)/<blockquote>\n\1\n<\/blockquote>/
-  ')
+  s/^> ?(.*)/<blockquote>\n\1\n<\/blockquote>/
+')
 
   MOD=$(echo "$MOD" | sed -E '
-    /^<\/blockquote>$/ {
-      N
-      /<\/blockquote>\n<blockquote>/d
-    }
-  ')
+  /^<\/blockquote>$/ {
+    N
+    /<\/blockquote>\n<blockquote>/d
+  }
+')
 }
 
+# indented blockquote
 while echo "$MOD" | grep -q '^>'; do
   BLOCKQUOTE
 done
 
-# h1 ~ h6
-MOD=$(echo "$MOD" | sed -E '
-  s/^# (.*)$/<h1>\1<\/h1>/
-  s/^## (.*)$/<h2>\1<\/h2>/
-  s/^### (.*)$/<h3>\1<\/h3>/
-  s/^#### (.*)$/<h4>\1<\/h4>/
-  s/^##### (.*)$/<h5>\1<\/h5>/
-  s/^###### (.*)$/<h6>\1<\/h6>/
-')
-
-# heading with id
-MOD=$(echo "$MOD" | sed -E '
-  s/^<h([1-6])>(.*) ?\{# ?(.*)\}<\/h\1>$/<h\1 id="\3">\2<a href="#\3"> 🔗<\/a><\/h\1>/
-')
-
-# hr
-MOD=$(echo "$MOD" | sed -E '
-  s/^[-*_]{3,}$/<hr>/
-')
-
-# footnote
-MOD=$(echo "$MOD" | sed -E '
-  s/^\[\^(.*)\]: /[<a class="footnote" id="footnote-\1" href="#fn-\1">\1<\/a>]: /
-  
-  s/\[\^([^]]+)\]/<sup><a class="footnote" id="fn-\1" href="#footnote-\1">\1<\/a><\/sup>/g
-')
-
-# em strong  code
-MOD=$(echo "$MOD" | sed -E '
-  s/\*\*\*([^*]+)\*\*\*/<strong><em>\1<\/em><\/strong>/g
-  s/\*\*([^*]+)\*\*/<strong>\1<\/strong>/g
-  s/(^|[^*])\*([^*]+)\*([^*]|$)/\1<em>\2<\/em>\3/g
-  s/\*\*\*([^*]+)\*\*\*/<strong><em>\1<\/em><\/strong>/g
-  s/\*\*([^*]+)\*\*/<strong>\1<\/strong>/g
-
-  s/___([^_]+)___/<strong><em>\1<\/em><\/strong>/g
-  s/__([^_]+)__/<strong>\1<\/strong>/g
-  s/(^|[^_])_([^_]+)_([^_]|$)/\1<em>\2<\/em>\3/g
-  s/___([^_]+)___/<strong><em>\1<\/em><\/strong>/g
-  s/__([^_]+)__/<strong>\1<\/strong>/g
-
-  s/``(.*)``/\&backtick;\1\&backtick;/g
-  s/`([^`]*)`/<code>\1<\/code>/g
-')
-
-# del, mark, sup, sub
-MOD=$(echo "$MOD" | sed -E '
-  s/~~(.*)~~/<del>\1<\/del>/g
-  s/==(.*)==/<mark>\1<\/mark>/g
-  s/\^(.*)\^/<sup>\1<\/sup>/g
-  s/~(.*)~/<sub>\1<\/sub>/g
-')
-
-
-# a, auto detect url
-MOD=$(echo "$MOD" | sed -E '
-  s/<((https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))>/<a href=\"\1\">\1<\/a>/
-
-  s/(^|[^\(">])(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))/\1<a href=\"\2\">\2<\/a>/
-')
-
-# img, a
-MOD=$(echo "$MOD" | sed -E '
-  s/!\[(.*)\]\((.*) "(.*)"\)/<figure>\n  <img src="\2" alt="\1" title="\3" loading="lazy">\n  <figcaption>\1<\/figcaption>\n<\/figure>/g
-  s/!\[(.*)\]\((.*)\)/<figure>\n  <img src="\2" alt="\1" loading="lazy">\n  <figcaption>\1<\/figcaption>\n<\/figure>/g
-
-  s/\[(.*)\]\((.*) "(.*)"\)/<a href="\2" title="\3">\1<\/a>/g
-  s/\[(.*)\]\((.*)\)/<a href="\2">\1<\/a>/g
-')
-
 # ul ol li
 LI() {
-  MOD=$(echo "$MOD" | sed -E '
-    /^[-+*] / {
-      i\<ul>
-      $ a\<\/ul>
-      :a
-      n
-      $ a\<\/ul>
-      /^[-+*] |^ {4}/ ba
-      i\<\/ul>
-    }
-  ')
+MOD=$(echo "$MOD" | sed -E '
+  /^[-+*] / {
+    i\<ul>
+    $ a\<\/ul>
+    :a
+    n
+    $ a\<\/ul>
+    /^[-+*] |^ {4}/ ba
+    i\<\/ul>
+  }
+')
 
-  MOD=$(echo "$MOD" | sed -E '
-    /^[0-9]+\. / {
-      i\<ol>
-      $ a\<\/ol>
-      :a
-      n
-      $ a\<\/ol>
-      /^[0-9]+\. |^ {4}/ ba
-      i\<\/ol>
-    }
-  ')
+MOD=$(echo "$MOD" | sed -E '
+  /^[0-9]+\. / {
+    i\<ol>
+    $ a\<\/ol>
+    :a
+    n
+    $ a\<\/ol>
+    /^[0-9]+\. |^ {4}/ ba
+    i\<\/ol>
+  }
+')
 
-  MOD=$(echo "$MOD" | sed -E '
-    /^<ul>$/,/^<\/ul>$/ {
-      s/^[-+*] (.*)$/<li>\1<\/li>/
-      s/^ {4}(.*)/<li>\n\1\n<\/li>/
-    }
-    /^<ol>$/,/^<\/ol>$/ {
-      s/^[0-9]+\. (.*)$/<li>\1<\/li>/
-      s/^ {4}(.*)/<li>\n\1\n<\/li>/
-    }
-  ')
+MOD=$(echo "$MOD" | sed -E '
+  /^<ul>$/,/^<\/ul>$/ {
+    s/^[-+*] (.*)$/<li>\1<\/li>/
+    s/^ {4}(.*)/<li>\n\1\n<\/li>/
+  }
+  /^<ol>$/,/^<\/ol>$/ {
+    s/^[0-9]+\. (.*)$/<li>\1<\/li>/
+    s/^ {4}(.*)/<li>\n\1\n<\/li>/
+  }
+')
 
-  MOD=$(echo "$MOD" | sed -E '
-    /^<\/li>$/ {
-      N
-      /^<\/li>\n<li>$/d
-    }
-  ')
+MOD=$(echo "$MOD" | sed -E '
+  /^<\/li>$/ {
+    N
+    /^<\/li>\n<li>$/d
+  }
+')
 }
 
 while echo "$MOD" | grep -qE '^[-+*] |^[0-9]+\. '; do
@@ -526,56 +483,50 @@ MOD=$(echo "$MOD" | sed -E '
   }
 ')
 
-# checkbox
+# table
 MOD=$(echo "$MOD" | sed -E '
-  s/^<li>\[ \]/<li><input type="checkbox" disabled>/
-  s/^<li>\[x\]/<li><input type="checkbox" checked disabled>/
-')
+  /^\|.*\|$/ {
+    i\<table>\n  <thead>
+    s/^\|(.*)\|$/<tr>\n<th>\1<\/th>\n<\/tr>/
+    s/\|/<\/th>\n<th>/g
+    :a
+    s/ {2,}//g
 
-# table tr
-MOD=$(echo "$MOD" | sed -E '
-  /^\|(.*\|)+$/ {
-    s/^/<table>\n<tr>/ 
-    s/$/<\/tr>\n<\/table>/
+    /^[ |:-]+$/ {
+      s/-+/--/g
+      s/:-+/:-/g
+      s/-+:/-:/g
+      s/:-+:/::/g
+      h
+      s/\|[ |:-]+\|/  <\/thead>\n  <tbody>/
+    }
+
+    /^\|.*\|$/ {
+      G
+      s/\n//
+      s/^/<tr>\n/
+      s/$/\n<\/tr>/
+
+      :t
+      s/\n\|([^|]+)(.*)\|\|([^|]+)(.*)/\n\1\3\n\2\|\4/
+      tt
+
+      s/\n\|\|\n/\n/
+      s/([[:print:]]*)--/<td>\1<\/td>/g
+      s/([[:print:]]*):-/<td class=\"align-left\">\1<\/td>/g
+      s/([[:print:]]*)-:/<td class=\"align-right\">\1<\/td>/g
+      s/([[:print:]]*)::/<td class=\"align-center\">\1<\/td>/g
+    }
+
+    n
+    $ a\  </tbody>\n</table>
+    /^\|.*\|$/ ba
+    i\  </tbody>\n</table>
   }
 ')
 
-# clean duplicated table
-MOD=$(echo "$MOD" | sed -E '
-  /^<\/table>$/ {
-    N
-    /^<\/table>\n<table>$/d
-  }
-')
 
-# thead tbody seperator
-MOD=$(echo "$MOD" | sed -E '
-  /^<table>$/,/^<\/table>$/ {
-    s/^<tr>[|:-]+<\/tr>$/<\/thead>\n<tbody>/
-  }
-')
-
-# td
-MOD=$(echo "$MOD" | sed -E '
-  /^<tr>/ {
-    s/^<tr>\|/<tr>\n    <td>/
-    s/\|<\/tr>$/<\/td>\n<\/tr>/
-    s/\|/<\/td>\n    <td>/g
-  }
-')
-
-# thead tbody
-MOD=$(echo "$MOD" | sed -E '
-  /^<table>$/ a\<thead>
-  /^<\/table>$/ i\<\/tbody>
-')
-
-# td -> th
-MOD=$(echo "$MOD" | sed -E '
-  /<thead>/,/<\/thead>/s/td>/th>/g
-')
-
-# dl dt
+# dt
 MOD=$(echo "$MOD" | sed -E '
   /^[^:]/ {
     N
@@ -596,6 +547,7 @@ MOD=$(echo "$MOD" | sed -E '
   }
 ')
 
+# clean continuous dl
 MOD=$(echo "$MOD" | sed -E '
   /^<\/dl>$/ {
     N
@@ -604,8 +556,60 @@ MOD=$(echo "$MOD" | sed -E '
   }
 ')
 
-# p
+# footnote
 MOD=$(echo "$MOD" | sed -E '
+  s/^\[\^(.*)\]: /[<a class="footnote" id="footnote-\1" href="#fn-\1">\1<\/a>]: /
+  
+  s/\[\^([^]]+)\]/<sup><a class="footnote" id="fn-\1" href="#footnote-\1">\1<\/a><\/sup>/g
+')  
+
+MOD=$(echo "$MOD" | sed -E '
+# heading
+  s/^# (.*)$/<h1>\1<\/h1>/
+  s/^## (.*)$/<h2>\1<\/h2>/
+  s/^### (.*)$/<h3>\1<\/h3>/
+  s/^#### (.*)$/<h4>\1<\/h4>/
+  s/^##### (.*)$/<h5>\1<\/h5>/
+  s/^###### (.*)$/<h6>\1<\/h6>/
+
+# heading with id
+  s/^<h([1-6])>(.*) ?\{# ?(.*)\}<\/h\1>$/<h\1 id="\3">\2<a href="#\3"> 🔗<\/a><\/h\1>/
+
+# hr
+  s/^[-*_]{3,}$/<hr>/
+
+# em strong
+   s/[_*]{3}([^_*]+)[_*]{3}/<strong><em>\1<\/em><\/strong>/g
+  s/[_*]{2}([^_*]+)[_*]{2}/<strong>\1<\/strong>/g
+  s/(^|[^_*])[_*]([^_*]+)[_*]([^_*]|$)/\1<em>\2<\/em>\3/g
+   s/[_*]{3}([^_*]+)[_*]{3}/<strong><em>\1<\/em><\/strong>/g
+  s/[_*]{2}([^_*]+)[_*]{2}/<strong>\1<\/strong>/g
+
+# del mark sup sub
+  s/~~(.*)~~/<del>\1<\/del>/g
+  s/==(.*)==/<mark>\1<\/mark>/g
+  s/\^(.*)\^/<sup>\1<\/sup>/g
+  s/~(.*)~/<sub>\1<\/sub>/g
+
+# a
+  s/<((https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))>/<a href=\"\1\">\1<\/a>/
+
+# auto detect link
+  s/(^|[^\(">])(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))/\1<a href=\"\2\">\2<\/a>/
+
+# img
+  s/!\[(.*)\]\((.*) "(.*)"\)/<figure>\n  <img src="\2" alt="\1" title="\3" loading="lazy">\n  <figcaption>\1<\/figcaption>\n<\/figure>/g
+  s/!\[(.*)\]\((.*)\)/<figure>\n  <img src="\2" alt="\1" loading="lazy">\n  <figcaption>\1<\/figcaption>\n<\/figure>/g
+
+# a
+  s/\[(.*)\]\((.*) "(.*)"\)/<a href="\2" title="\3">\1<\/a>/g
+  s/\[(.*)\]\((.*)\)/<a href="\2">\1<\/a>/g
+
+# checkbox
+  s/^<li>\[ \]/<li><input type="checkbox" disabled>/
+  s/^<li>\[x\]/<li><input type="checkbox" checked disabled>/
+
+# p
   s/^( *)([^< ].*)$/<p>\1\2<\/p>/
   s/^(.*[^>])$/<p>\1<\/p>/
   
@@ -630,9 +634,8 @@ MOD=$(echo "$MOD" | sed -E '
 
 # fixing codeblock for p
 MOD=$(echo "$MOD" | sed -E '
-  /^<<pre>/,/<\/pre>>$/ {
-    s/^<//
-    s/>$//
+  /^<<<pre>/,/<\/pre>>>$/ {
+    s/^<<(.*)>>$/\1/
   }
 ')
 
@@ -1383,32 +1386,32 @@ build_rebuild() {
 # Command line help text
 show_help() {
   echo -e "$GREEN$_SCRIPT_NAME$RESET
-${BLUE}version${RESET}: $_SCRIPT_VERSION
-${BLUE}site${RESET}: $_SCRIPT_SITE
+${BLUE}version$RESET: $_SCRIPT_VERSION
+${BLUE}site$RESET: $_SCRIPT_SITE
 
 Commands: 
-  ${YELLOW}./$_SCRIPT_FILE_NAME$ h{RESET}
+  $YELLOW./$_SCRIPT_FILE_NAME h$RESET
       (h)elp. Show this dialog.
-  ${YELLOW}./$_SCRIPT_FILE_NAME$ b{RESET}
+  $YELLOW./$_SCRIPT_FILE_NAME b$RESET
       (b)uild. Build the blog. It automatically decides whether to update the post or create all files anew.
 
 First to do:
   ${BLUE}1.$RESET Open $YELLOW$_SCRIPT_FILE_NAME$RESET and edit settings. 
   ${BLUE}2.$RESET Create a markdown file in $YELLOW./write/$RESET
     - Markdown files should starts with frontmatter. 
-    $YELLOW---
-    title: New post
-    description: Description of this post.
-    date: 2025-02-05
-    lastmod: 2025-05-02
-    tags: tag1 tag2
-    draft: false
-    pin: false
-    banner: image.png
-    ---$RESET
+$YELLOW---
+title: New post
+description: Description of this post.
+date: 2025-02-05
+lastmod: 2025-05-02
+tags: tag1 tag2
+draft: false
+pin: 3
+banner: image.png
+---$RESET
     - [date] and [lastmod](last modified date) should be yyyy-mm-dd format. 
     - [tags] are seperated with whitespace. 
-    - [description], [lastmod], [tags] [draft] and [pin] are option.
+    - [description], [lastmod], [tags] [draft], [pin] and [banner] are option.
   ${BLUE}3.$RESET Run ${YELLOW}./$_SCRIPT_FILE_NAME b$RESET
   ${BLUE}4.$RESET Now your posts are in ${YELLOW}./posts/$RESET
 "

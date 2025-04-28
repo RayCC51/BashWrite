@@ -4,16 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="author" content="raycc">
-  <meta name="description" content="How to include images in the posts">
+  <meta name="description" content="Add simple code copy button with js">
 
-  <meta property="og:title" content="Images in the posts">
-  <meta property="og:description" content="How to include images in the posts">
-  <meta property="og:url" content="https://raycc51.github.io/BashWrite/posts/images/index.html">
+  <meta property="og:title" content="Code copy JS">
+  <meta property="og:description" content="Add simple code copy button with js">
+  <meta property="og:url" content="https://raycc51.github.io/BashWrite/posts/codecopy.html">
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Images in the posts">
-  <meta name="twitter:description" content="How to include images in the posts">
+  <meta name="twitter:title" content="Code copy JS">
+  <meta name="twitter:description" content="Add simple code copy button with js">
   
-  <title>Images in the posts</title>
+  <title>Code copy JS</title>
   <link rel="stylesheet" href="https://raycc51.github.io/BashWrite/style.css">
 
   <script>
@@ -44,77 +44,82 @@
   </header>
   <article>
     <header>
-    <img id="banner" alt="banner image" src="https://place-hold.it/100x400">
-      <h1 id="meta-title">Images in the posts</h1>
-      <p id="meta-date">Written in <time>2025-04-20</time></p>
-      <p id="meta-tags">Tags: <a href="https://raycc51.github.io/BashWrite/tags/sample.html">sample</a> <a href="https://raycc51.github.io/BashWrite/tags/blog.html">blog</a> <a href="https://raycc51.github.io/BashWrite/tags/image.html">image</a> <a href="https://raycc51.github.io/BashWrite/tags/tutorial.html">tutorial</a> </p>
+      <h1 id="meta-title">Code copy JS</h1>
+      <p id="meta-date">Written in <time>2025-04-28</time></p>
+      <p id="meta-tags">Tags: <a href="https://raycc51.github.io/BashWrite/tags/js.html">js</a> <a href="https://raycc51.github.io/BashWrite/tags/tutorial.html">tutorial</a> <a href="https://raycc51.github.io/BashWrite/tags/sample.html">sample</a> </p>
     </header>
     <main>
 
-<h2>Include images in posts</h2>
+<div class="code-container">
+<pre><code class="language-plaintext">
+sample
+code
+block
+</code></pre>
+</div>
 
-<p>You can use markdown to include the images. </p>
+<h2>1. Add a &lt;script&gt; tag inside the <code>CUSTOM_HTML_HEAD</code> variable</h2>
 
-<h3>1. Prepare images. </h3>
+<p><em>bw.sh</em></p>
 
-<figure>
-  <img src="screenshot.png" alt="screenshot.png" loading="lazy">
-  <figcaption>screenshot.png</figcaption>
-</figure>
+<div class="code-container">
+<pre><code class="language-md">
+CUSTOM_HTML_HEAD="
+&lt;script src=\"$BASE_URL/assets/codecopy.js\" defer&gt;&lt;/script&gt;
+"
+</code></pre>
+</div>
 
-<h3>2. Put your images in...</h3>
+<h2>2. Create <code>codecopy.js</code> file in the <em>assets/</em></h2>
 
 <div class="code-container">
 <pre><code class="language-plaintext">
-your-blog-directory/
+your-blog/
+├─ assets/
+│  ├─ codecopy.js    &lt;&lt;&lt; New!
 ├─ write/
-│  ├─ new-post/           &lt;&lt;&lt; New!
-│  │  ├─ index.md         &lt;&lt;&lt; New!
-│  │  ├─ screenshot.png   &lt;&lt;&lt; New!
 ├─ bw.sh
 </code></pre>
 </div>
 
-<p>Create a new folder under the <code>write/</code> folder. It’s best to name the folder after the title of the new post you will write.</p>
+<h2>3. Wirte codes in <code>codecopy.js</code></h2>
 
-<p>Try to keep only 1 markdown file per folder if possible. This will make file management easier.</p>
-
-<p>Name the markdown file <code>index.md</code>. This way, you can have a clean URL.</p>
-
-<p>Also, include any images you want to put in this folder.</p>
-
-<h3>3. Write markdown.</h3>
-
-<figure>
-  <img src="screenshot.png" alt="screenshot" loading="lazy">
-  <figcaption>screenshot</figcaption>
-</figure>
+<p><em>assets/codecopy.js</em></p>
 
 <div class="code-container">
-<pre><code class="language-md">
-![screenshot](screenshot.png)
+<pre><code class="language-js">
+// Copy button for code block
+const codes = document.querySelectorAll('div.code-container');
+
+codes.forEach(item =&gt; {
+  // Container style
+  item.setAttribute("style", "position: relative;");
+
+  // Create button
+  const copyBtn = document.createElement('button');
+  copyBtn.textContent = 'Copy';
+  copyBtn.setAttribute("style", "position: absolute; top: 0; right: 0; z-index: 3; background: var(--background-color); color: var(--main-theme); border: none;");
+
+  // Add event
+  copyBtn.addEventListener("click", () =&gt; {
+    navigator.clipboard.writeText(copyBtn.previousElementSibling.textContent).then(()
+=&gt; {
+      copyBtn.textContent = "Copied!"
+      setTimeout(() =&gt; {
+        copyBtn.textContent = "Copy"
+      }, 1000)
+    })
+  });
+
+  // Add element
+  item.appendChild(copyBtn);
+})
 </code></pre>
 </div>
 
-<h2>Banner Image</h2>
+<h2>4. Save the file and run <code>./bw.sh b</code></h2>
 
-<h3>1. Prepare image or image link</h3>
-
-<p>...</p>
-
-
-<h3>2. Frontmatter</h3>
-
-<div class="code-container">
-<pre><code class="language-plaintext">
-title: ...
-description: ...
-date: ...
-banner: https://place-hold.it/100x400
-</code></pre>
-</div>
-
-<p>Put your image path or image url in <code>banner</code>. </p>
+<p>Fin!</p>
 
     </main>
     <footer id="custom-html">

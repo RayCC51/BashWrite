@@ -28,6 +28,8 @@
 <link rel="icon" type="image/png" sizes="16x16" href="https://raycc51.github.io/BashWrite//assets/favicon_io/favicon-16x16.png">
 <link rel="manifest" href="https://raycc51.github.io/BashWrite//assets/favicon_io/site.webmanifest">
 
+<script src="https://raycc51.github.io/BashWrite//assets/codecopy.js" defer></script>
+
 </head>
 <body>
   <header>
@@ -51,110 +53,136 @@
 
 <h1>Pure markdown h1</h1>
 
+<div class="code-container">
 <pre><code class="language-md">
 # Pure markdown h1
 </code></pre>
+</div>
 
 <h2>h2</h2>
 
+<div class="code-container">
 <pre><code class="language-md">
 ## h2
 </code></pre>
+</div>
 
 <h3>h3</h3>
 
+<div class="code-container">
 <pre><code class="language-md">
 ### h3
 </code></pre>
+</div>
 
 <h4>h4</h4>
 
+<div class="code-container">
 <pre><code class="language-md">
 #### h4
 </code></pre>
+</div>
 
 <h5>h5</h5>
 
+<div class="code-container">
 <pre><code class="language-md">
 ##### h5
 </code></pre>
+</div>
 
 <h6>h6</h6>
 
+<div class="code-container">
 <pre><code class="language-md">
 ###### h6
 </code></pre>
+</div>
 
 <p>hello 
 world</p>
 
+<div class="code-container">
 <pre><code class="language-md">
 hello 
 world
 </code></pre>
+</div>
 
 <p>two blank</p>
 
 <p>line break </p>
 
+<div class="code-container">
 <pre><code class="language-md">
 two blank  
 line break
 </code></pre>
+</div>
 
 <p class="indented">4 space = indent</p>
 
+<div class="code-container">
 <pre><code class="language-md">
     4 space = indent
 </code></pre>
+</div>
 
 <p>italic <em>em</em></p>
 
+<div class="code-container">
 <pre><code class="language-md">
 italic *em*
 </code></pre>
+</div>
 
 <p>bold <strong>strong</strong></p>
 
+<div class="code-container">
 <pre><code class="language-md">
 bold **strong**
 </code></pre>
+</div>
 
 <p>italic and bold <strong><em>em strong</em></strong></p>
 
+<div class="code-container">
 <pre><code class="language-md">
 italic and bold ***em strong***
 </code></pre>
+</div>
 
-<p>escape: \ . | # ! * \+ - _ ( { [ &lt; ``</p>
+<p>escape: \ . | # ! * + - _ ( { [ &lt; ``</p>
 
+<div class="code-container">
 <pre><code class="language-md">
 escape: \\ \. \| \# \! \* \+ \- \_ \( \{ \[ \&lt; \``
 </code></pre>
-
-<p>`escape <code>backtick</code> in code`</p>
-
-<pre><code class="language-md">
-``escape `backtick` in code``
-</code></pre>
+</div>
 
 <hr>
 
+<div class="code-container">
 <pre><code class="language-md">
 ---
 </code></pre>
+</div>
 
 <hr>
 
+<div class="code-container">
 <pre><code class="language-md">
 ***
 </code></pre>
+</div>
 
 <hr>
 
+<div class="code-container">
 <pre><code class="language-md">
 ___
 </code></pre>
+</div>
 
 
 <ul>
@@ -167,12 +195,14 @@ ___
 <li>list</li>
 </ul>
 
+<div class="code-container">
 <pre><code class="language-md">
 - unordered ul
 - list li
     - indented
 - list
 </code></pre>
+</div>
 
 <ol>
 <li>ordered ol</li>
@@ -184,12 +214,14 @@ ___
 <li>list</li>
 </ol>
 
+<div class="code-container">
 <pre><code class="language-md">
 1. ordered ol
 2. list li
     1. indented
 4. list
 </code></pre>
+</div>
 
 <ol>
 <p><li>mixed</p>
@@ -200,11 +232,13 @@ ___
 <li>ol</li>
 </ol>
 
+<div class="code-container">
 <pre><code class="language-md">
 1. mixed
     - ul
 2. ol
 </code></pre>
+</div>
 
 <blockquote>
 <p>block quote</p>
@@ -218,6 +252,7 @@ ___
 <p>blockquote</p>
 </blockquote>
 
+<div class="code-container">
 <pre><code class="language-md">
 &gt; block quote
 &gt;
@@ -227,138 +262,173 @@ ___
 &gt;
 &gt; blockquote
 </code></pre>
+</div>
 
 <a href="https://example.com">Link a</a>
 
+<div class="code-container">
 <pre><code class="language-md">
 [Link a](https://example.com)
 </code></pre>
+</div>
 
 <a href="https://example.com">https://example.com</a>
 
+<div class="code-container">
 <pre><code class="language-md">
 &lt;https://example.com&gt;
 </code></pre>
+</div>
 
 <figure>
   <img src="https://place-hold.it/100x100" alt="img" loading="lazy">
   <figcaption>img</figcaption>
 </figure>
 
+<div class="code-container">
 <pre><code class="language-md">
 ![img](https://place-hold.it/100x100)
 </code></pre>
+</div>
 
 <figure>
   <img src="https://place-hold.it/100x100" alt="img alt" title="title" loading="lazy">
   <figcaption>img alt</figcaption>
 </figure>
 
+<div class="code-container">
 <pre><code class="language-md">
 ![img alt](https://place-hold.it/100x100 "title")
 </code></pre>
+</div>
 
 <p>inline <code>code</code></p>
 
+<div class="code-container">
 <pre><code class="language-md">
 inline `code`
 </code></pre>
+</div>
 
-<pre><code>
+<div class="code-container">
+<pre><code class="language-plaintext">
 plain code block
 \ . | # ! * + - _ ( ) { } [ ] &lt; &gt; ''
 </code></pre>
+</div>
 
+<div class="code-container">
 <pre><code class="language-md">
 ```
 plain code block
 \ . | # ! * + - _ ( ) { } [ ] &lt; &gt; ''
 ```
 </code></pre>
+</div>
 
+<div class="code-container">
 <pre><code class="language-python">
 print("python")
 </code></pre>
+</div>
 
+<div class="code-container">
 <pre><code class="language-md">
 ```python
 print("python")
 ```
 </code></pre>
+</div>
 
 
 <h1>Extended markdown</h1>
 
 <a href="https://www.example.com">https://www.example.com</a>
 
+<div class="code-container">
 <pre><code class="language-md">
 https://www.example.com
 </code></pre>
+</div>
 
 <p>strikethrough <del>del</del></p>
 
+<div class="code-container">
 <pre><code class="language-md">
 strikethrough ~~del~~
 </code></pre>
+</div>
 
 <p>highlight <mark>mark</mark></p>
 
+<div class="code-container">
 <pre><code class="language-md">
 highlight ==mark==
 </code></pre>
+</div>
 
 <p><sub>sub</sub> script</p>
 
+<div class="code-container">
 <pre><code class="language-md">
 ~sub~ script
 </code></pre>
+</div>
 
 <p><sup>sup</sup>er script</p>
 
+<div class="code-container">
 <pre><code class="language-md">
 ^sup^er script
 </code></pre>
+</div>
 
 <ul>
 <li><input type="checkbox" disabled> checked box ul li</li>
 <li><input type="checkbox" checked disabled> input type="checkbox" checked disabled</li>
 </ul>
 
+<div class="code-container">
 <pre><code class="language-md">
 - [ ] checked box ul li
 - [x] input type="checkbox" checked disabled
 </code></pre>
+</div>
 
 <h3 id="extened">heading with id <a href="#extened"> 🔗</a></h3>
 
+<div class="code-container">
 <pre><code class="language-md">
 ### heading with id {#extened}
 </code></pre>
+</div>
 
 <table>
-<thead>
+  <thead>
 <tr>
-    <th>ttt</th>
-    <th>aaa</th>
-    <th>bbb</th>
-    <th>lll</th>
+<th>ttt</th>
+<th>aaa</th>
+<th>bbb</th>
+<th>lll</th>
 </tr>
-</thead>
-<tbody>
+  </thead>
+  <tbody>
 <tr>
-    <td>.</td>
-    <td>l</td>
-    <td>c</td>
-    <td>r</td>
+<td>.</td>
+<td class="align-left">l</td>
+<td class="align-center">c</td>
+<td class="align-right">r</td>
 </tr>
-</tbody>
+  </tbody>
 </table>
 
+<div class="code-container">
 <pre><code class="language-md">
 |ttt|aaa|bbb|lll|
 |---|:--|:-:|--:|
 |.|l|c|r|
 </code></pre>
+</div>
 
 <dl>
     <dt>dl</dt>
@@ -368,6 +438,7 @@ highlight ==mark==
     <dd>data</dd>
 </dl>
 
+<div class="code-container">
 <pre><code class="language-md">
 dl
 : definition list
@@ -376,6 +447,7 @@ dt
 : definition
 : data
 </code></pre>
+</div>
 
 <p>foot<sup><a class="footnote" id="fn-1" href="#footnote-1">1</a></sup> note<sup><a class="footnote" id="fn-note" href="#footnote-note">note</a></sup> sup a</p>
 
@@ -383,6 +455,7 @@ dt
 
 <p>[<a class="footnote" id="footnote-note" href="#fn-note">note</a>]: long</p>
 
+<div class="code-container">
 <pre><code class="language-md">
 foot[^1] note[^note] sup a
 
@@ -390,26 +463,33 @@ foot[^1] note[^note] sup a
 
 [^note]: long
 </code></pre>
+</div>
 
 <h1>HTML Tag</h1>
 
 <!-- comment -->
 
+<div class="code-container">
 <pre><code class="language-md">
 &lt;!-- comment --&gt;
 </code></pre>
+</div>
 
 <br>
 
+<div class="code-container">
 <pre><code class="language-md">
 &lt;br&gt;
 </code></pre>
+</div>
 
 <b>html b tag</b>
 
+<div class="code-container">
 <pre><code class="language-md">
 &lt;b&gt;html b tag&lt;/b&gt;
 </code></pre>
+</div>
 
 <details>
 <summary>details and summary</summary>
@@ -422,6 +502,7 @@ foot[^1] note[^note] sup a
 <p>paragraph</p>
 </details>
 
+<div class="code-container">
 <pre><code class="language-md">
 &lt;details&gt;
 &lt;summary&gt;details and summary&lt;/summary&gt;
@@ -434,25 +515,43 @@ close
 paragraph
 &lt;/details&gt;
 </code></pre>
+</div>
 
 <p>iframe</p>
 
 <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/jNQXAC9IVRw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
+<div class="code-container">
 <pre><code class="language-md">
 &lt;iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/jNQXAC9IVRw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen&gt;&lt;/iframe&gt;
 </code></pre>
+</div>
 
     </main>
     <footer id="custom-html">
       
-<script src="https://giscus.app/client.js" data-repo="RayCC51/BashWrite" data-repo-id="R_kgDOOQp0-w" data-category="Announcements" data-category-id="DIC_kwDOOQp0-84CpMGk" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" data-loading="lazy" crossorigin="anonymous" async> </script>
+<script src="https://giscus.app/client.js" 
+  data-repo="RayCC51/BashWrite" 
+  data-repo-id="R_kgDOOQp0-w" 
+  data-category="Announcements" 
+  data-category-id="DIC_kwDOOQp0-84CpMGk" 
+  data-mapping="pathname" 
+  data-strict="0" 
+  data-reactions-enabled="1" 
+  data-emit-metadata="0" 
+  data-input-position="top" 
+  data-theme="preferred_color_scheme" 
+  data-lang="en" 
+  data-loading="lazy" 
+  crossorigin="anonymous" 
+  async> 
+</script>
 
     </footer>
   </article>
   <footer>
     <p>© 2025 raycc</p>
-    <p>Generated by <a href="https://github.com/raycc51/bashwrite">BashWrite</a></p>
+    <p>Generated by <a href="https://github.com/RayCC51/BashWrite">BashWrite</a></p>
   </footer>
   <a href="#" id="toTop">&#x2B06;</a>
 </body>

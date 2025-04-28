@@ -1,11 +1,16 @@
-sample ./posts/markdown/markdown-sample.html ./posts/frontmatter.html ./posts/images/index.html
-md ./posts/markdown/markdown-sample.html
-html ./posts/markdown/markdown-sample.html
+sample ./posts/markdown/markdown-sample.html ./posts/frontmatter.html ./posts/images/index.html ./posts/markdown/md4html-bug.html ./posts/codecopy.html ./posts/comments.html
+md ./posts/markdown/markdown-sample.html ./posts/markdown/md4html-bug.html
+html ./posts/markdown/markdown-sample.html ./posts/markdown/md4html-bug.html
 github ./posts/github-action/index.html
 action ./posts/github-action/index.html
 pages ./posts/github-action/index.html
 ghpages ./posts/github-action/index.html
 publish ./posts/github-action/index.html
 frontmatter ./posts/frontmatter.html
-blog ./posts/frontmatter.html ./posts/images/index.html
+blog ./posts/frontmatter.html ./posts/images/index.html ./posts/start.html ./posts/comments.html
 image ./posts/images/index.html
+bug ./posts/markdown/md4html-bug.html
+fixme ./posts/markdown/md4html-bug.html
+tutorial ./posts/frontmatter.html ./posts/start.html ./posts/images/index.html ./posts/codecopy.html ./posts/comments.html
+js ./posts/codecopy.html
+comment ./posts/comments.html

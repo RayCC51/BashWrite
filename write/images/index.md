@@ -2,9 +2,9 @@
 title: Images in the posts
 description: How to include images in the posts
 date: 2025-04-20
-tags: sample blog image
+tags: sample blog image tutorial
 draft: false
-pin: 2
+pin: 5
 banner: https://place-hold.it/100x400
 ---
 

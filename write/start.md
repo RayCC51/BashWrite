@@ -1,14 +1,14 @@
-# BashWrite - [demo](https://raycc51.github.io/BashWrite/)
+---
+title: Quick start BashWrite
+description: How to use BashWrite
+date: 2025-04-27
+tags: tutorial blog
+pin: 1
+---
 
-![screenshot](screenshot.png)
+## About BashWrite
 
 Single, pure bash script for make your blog. 
-
-You can find more information in [demo](https://raycc51.github.io/BashWrite/) site. 
-
-Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
-
-## Features
 
 - No dependencies
 - Support extended Markdown with [mattcone/markdown-guide](https://github.com/mattcone/markdown-guide)
@@ -19,10 +19,7 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 - RSS
 - Github pages
 
-### Limits
-
-- Hard to customizing
-- [Markdown to html converter](https://github.com/RayCC51/md2html) is not perfect - [bug list](https://raycc51.github.io/BashWrite/posts/markdown/md4html-bug.html)
+---
 
 ## Quick start
 
@@ -37,19 +34,22 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 
 1. Write a markdown file in *write/*.
 2. The markdown file should starts with [frontmatter](https://raycc51.github.io/BashWrite/posts/frontmatter.html)
-    ```
-    ---
-    title: My new post
-    description: Write description of this post. 
-    date: 2025-02-05
-    lastmod: 2025-05-02
-    tags: tags seperated by a whitespace
-    draft: false
-    pin: 1
-    banner: image.png
-    ---
-    ```
 3. Save your file and run `./bw.sh b`
+
+### [Frontmatter](https://raycc51.github.io/BashWrite/posts/frontmatter.html)
+
+```
+---
+title: My new post
+description: Write description of this post. 
+date: 2025-02-05
+lastmod: 2025-05-02
+tags: tags seperated by a whitespace
+draft: false
+pin: 1
+banner: image.png
+---
+```
 
 ### Remove posts
 
@@ -57,10 +57,7 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 2. Run `./bw.sh b`
 3. Then the script will delete files and links.
 
-## Commands
-
-- `./bw.sh h` : Show help dialog.   
-- `./bw.sh b` : Build blog. 
+---
 
 ## About directory structure
 
@@ -88,8 +85,3 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 
 - write/ - Write your markdowns in this folder. You can also add assets needed for the posting.
 - assets/ - Add any assets in this folder. 
-
-## Contributing
-
-1. I am always welcome to any issues pointing out my English spelling or grammar since I am not very good at English. 
-2. There are no specific contributing rules. Feel free to leave issues or send pull requests, and I will handle them accordingly.

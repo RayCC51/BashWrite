@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="raycc">
+  <meta name="description" content="How to add comments in your blog">
+
+  <meta property="og:title" content="Giscus Comments">
+  <meta property="og:description" content="How to add comments in your blog">
+  <meta property="og:url" content="https://raycc51.github.io/BashWrite/posts/comments.html">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Giscus Comments">
+  <meta name="twitter:description" content="How to add comments in your blog">
+  
+  <title>Giscus Comments</title>
+  <link rel="stylesheet" href="https://raycc51.github.io/BashWrite/style.css">
+
+  <script>
+  if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    document.documentElement.classList.add("dark");
+  }
+  </script>
+
+  
+<link rel="apple-touch-icon" sizes="180x180" href="https://raycc51.github.io/BashWrite//assets/favicon_io/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://raycc51.github.io/BashWrite//assets/favicon_io/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://raycc51.github.io/BashWrite//assets/favicon_io/favicon-16x16.png">
+<link rel="manifest" href="https://raycc51.github.io/BashWrite//assets/favicon_io/site.webmanifest">
+
+<script src="https://raycc51.github.io/BashWrite//assets/codecopy.js" defer></script>
+
+</head>
+<body>
+  <header>
+    <h3><a href="https://raycc51.github.io/BashWrite">bashwrite blog</a></h3>
+    <nav>
+      <ul>
+        <li><a href="https://raycc51.github.io/BashWrite/all-posts.html">Posts</a></li>
+        <li><a href="https://raycc51.github.io/BashWrite/all-tags.html">Tags</a></li>
+        <li><a href="https://raycc51.github.io/BashWrite/rss.xml">RSS</a></li>
+      </ul>
+    </nav>
+  </header>
+  <article>
+    <header>
+      <h1 id="meta-title">Giscus Comments</h1>
+      <p id="meta-date">Written in <time>2025-04-27</time></p>
+      <p id="meta-tags">Tags: <a href="https://raycc51.github.io/BashWrite/tags/sample.html">sample</a> <a href="https://raycc51.github.io/BashWrite/tags/blog.html">blog</a> <a href="https://raycc51.github.io/BashWrite/tags/comment.html">comment</a> <a href="https://raycc51.github.io/BashWrite/tags/tutorial.html">tutorial</a> </p>
+    </header>
+    <main>
+
+<h2>1. Visit giscus homepage</h2>
+
+<a href="https://giscus.app/">https://giscus.app/</a>
+
+<p>Read the text on the homepage carefully and follow it.</p>
+
+<h2>2. Giscus setting</h2>
+
+<p>If you don't understand something, follow the settings below.</p>
+
+<ul>
+<p><li>Page ↔️ Discussions Mapping </p>
+<ul>
+<li><input type="checkbox" checked disabled> Discussion title contains page pathname</li>
+</ul>
+</li>
+<p><li>Discussion Category</p>
+<ul>
+<li>-> Announcements</li>
+<li><input type="checkbox" checked disabled> Only search for discussions in this category</li>
+</ul>
+</li>
+<p><li>Features</p>
+<ul>
+<li><input type="checkbox" checked disabled> Enable reactions for the main post</li>
+<li><input type="checkbox" disabled> Emit discussion metadata</li>
+<li><input type="checkbox" checked disabled> Place the comment box above the comments</li>
+<li><input type="checkbox" checked disabled> Load the comments lazily</li>
+</ul>
+</li>
+<p><li>Theme</p>
+<ul>
+<li>-> Preferred color scheme</li>
+</ul>
+</li>
+</ul>
+
+<h2>3. Copy script html code</h2>
+
+<div class="code-container">
+<pre><code class="language-html">
+&lt;script 
+  src="https://giscus.app/client.js"
+  data-repo="RayCC51/BashWrite"
+  data-repo-id="R_kgDOOQp0-w"
+  data-category="Announcements"
+  data-category-id="DIC_kwDOOQp0-84CpMGk"
+  data-mapping="pathname"
+  data-strict="0"
+  data-reactions-enabled="1"
+  data-emit-metadata="0"
+  data-input-position="top"
+  data-theme="preferred_color_scheme"
+  data-lang="en"
+  data-loading="lazy"
+  crossorigin="anonymous"
+  async&gt;
+&lt;/script&gt;
+</code></pre>
+</div>
+
+<h2>4. Paste above code in <code>bw.sh</code> - <code>CUSTOME<em>HTML</em>ARTICLE_FOOTER</code></h2>
+
+<div class="code-container">
+<pre><code class="language-bash">
+CUSTOM_HTML_ARTICLE_FOOTER="
+&lt;script 
+  src=\"https://giscus.app/client.js\"
+  data-repo=\"RayCC51/BashWrite\"
+  data-repo-id=\"R_kgDOOQp0-w\"
+  data-category=\"Announcements\"
+  data-category-id=\"DIC_kwDOOQp0-84CpMGk\"
+  data-mapping=\"pathname\"
+  data-strict=\"0\"
+  data-reactions-enabled=\"1\"
+  data-emit-metadata=\"0\"
+  data-input-position=\"top\"
+  data-theme=\"preferred_color_scheme\"
+  data-lang=\"en\"
+  data-loading=\"lazy\"
+  crossorigin=\"anonymous\"
+  async&gt;
+&lt;/script&gt;
+"
+</code></pre>
+</div>
+
+<p>You need to escape the <code>"</code>. That is, you should change <code>"</code> to <code>\"</code>.</p>
+
+<h2>5. Save and run <code>./bw.sh b</code></h2>
+
+<p>Now there are comments on your blog post.</p>
+
+    </main>
+    <footer id="custom-html">
+      
+<script src="https://giscus.app/client.js" 
+  data-repo="RayCC51/BashWrite" 
+  data-repo-id="R_kgDOOQp0-w" 
+  data-category="Announcements" 
+  data-category-id="DIC_kwDOOQp0-84CpMGk" 
+  data-mapping="pathname" 
+  data-strict="0" 
+  data-reactions-enabled="1" 
+  data-emit-metadata="0" 
+  data-input-position="top" 
+  data-theme="preferred_color_scheme" 
+  data-lang="en" 
+  data-loading="lazy" 
+  crossorigin="anonymous" 
+  async> 
+</script>
+
+    </footer>
+  </article>
+  <footer>
+    <p>© 2025 raycc</p>
+    <p>Generated by <a href="https://github.com/RayCC51/BashWrite">BashWrite</a></p>
+  </footer>
+  <a href="#" id="toTop">&#x2B06;</a>
+</body>

@@ -3,10 +3,36 @@ title: md2html bug list
 description: I don't know how to solve these bugs...
 date: 2025-04-17
 lastmod: 2025-04-23
-tag: md html sample bug fixme
+tags: md html sample bug fixme
 ---
 
 [md2html](https://github.com/RayCC51/md2html)
+
+## Inline code
+
+### Need escape for special charactors
+
+`<hr>`
+
+`\<hr\>`
+
+`\\ \. \| \# \! \* \+ \- \_ \( \) \{ \} \[ \] \< \> \``
+
+```md
+`<hr>`
+
+`\<hr\>`
+
+`\\ \. \| \# \! \* \+ \- \_ \( \) \{ \} \[ \] \< \> \``
+```
+
+### Can not use double backtick(``)
+
+``double `code` backtick``
+
+```md
+``double `code` backtick``
+```
 
 ## List
 
@@ -34,20 +60,6 @@ tag: md html sample bug fixme
     > blockquote
 
 - list
-```
-
-## Table
-
-### Alignment
-
-|table|table|table|table|
-|---|:-:|:--|--:|
-|!|!|!|!|
-
-```md
-|table|table|table|table|
-|---|:-:|:--|--:|
-|!|!|!|!|
 ```
 
 ## Footnote

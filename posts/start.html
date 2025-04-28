@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="raycc">
+  <meta name="description" content="How to use BashWrite">
+
+  <meta property="og:title" content="Quick start BashWrite">
+  <meta property="og:description" content="How to use BashWrite">
+  <meta property="og:url" content="https://raycc51.github.io/BashWrite/posts/start.html">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Quick start BashWrite">
+  <meta name="twitter:description" content="How to use BashWrite">
+  
+  <title>Quick start BashWrite</title>
+  <link rel="stylesheet" href="https://raycc51.github.io/BashWrite/style.css">
+
+  <script>
+  if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    document.documentElement.classList.add("dark");
+  }
+  </script>
+
+  
+<link rel="apple-touch-icon" sizes="180x180" href="https://raycc51.github.io/BashWrite//assets/favicon_io/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://raycc51.github.io/BashWrite//assets/favicon_io/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://raycc51.github.io/BashWrite//assets/favicon_io/favicon-16x16.png">
+<link rel="manifest" href="https://raycc51.github.io/BashWrite//assets/favicon_io/site.webmanifest">
+
+<script src="https://raycc51.github.io/BashWrite//assets/codecopy.js" defer></script>
+
+</head>
+<body>
+  <header>
+    <h3><a href="https://raycc51.github.io/BashWrite">bashwrite blog</a></h3>
+    <nav>
+      <ul>
+        <li><a href="https://raycc51.github.io/BashWrite/all-posts.html">Posts</a></li>
+        <li><a href="https://raycc51.github.io/BashWrite/all-tags.html">Tags</a></li>
+        <li><a href="https://raycc51.github.io/BashWrite/rss.xml">RSS</a></li>
+      </ul>
+    </nav>
+  </header>
+  <article>
+    <header>
+      <h1 id="meta-title">Quick start BashWrite</h1>
+      <p id="meta-date">Written in <time>2025-04-27</time></p>
+      <p id="meta-tags">Tags: <a href="https://raycc51.github.io/BashWrite/tags/tutorial.html">tutorial</a> <a href="https://raycc51.github.io/BashWrite/tags/blog.html">blog</a> </p>
+    </header>
+    <main>
+
+<h2>About BashWrite</h2>
+
+<p>Single, pure bash script for make your blog. </p>
+
+<ul>
+<li>No dependencies</li>
+<li>Support extended Markdown with <a href="https://github.com/mattcone/markdown-guide">mattcone/markdown-guide</a></li>
+<li>Darkmode</li>
+<li>Tags</li>
+<li>Recent posts</li>
+<li>Pinned posts</li>
+<li>RSS</li>
+<li>Github pages</li>
+</ul>
+
+<hr>
+
+<h2>Quick start</h2>
+
+<h3>Install</h3>
+
+<ol>
+<li>Download <code>bw.sh</code> - <a href="https://github.com/RayCC51/BashWrite/releases">Release page</a>.</li>
+<li>Open <code>bw.sh</code>, edit settings and save the file.</li>
+<li>Open <em>terminal</em>, and run <code>./bw.sh b</code></li>
+<li>Then your blog will be generated!</li>
+</ol>
+
+<h3>Write new posts</h3>
+
+<ol>
+<li>Write a markdown file in <em>write/</em>.</li>
+<li>The markdown file should starts with <a href="https://raycc51.github.io/BashWrite/posts/frontmatter.html">frontmatter</a></li>
+<li>Save your file and run <code>./bw.sh b</code></li>
+</ol>
+
+<h3><a href="https://raycc51.github.io/BashWrite/posts/frontmatter.html">Frontmatter</a></h3>
+
+<div class="code-container">
+<pre><code class="language-plaintext">
+---
+title: My new post
+description: Write description of this post. 
+date: 2025-02-05
+lastmod: 2025-05-02
+tags: tags seperated by a whitespace
+draft: false
+pin: 1
+banner: image.png
+---
+</code></pre>
+</div>
+
+<h3>Remove posts</h3>
+
+<ol>
+<li>Remove a markdown file in <em>write/</em></li>
+<li>Run <code>./bw.sh b</code></li>
+<li>Then the script will delete files and links.</li>
+</ol>
+
+<hr>
+
+<h2>About directory structure</h2>
+
+<h3>Download from repo</h3>
+
+<ul>
+<li>bw.sh</li>
+<li>.github/ - Download this folder if you want to use github pages.</li>
+</ul>
+
+<h3>Automatically generated: Do not edit these files</h3>
+
+<ul>
+<li>backup/</li>
+<li>checksum/ - Checksum list for compare the diffrence of files.</li>
+<li>posts/</li>
+<li>tags/</li>
+<li>404.html</li>
+<li>all-posts.html - List of every posts.</li>
+<li>all-tags.html - List of every tags.</li>
+<li>index.html</li>
+<li>robots.txt</li>
+<li>rss.xml</li>
+<li>style.css</li>
+<li>sitemap.xml</li>
+</ul>
+
+<h3>Create these folders yourself, and work only within these folders</h3>
+
+<ul>
+<li>write/ - Write your markdowns in this folder. You can also add assets needed for the posting.</li>
+<li>assets/ - Add any assets in this folder. </li>
+</ul>
+
+    </main>
+    <footer id="custom-html">
+      
+<script src="https://giscus.app/client.js" 
+  data-repo="RayCC51/BashWrite" 
+  data-repo-id="R_kgDOOQp0-w" 
+  data-category="Announcements" 
+  data-category-id="DIC_kwDOOQp0-84CpMGk" 
+  data-mapping="pathname" 
+  data-strict="0" 
+  data-reactions-enabled="1" 
+  data-emit-metadata="0" 
+  data-input-position="top" 
+  data-theme="preferred_color_scheme" 
+  data-lang="en" 
+  data-loading="lazy" 
+  crossorigin="anonymous" 
+  async> 
+</script>
+
+    </footer>
+  </article>
+  <footer>
+    <p>© 2025 raycc</p>
+    <p>Generated by <a href="https://github.com/RayCC51/BashWrite">BashWrite</a></p>
+  </footer>
+  <a href="#" id="toTop">&#x2B06;</a>
+</body>

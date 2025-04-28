@@ -6,9 +6,305 @@
   <link>https://raycc51.github.io/BashWrite</link>
   <description>raycc's blog</description>
   <language>en</language>
-  <pubDate>Sun, 27 Apr 2025 01:06:05 +0000</pubDate>
+  <pubDate>Mon, 28 Apr 2025 13:40:48 +0000</pubDate>
   <copyright>© 2025 raycc</copyright>
   <atom:link href="https://raycc51.github.io/BashWrite/rss.xml" rel="self" type="application/rss+xml" />
+
+<item>
+  <title>Code copy JS</title>
+  <link>https://raycc51.github.io/BashWrite/posts/codecopy.html</link>
+  <guid>https://raycc51.github.io/BashWrite/posts/codecopy.html</guid>
+  <description><![CDATA[
+        <main>
+
+<div class="code-container">
+<pre><code class="language-plaintext">
+sample
+code
+block
+</code></pre>
+</div>
+
+<h2>1. Add a &lt;script&gt; tag inside the <code>CUSTOM_HTML_HEAD</code> variable</h2>
+
+<p><em>bw.sh</em></p>
+
+<div class="code-container">
+<pre><code class="language-md">
+CUSTOM_HTML_HEAD="
+&lt;script src=\"$BASE_URL/assets/codecopy.js\" defer&gt;&lt;/script&gt;
+"
+</code></pre>
+</div>
+
+<h2>2. Create <code>codecopy.js</code> file in the <em>assets/</em></h2>
+
+<div class="code-container">
+<pre><code class="language-plaintext">
+your-blog/
+├─ assets/
+│  ├─ codecopy.js    &lt;&lt;&lt; New!
+├─ write/
+├─ bw.sh
+</code></pre>
+</div>
+
+<h2>3. Wirte codes in <code>codecopy.js</code></h2>
+
+<p><em>assets/codecopy.js</em></p>
+
+<div class="code-container">
+<pre><code class="language-js">
+// Copy button for code block
+const codes = document.querySelectorAll('div.code-container');
+
+codes.forEach(item =&gt; {
+  // Container style
+  item.setAttribute("style", "position: relative;");
+
+  // Create button
+  const copyBtn = document.createElement('button');
+  copyBtn.textContent = 'Copy';
+  copyBtn.setAttribute("style", "position: absolute; top: 0; right: 0; z-index: 3; background: var(--background-color); color: var(--main-theme); border: none;");
+
+  // Add event
+  copyBtn.addEventListener("click", () =&gt; {
+    navigator.clipboard.writeText(copyBtn.previousElementSibling.textContent).then(()
+=&gt; {
+      copyBtn.textContent = "Copied!"
+      setTimeout(() =&gt; {
+        copyBtn.textContent = "Copy"
+      }, 1000)
+    })
+  });
+
+  // Add element
+  item.appendChild(copyBtn);
+})
+</code></pre>
+</div>
+
+<h2>4. Save the file and run <code>./bw.sh b</code></h2>
+
+<p>Fin!</p>
+
+    </main>
+  ]]></description>
+  <pubDate>Mon, 28 Apr 2025 00:00:00 UTC</pubDate>
+</item>
+
+<item>
+  <title>Quick start BashWrite</title>
+  <link>https://raycc51.github.io/BashWrite/posts/start.html</link>
+  <guid>https://raycc51.github.io/BashWrite/posts/start.html</guid>
+  <description><![CDATA[
+        <main>
+
+<h2>About BashWrite</h2>
+
+<p>Single, pure bash script for make your blog. </p>
+
+<ul>
+<li>No dependencies</li>
+<li>Support extended Markdown with <a href="https://github.com/mattcone/markdown-guide">mattcone/markdown-guide</a></li>
+<li>Darkmode</li>
+<li>Tags</li>
+<li>Recent posts</li>
+<li>Pinned posts</li>
+<li>RSS</li>
+<li>Github pages</li>
+</ul>
+
+<hr>
+
+<h2>Quick start</h2>
+
+<h3>Install</h3>
+
+<ol>
+<li>Download <code>bw.sh</code> - <a href="https://github.com/RayCC51/BashWrite/releases">Release page</a>.</li>
+<li>Open <code>bw.sh</code>, edit settings and save the file.</li>
+<li>Open <em>terminal</em>, and run <code>./bw.sh b</code></li>
+<li>Then your blog will be generated!</li>
+</ol>
+
+<h3>Write new posts</h3>
+
+<ol>
+<li>Write a markdown file in <em>write/</em>.</li>
+<li>The markdown file should starts with <a href="https://raycc51.github.io/BashWrite/posts/frontmatter.html">frontmatter</a></li>
+<li>Save your file and run <code>./bw.sh b</code></li>
+</ol>
+
+<h3><a href="https://raycc51.github.io/BashWrite/posts/frontmatter.html">Frontmatter</a></h3>
+
+<div class="code-container">
+<pre><code class="language-plaintext">
+---
+title: My new post
+description: Write description of this post. 
+date: 2025-02-05
+lastmod: 2025-05-02
+tags: tags seperated by a whitespace
+draft: false
+pin: 1
+banner: image.png
+---
+</code></pre>
+</div>
+
+<h3>Remove posts</h3>
+
+<ol>
+<li>Remove a markdown file in <em>write/</em></li>
+<li>Run <code>./bw.sh b</code></li>
+<li>Then the script will delete files and links.</li>
+</ol>
+
+<hr>
+
+<h2>About directory structure</h2>
+
+<h3>Download from repo</h3>
+
+<ul>
+<li>bw.sh</li>
+<li>.github/ - Download this folder if you want to use github pages.</li>
+</ul>
+
+<h3>Automatically generated: Do not edit these files</h3>
+
+<ul>
+<li>backup/</li>
+<li>checksum/ - Checksum list for compare the diffrence of files.</li>
+<li>posts/</li>
+<li>tags/</li>
+<li>404.html</li>
+<li>all-posts.html - List of every posts.</li>
+<li>all-tags.html - List of every tags.</li>
+<li>index.html</li>
+<li>robots.txt</li>
+<li>rss.xml</li>
+<li>style.css</li>
+<li>sitemap.xml</li>
+</ul>
+
+<h3>Create these folders yourself, and work only within these folders</h3>
+
+<ul>
+<li>write/ - Write your markdowns in this folder. You can also add assets needed for the posting.</li>
+<li>assets/ - Add any assets in this folder. </li>
+</ul>
+
+    </main>
+  ]]></description>
+  <pubDate>Sun, 27 Apr 2025 00:00:00 UTC</pubDate>
+</item>
+
+<item>
+  <title>Giscus Comments</title>
+  <link>https://raycc51.github.io/BashWrite/posts/comments.html</link>
+  <guid>https://raycc51.github.io/BashWrite/posts/comments.html</guid>
+  <description><![CDATA[
+        <main>
+
+<h2>1. Visit giscus homepage</h2>
+
+<a href="https://giscus.app/">https://giscus.app/</a>
+
+<p>Read the text on the homepage carefully and follow it.</p>
+
+<h2>2. Giscus setting</h2>
+
+<p>If you don't understand something, follow the settings below.</p>
+
+<ul>
+<p><li>Page ↔️ Discussions Mapping </p>
+<ul>
+<li><input type="checkbox" checked disabled> Discussion title contains page pathname</li>
+</ul>
+</li>
+<p><li>Discussion Category</p>
+<ul>
+<li>-> Announcements</li>
+<li><input type="checkbox" checked disabled> Only search for discussions in this category</li>
+</ul>
+</li>
+<p><li>Features</p>
+<ul>
+<li><input type="checkbox" checked disabled> Enable reactions for the main post</li>
+<li><input type="checkbox" disabled> Emit discussion metadata</li>
+<li><input type="checkbox" checked disabled> Place the comment box above the comments</li>
+<li><input type="checkbox" checked disabled> Load the comments lazily</li>
+</ul>
+</li>
+<p><li>Theme</p>
+<ul>
+<li>-> Preferred color scheme</li>
+</ul>
+</li>
+</ul>
+
+<h2>3. Copy script html code</h2>
+
+<div class="code-container">
+<pre><code class="language-html">
+&lt;script 
+  src="https://giscus.app/client.js"
+  data-repo="RayCC51/BashWrite"
+  data-repo-id="R_kgDOOQp0-w"
+  data-category="Announcements"
+  data-category-id="DIC_kwDOOQp0-84CpMGk"
+  data-mapping="pathname"
+  data-strict="0"
+  data-reactions-enabled="1"
+  data-emit-metadata="0"
+  data-input-position="top"
+  data-theme="preferred_color_scheme"
+  data-lang="en"
+  data-loading="lazy"
+  crossorigin="anonymous"
+  async&gt;
+&lt;/script&gt;
+</code></pre>
+</div>
+
+<h2>4. Paste above code in <code>bw.sh</code> - <code>CUSTOME<em>HTML</em>ARTICLE_FOOTER</code></h2>
+
+<div class="code-container">
+<pre><code class="language-bash">
+CUSTOM_HTML_ARTICLE_FOOTER="
+&lt;script 
+  src=\"https://giscus.app/client.js\"
+  data-repo=\"RayCC51/BashWrite\"
+  data-repo-id=\"R_kgDOOQp0-w\"
+  data-category=\"Announcements\"
+  data-category-id=\"DIC_kwDOOQp0-84CpMGk\"
+  data-mapping=\"pathname\"
+  data-strict=\"0\"
+  data-reactions-enabled=\"1\"
+  data-emit-metadata=\"0\"
+  data-input-position=\"top\"
+  data-theme=\"preferred_color_scheme\"
+  data-lang=\"en\"
+  data-loading=\"lazy\"
+  crossorigin=\"anonymous\"
+  async&gt;
+&lt;/script&gt;
+"
+</code></pre>
+</div>
+
+<p>You need to escape the <code>"</code>. That is, you should change <code>"</code> to <code>\"</code>.</p>
+
+<h2>5. Save and run <code>./bw.sh b</code></h2>
+
+<p>Now there are comments on your blog post.</p>
+
+    </main>
+  ]]></description>
+  <pubDate>Sun, 27 Apr 2025 00:00:00 UTC</pubDate>
+</item>
 
 <item>
   <title>Images in the posts</title>
@@ -30,7 +326,8 @@
 
 <h3>2. Put your images in...</h3>
 
-<pre><code>
+<div class="code-container">
+<pre><code class="language-plaintext">
 your-blog-directory/
 ├─ write/
 │  ├─ new-post/           &lt;&lt;&lt; New!
@@ -38,6 +335,7 @@ your-blog-directory/
 │  │  ├─ screenshot.png   &lt;&lt;&lt; New!
 ├─ bw.sh
 </code></pre>
+</div>
 
 <p>Create a new folder under the <code>write/</code> folder. It’s best to name the folder after the title of the new post you will write.</p>
 
@@ -54,9 +352,11 @@ your-blog-directory/
   <figcaption>screenshot</figcaption>
 </figure>
 
+<div class="code-container">
 <pre><code class="language-md">
 ![screenshot](screenshot.png)
 </code></pre>
+</div>
 
 <h2>Banner Image</h2>
 
@@ -67,12 +367,14 @@ your-blog-directory/
 
 <h3>2. Frontmatter</h3>
 
-<pre><code>
+<div class="code-container">
+<pre><code class="language-plaintext">
 title: ...
 description: ...
 date: ...
 banner: https://place-hold.it/100x400
 </code></pre>
+</div>
 
 <p>Put your image path or image url in <code>banner</code>. </p>
 
@@ -89,6 +391,36 @@ banner: https://place-hold.it/100x400
         <main>
 
 <a href="https://github.com/RayCC51/md2html">md2html</a>
+
+<h2>Inline code</h2>
+
+<h3>Need escape for special charactors</h3>
+
+<p><code><hr></code></p>
+
+<p><code>&lt;hr&gt;</code></p>
+
+<p><code>\ . | # ! * + - _ ( ) { } [ ] &lt; &gt; `</code></p>
+
+<div class="code-container">
+<pre><code class="language-md">
+`&lt;hr&gt;`
+
+`\&lt;hr\&gt;`
+
+`\\ \. \| \# \! \* \+ \- \_ \( \) \{ \} \[ \] \&lt; \&gt; \``
+</code></pre>
+</div>
+
+<h3>Can not use double backtick(``)</h3>
+
+<p>`<code>double </code>code<code> backtick</code>`</p>
+
+<div class="code-container">
+<pre><code class="language-md">
+``double `code` backtick``
+</code></pre>
+</div>
 
 <h2>List</h2>
 
@@ -110,6 +442,7 @@ banner: https://place-hold.it/100x400
 <li>list</li>
 </ul>
 
+<div class="code-container">
 <pre><code class="language-md">
 - list
 - list
@@ -122,35 +455,7 @@ banner: https://place-hold.it/100x400
 
 - list
 </code></pre>
-
-<h2>Table</h2>
-
-<h3>Alignment</h3>
-
-<table>
-<thead>
-<tr>
-    <th>table</th>
-    <th>table</th>
-    <th>table</th>
-    <th>table</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-    <td>!</td>
-    <td>!</td>
-    <td>!</td>
-    <td>!</td>
-</tr>
-</tbody>
-</table>
-
-<pre><code class="language-md">
-|table|table|table|table|
-|---|:-:|:--|--:|
-|!|!|!|!|
-</code></pre>
+</div>
 
 <h2>Footnote</h2>
 
@@ -162,6 +467,7 @@ banner: https://place-hold.it/100x400
 
 <p>[<a class="footnote" id="footnote-foot note" href="#fn-foot note">foot note</a>]: So this will not working well.</p>
 
+<div class="code-container">
 <pre><code class="language-md">
 How to call[^of this] things[^foot note]?
 
@@ -169,6 +475,7 @@ How to call[^of this] things[^foot note]?
 
 [^foot note]: So this will not working well. 
 </code></pre>
+</div>
 
 <h3>Footnote with several lines</h3>
 
@@ -180,6 +487,7 @@ How to call[^of this] things[^foot note]?
 
 <p class="indented">work. </p>
 
+<div class="code-container">
 <pre><code class="language-md">
 Footnote[^with]. 
 
@@ -189,6 +497,7 @@ Footnote[^with].
 
     work. 
 </code></pre>
+</div>
 
     </main>
   ]]></description>
@@ -204,110 +513,136 @@ Footnote[^with].
 
 <h1>Pure markdown h1</h1>
 
+<div class="code-container">
 <pre><code class="language-md">
 # Pure markdown h1
 </code></pre>
+</div>
 
 <h2>h2</h2>
 
+<div class="code-container">
 <pre><code class="language-md">
 ## h2
 </code></pre>
+</div>
 
 <h3>h3</h3>
 
+<div class="code-container">
 <pre><code class="language-md">
 ### h3
 </code></pre>
+</div>
 
 <h4>h4</h4>
 
+<div class="code-container">
 <pre><code class="language-md">
 #### h4
 </code></pre>
+</div>
 
 <h5>h5</h5>
 
+<div class="code-container">
 <pre><code class="language-md">
 ##### h5
 </code></pre>
+</div>
 
 <h6>h6</h6>
 
+<div class="code-container">
 <pre><code class="language-md">
 ###### h6
 </code></pre>
+</div>
 
 <p>hello 
 world</p>
 
+<div class="code-container">
 <pre><code class="language-md">
 hello 
 world
 </code></pre>
+</div>
 
 <p>two blank</p>
 
 <p>line break </p>
 
+<div class="code-container">
 <pre><code class="language-md">
 two blank  
 line break
 </code></pre>
+</div>
 
 <p class="indented">4 space = indent</p>
 
+<div class="code-container">
 <pre><code class="language-md">
     4 space = indent
 </code></pre>
+</div>
 
 <p>italic <em>em</em></p>
 
+<div class="code-container">
 <pre><code class="language-md">
 italic *em*
 </code></pre>
+</div>
 
 <p>bold <strong>strong</strong></p>
 
+<div class="code-container">
 <pre><code class="language-md">
 bold **strong**
 </code></pre>
+</div>
 
 <p>italic and bold <strong><em>em strong</em></strong></p>
 
+<div class="code-container">
 <pre><code class="language-md">
 italic and bold ***em strong***
 </code></pre>
+</div>
 
-<p>escape: \ . | # ! * \+ - _ ( { [ &lt; ``</p>
+<p>escape: \ . | # ! * + - _ ( { [ &lt; ``</p>
 
+<div class="code-container">
 <pre><code class="language-md">
 escape: \\ \. \| \# \! \* \+ \- \_ \( \{ \[ \&lt; \``
 </code></pre>
-
-<p>`escape <code>backtick</code> in code`</p>
-
-<pre><code class="language-md">
-``escape `backtick` in code``
-</code></pre>
+</div>
 
 <hr>
 
+<div class="code-container">
 <pre><code class="language-md">
 ---
 </code></pre>
+</div>
 
 <hr>
 
+<div class="code-container">
 <pre><code class="language-md">
 ***
 </code></pre>
+</div>
 
 <hr>
 
+<div class="code-container">
 <pre><code class="language-md">
 ___
 </code></pre>
+</div>
 
 
 <ul>
@@ -320,12 +655,14 @@ ___
 <li>list</li>
 </ul>
 
+<div class="code-container">
 <pre><code class="language-md">
 - unordered ul
 - list li
     - indented
 - list
 </code></pre>
+</div>
 
 <ol>
 <li>ordered ol</li>
@@ -337,12 +674,14 @@ ___
 <li>list</li>
 </ol>
 
+<div class="code-container">
 <pre><code class="language-md">
 1. ordered ol
 2. list li
     1. indented
 4. list
 </code></pre>
+</div>
 
 <ol>
 <p><li>mixed</p>
@@ -353,11 +692,13 @@ ___
 <li>ol</li>
 </ol>
 
+<div class="code-container">
 <pre><code class="language-md">
 1. mixed
     - ul
 2. ol
 </code></pre>
+</div>
 
 <blockquote>
 <p>block quote</p>
@@ -371,6 +712,7 @@ ___
 <p>blockquote</p>
 </blockquote>
 
+<div class="code-container">
 <pre><code class="language-md">
 &gt; block quote
 &gt;
@@ -380,138 +722,173 @@ ___
 &gt;
 &gt; blockquote
 </code></pre>
+</div>
 
 <a href="https://example.com">Link a</a>
 
+<div class="code-container">
 <pre><code class="language-md">
 [Link a](https://example.com)
 </code></pre>
+</div>
 
 <a href="https://example.com">https://example.com</a>
 
+<div class="code-container">
 <pre><code class="language-md">
 &lt;https://example.com&gt;
 </code></pre>
+</div>
 
 <figure>
   <img src="https://place-hold.it/100x100" alt="img" loading="lazy">
   <figcaption>img</figcaption>
 </figure>
 
+<div class="code-container">
 <pre><code class="language-md">
 ![img](https://place-hold.it/100x100)
 </code></pre>
+</div>
 
 <figure>
   <img src="https://place-hold.it/100x100" alt="img alt" title="title" loading="lazy">
   <figcaption>img alt</figcaption>
 </figure>
 
+<div class="code-container">
 <pre><code class="language-md">
 ![img alt](https://place-hold.it/100x100 "title")
 </code></pre>
+</div>
 
 <p>inline <code>code</code></p>
 
+<div class="code-container">
 <pre><code class="language-md">
 inline `code`
 </code></pre>
+</div>
 
-<pre><code>
+<div class="code-container">
+<pre><code class="language-plaintext">
 plain code block
 \ . | # ! * + - _ ( ) { } [ ] &lt; &gt; ''
 </code></pre>
+</div>
 
+<div class="code-container">
 <pre><code class="language-md">
 ```
 plain code block
 \ . | # ! * + - _ ( ) { } [ ] &lt; &gt; ''
 ```
 </code></pre>
+</div>
 
+<div class="code-container">
 <pre><code class="language-python">
 print("python")
 </code></pre>
+</div>
 
+<div class="code-container">
 <pre><code class="language-md">
 ```python
 print("python")
 ```
 </code></pre>
+</div>
 
 
 <h1>Extended markdown</h1>
 
 <a href="https://www.example.com">https://www.example.com</a>
 
+<div class="code-container">
 <pre><code class="language-md">
 https://www.example.com
 </code></pre>
+</div>
 
 <p>strikethrough <del>del</del></p>
 
+<div class="code-container">
 <pre><code class="language-md">
 strikethrough ~~del~~
 </code></pre>
+</div>
 
 <p>highlight <mark>mark</mark></p>
 
+<div class="code-container">
 <pre><code class="language-md">
 highlight ==mark==
 </code></pre>
+</div>
 
 <p><sub>sub</sub> script</p>
 
+<div class="code-container">
 <pre><code class="language-md">
 ~sub~ script
 </code></pre>
+</div>
 
 <p><sup>sup</sup>er script</p>
 
+<div class="code-container">
 <pre><code class="language-md">
 ^sup^er script
 </code></pre>
+</div>
 
 <ul>
 <li><input type="checkbox" disabled> checked box ul li</li>
 <li><input type="checkbox" checked disabled> input type="checkbox" checked disabled</li>
 </ul>
 
+<div class="code-container">
 <pre><code class="language-md">
 - [ ] checked box ul li
 - [x] input type="checkbox" checked disabled
 </code></pre>
+</div>
 
 <h3 id="extened">heading with id <a href="#extened"> 🔗</a></h3>
 
+<div class="code-container">
 <pre><code class="language-md">
 ### heading with id {#extened}
 </code></pre>
+</div>
 
 <table>
-<thead>
+  <thead>
 <tr>
-    <th>ttt</th>
-    <th>aaa</th>
-    <th>bbb</th>
-    <th>lll</th>
+<th>ttt</th>
+<th>aaa</th>
+<th>bbb</th>
+<th>lll</th>
 </tr>
-</thead>
-<tbody>
+  </thead>
+  <tbody>
 <tr>
-    <td>.</td>
-    <td>l</td>
-    <td>c</td>
-    <td>r</td>
+<td>.</td>
+<td class="align-left">l</td>
+<td class="align-center">c</td>
+<td class="align-right">r</td>
 </tr>
-</tbody>
+  </tbody>
 </table>
 
+<div class="code-container">
 <pre><code class="language-md">
 |ttt|aaa|bbb|lll|
 |---|:--|:-:|--:|
 |.|l|c|r|
 </code></pre>
+</div>
 
 <dl>
     <dt>dl</dt>
@@ -521,6 +898,7 @@ highlight ==mark==
     <dd>data</dd>
 </dl>
 
+<div class="code-container">
 <pre><code class="language-md">
 dl
 : definition list
@@ -529,6 +907,7 @@ dt
 : definition
 : data
 </code></pre>
+</div>
 
 <p>foot<sup><a class="footnote" id="fn-1" href="#footnote-1">1</a></sup> note<sup><a class="footnote" id="fn-note" href="#footnote-note">note</a></sup> sup a</p>
 
@@ -536,6 +915,7 @@ dt
 
 <p>[<a class="footnote" id="footnote-note" href="#fn-note">note</a>]: long</p>
 
+<div class="code-container">
 <pre><code class="language-md">
 foot[^1] note[^note] sup a
 
@@ -543,26 +923,33 @@ foot[^1] note[^note] sup a
 
 [^note]: long
 </code></pre>
+</div>
 
 <h1>HTML Tag</h1>
 
 <!-- comment -->
 
+<div class="code-container">
 <pre><code class="language-md">
 &lt;!-- comment --&gt;
 </code></pre>
+</div>
 
 <br>
 
+<div class="code-container">
 <pre><code class="language-md">
 &lt;br&gt;
 </code></pre>
+</div>
 
 <b>html b tag</b>
 
+<div class="code-container">
 <pre><code class="language-md">
 &lt;b&gt;html b tag&lt;/b&gt;
 </code></pre>
+</div>
 
 <details>
 <summary>details and summary</summary>
@@ -575,6 +962,7 @@ foot[^1] note[^note] sup a
 <p>paragraph</p>
 </details>
 
+<div class="code-container">
 <pre><code class="language-md">
 &lt;details&gt;
 &lt;summary&gt;details and summary&lt;/summary&gt;
@@ -587,14 +975,17 @@ close
 paragraph
 &lt;/details&gt;
 </code></pre>
+</div>
 
 <p>iframe</p>
 
 <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/jNQXAC9IVRw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
+<div class="code-container">
 <pre><code class="language-md">
 &lt;iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/jNQXAC9IVRw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen&gt;&lt;/iframe&gt;
 </code></pre>
+</div>
 
     </main>
   ]]></description>
@@ -611,13 +1002,14 @@ paragraph
 <h2>Download github action</h2>
 
 <ol>
-<li>Download <code>.github/workflows/build.yaml</code> in <a href="https://github.com/raycc51/bashwrite">Github</a></li>
+<li>Download <code>.github/workflows/build.yaml</code> in <a href="https://github.com/raycc51/bashwrite">Github RayCC51/BashWrite</a></li>
 <li>Put the <code>build.yaml</code> in your <code>your-blog-path/.github/workflows/</code></li>
 </ol>
 
 <h3>Directory</h3>
 
-<pre><code>
+<div class="code-container">
+<pre><code class="language-plaintext">
 your_blog/
 ├─ .github/           &lt;&lt;&lt; New!
 │  ├─ workflows/      &lt;&lt;&lt; New!
@@ -627,6 +1019,7 @@ your_blog/
 │  ├─ post2.md
 ├─ bw.sh
 </code></pre>
+</div>
 
 <h2>Settings in github.com</h2>
 
@@ -660,7 +1053,8 @@ your_blog/
   <description><![CDATA[
         <main>
 
-<pre><code>
+<div class="code-container">
+<pre><code class="language-plaintext">
 ---
 title: Frontmatter
 description: About frontmatter
@@ -672,66 +1066,67 @@ pin: 1
 banner: image.png
 ---
 </code></pre>
+</div>
 
 <table>
-<thead>
+  <thead>
 <tr>
-    <th></th>
-    <th>Required</th>
-    <th>Default vaule</th>
-    <th>Type</th>
+<th></th>
+<th>Required</th>
+<th>Default vaule</th>
+<th>Type</th>
 </tr>
-</thead>
-<tbody>
+  </thead>
+  <tbody>
 <tr>
-    <td>title</td>
-    <td>O</td>
-    <td>New post <code>yyyy-mm-dd</code></td>
-    <td>String</td>
-</tr>
-<tr>
-    <td>description</td>
-    <td>∆</td>
-    <td>•</td>
-    <td>String</td>
+<td>title</td>
+<td>O</td>
+<td>New post <code>yyyy-mm-dd</code></td>
+<td>String</td>
 </tr>
 <tr>
-    <td>date</td>
-    <td>O</td>
-    <td><code>yyyy-mm-dd</code></td>
-    <td>yyyy-mm-dd</td>
+<td>description</td>
+<p>∆<td></td>
+•<td></td></p>
+<td>String</td>
 </tr>
 <tr>
-    <td>lastmod</td>
-    <td>X</td>
-    <td>•</td>
-    <td>yyyy-mm-dd</td>
+<td>date</td>
+<td>O</td>
+<td><code>yyyy-mm-dd</code></td>
+<td>yyyy-mm-dd</td>
 </tr>
 <tr>
-    <td>tags</td>
-    <td>X</td>
-    <td>•</td>
-    <td>String</td>
+<td>lastmod</td>
+<td>X</td>
+<p>•<td></td></p>
+<td>yyyy-mm-dd</td>
 </tr>
 <tr>
-    <td>draft</td>
-    <td>X</td>
-    <td><code>false</code></td>
-    <td>bool</td>
+<td>tags</td>
+<td>X</td>
+<p>•<td></td></p>
+<td>String</td>
 </tr>
 <tr>
-    <td>pin</td>
-    <td>X</td>
-    <td>•</td>
-    <td>int</td>
+<td>draft</td>
+<td>X</td>
+<td><code>false</code></td>
+<td>bool</td>
 </tr>
 <tr>
-    <td>banner</td>
-    <td>X</td>
-    <td>•</td>
-    <td>String</td>
+<td>pin</td>
+<td>X</td>
+<p>•<td></td></p>
+<td>int</td>
 </tr>
-</tbody>
+<tr>
+<td>banner</td>
+<td>X</td>
+<p>•<td></td></p>
+<td>String</td>
+</tr>
+  </tbody>
 </table>
 
 <p><code>yyyy-mm-dd</code> is build date.</p>
