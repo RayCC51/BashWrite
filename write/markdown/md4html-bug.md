@@ -10,12 +10,28 @@ tags: md html sample bug fixme
 
 ## Inline code
 
-### Escaping backtick in inline code
+### Need escape for special charactors
 
-`\``
+`<hr>`
+
+`\<hr\>`
+
+`\\ \. \| \# \! \* \+ \- \_ \( \) \{ \} \[ \] \< \> \``
 
 ```md
-`\``
+`<hr>`
+
+`\<hr\>`
+
+`\\ \. \| \# \! \* \+ \- \_ \( \) \{ \} \[ \] \< \> \``
+```
+
+### Can not use double backtick(``)
+
+``double `code` backtick``
+
+```md
+``double `code` backtick``
 ```
 
 ## List

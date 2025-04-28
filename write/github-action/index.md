@@ -9,7 +9,7 @@ draft: false
 
 ## Download github action
 
-1. Download `.github/workflows/build.yaml` in [Github](https://github.com/raycc51/bashwrite)
+1. Download `.github/workflows/build.yaml` in [Github RayCC51/BashWrite](https://github.com/raycc51/bashwrite)
 2. Put the `build.yaml` in your `your-blog-path/.github/workflows/`
 
 ### Directory

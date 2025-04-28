@@ -335,7 +335,7 @@ MOD=$(echo "$MOD" | sed -E '
     
     s/```([a-zA-Z0-9_]+)?\n/<pre><code class="language-\1">\n/
     s/```/<\/code><\/pre>/
-    s/(<pre><code) class="language-">/\1>/
+    s/(<pre><code class="language-)">/\1plaintext">/
 
     s/`/\\`/g
   }
@@ -345,22 +345,12 @@ MOD=$(echo "$MOD" | sed -E '
 MOD=$(echo "$MOD" | sed -E '
   s/\\`/\&backtick;/g
 
-  /``(.*)``/ {
-    s/`/\&backtick;/g
-    s/\&backtick;\&backtick;/`/g
-  }
-
-  /`[^`]+`/ {
-    s/</\&lt;/g
-    s/>/\&gt;/g
-
-    s/`([^`]+)`/<code>\1<\/code>/g
-  }
+  s/`([^`]+)`/<code>\1<\/code>/g
 ')
 
 # escaping in code
 MOD=$(echo "$MOD" | sed -E '
-  /<code/, /<\/code>/ {
+  /<pre>/, /<\/pre>/ {
     s/\\/\\\\/g
     s/\./\\\./g
     s/\|/\\\|/g
@@ -382,12 +372,7 @@ MOD=$(echo "$MOD" | sed -E '
     s/=/\&equal;/g
     s/\^/\&caret;/g
     s/^:/\&colon;/
-  }
-')
 
-# fixing codeblock for p
-MOD=$(echo "$MOD" | sed -E '
-  /^<pre>/,/<\/pre>$/ {
     s/^(.*)$/<\1>/
   }
 ')

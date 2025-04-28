@@ -89,12 +89,6 @@ escape: \\ \. \| \# \! \* \+ \- \_ \( \{ \[ \< \``
 escape: \\ \. \| \# \! \* \+ \- \_ \( \{ \[ \< \``
 ```
 
-``escape `backtick` in code``
-
-```md
-``escape `backtick` in code``
-```
-
 ---
 
 ```md
