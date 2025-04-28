@@ -42,6 +42,8 @@ CUSTOM_HTML_HEAD="
 <link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"$BASE_URL/assets/favicon_io/favicon-32x32.png\">
 <link rel=\"icon\" type=\"image/png\" sizes=\"16x16\" href=\"$BASE_URL/assets/favicon_io/favicon-16x16.png\">
 <link rel=\"manifest\" href=\"$BASE_URL/assets/favicon_io/site.webmanifest\">
+
+<script src=\"$BASE_URL/assets/codecopy.js\" defer></script>
 "
 
 ### Write your own HTML code.
@@ -333,8 +335,8 @@ MOD=$(echo "$MOD" | sed -E '
     s/</\&lt;/g
     s/>/\&gt;/g
     
-    s/```([a-zA-Z0-9_]+)?\n/<pre><code class="language-\1">\n/
-    s/```/<\/code><\/pre>/
+    s/```([a-zA-Z0-9_]+)?\n/<div class="code-container">\n<pre><code class="language-\1">\n/
+    s/```/<\/code><\/pre>\n<\/div>/
     s/(<pre><code class="language-)">/\1plaintext">/
 
     s/`/\\`/g
@@ -373,7 +375,7 @@ MOD=$(echo "$MOD" | sed -E '
     s/\^/\&caret;/g
     s/^:/\&colon;/
 
-    s/^(.*)$/<\1>/
+    s/^(.*)$/<<\1>>/
   }
 ')
 
@@ -632,8 +634,8 @@ MOD=$(echo "$MOD" | sed -E '
 
 # fixing codeblock for p
 MOD=$(echo "$MOD" | sed -E '
-  /^<<pre>/,/<\/pre>>$/ {
-    s/^<(.*)>$/\1/
+  /^<<<pre>/,/<\/pre>>>$/ {
+    s/^<<(.*)>>$/\1/
   }
 ')
 
