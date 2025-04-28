@@ -3,7 +3,7 @@ title: md2html bug list
 description: I don't know how to solve these bugs...
 date: 2025-04-17
 lastmod: 2025-04-23
-tag: md html sample bug fixme
+tags: md html sample bug fixme
 ---
 
 [md2html](https://github.com/RayCC51/md2html)
