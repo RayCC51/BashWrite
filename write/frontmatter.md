@@ -23,13 +23,13 @@ banner: image.png
 ||Required|Default vaule|Type|
 |---|---|---|---|
 |title|O|New post `yyyy-mm-dd`|String|
-|description|∆|•|String|
+|description|o|.|String|
 |date|O|`yyyy-mm-dd`|yyyy-mm-dd|
-|lastmod|X|•|yyyy-mm-dd|
-|tags|X|•|String|
+|lastmod|X|.|yyyy-mm-dd|
+|tags|X|.|String|
 |draft|X|`false`|bool|
-|pin|X|•|int|
-|banner|X|•|String|
+|pin|X|.|int|
+|banner|X|.|String|
 
 `yyyy-mm-dd` is build date.
 

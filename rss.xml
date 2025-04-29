@@ -6,7 +6,7 @@
   <link>https://raycc51.github.io/BashWrite</link>
   <description>raycc's blog</description>
   <language>en</language>
-  <pubDate>Tue, 29 Apr 2025 01:46:11 +0000</pubDate>
+  <pubDate>Tue, 29 Apr 2025 02:13:58 +0000</pubDate>
   <copyright>© 2025 raycc</copyright>
   <atom:link href="https://raycc51.github.io/BashWrite/rss.xml" rel="self" type="application/rss+xml" />
 
@@ -387,8 +387,8 @@ banner: https://place-hold.it/100x400
 
 <item>
   <title>md2html bug list</title>
-  <link>https://raycc51.github.io/BashWrite/posts/markdown/md4html-bug.html</link>
-  <guid>https://raycc51.github.io/BashWrite/posts/markdown/md4html-bug.html</guid>
+  <link>https://raycc51.github.io/BashWrite/posts/markdown/md2html-bug.html</link>
+  <guid>https://raycc51.github.io/BashWrite/posts/markdown/md2html-bug.html</guid>
   <description><![CDATA[
         <main>
 
@@ -500,6 +500,36 @@ Footnote[^with].
     work. 
 </code></pre>
 </div>
+
+
+<h2>???</h2>
+
+<table>
+  <thead>
+<tr>
+<th></th>
+<th>head</th>
+</tr>
+  </thead>
+  <tbody>
+<tr>
+<td>q</td>
+<td>@</td>
+</tr>
+<tr>
+<p>π<td></td>
+©<td></td></p>
+</tr>
+<tr>
+<p>∆<td></td>
+•<td></td></p>
+</tr>
+<tr>
+<p>ä<td></td>
+❓<td></td></p>
+</tr>
+  </tbody>
+</table>
 
     </main>
   ]]></description>
@@ -1088,8 +1118,8 @@ banner: image.png
 </tr>
 <tr>
 <td>description</td>
-<p>∆<td></td>
-•<td></td></p>
+<td>o</td>
+<td>.</td>
 <td>String</td>
 </tr>
 <tr>
@@ -1101,13 +1131,13 @@ banner: image.png
 <tr>
 <td>lastmod</td>
 <td>X</td>
-<p>•<td></td></p>
+<td>.</td>
 <td>yyyy-mm-dd</td>
 </tr>
 <tr>
 <td>tags</td>
 <td>X</td>
-<p>•<td></td></p>
+<td>.</td>
 <td>String</td>
 </tr>
 <tr>
@@ -1119,13 +1149,13 @@ banner: image.png
 <tr>
 <td>pin</td>
 <td>X</td>
-<p>•<td></td></p>
+<td>.</td>
 <td>int</td>
 </tr>
 <tr>
 <td>banner</td>
 <td>X</td>
-<p>•<td></td></p>
+<td>.</td>
 <td>String</td>
 </tr>
   </tbody>
