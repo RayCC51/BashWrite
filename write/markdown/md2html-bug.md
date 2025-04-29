@@ -2,7 +2,7 @@
 title: md2html bug list
 description: I don't know how to solve these bugs...
 date: 2025-04-17
-lastmod: 2025-04-23
+lastmod: 2025-04-29
 tags: md html sample bug fixme
 ---
 
@@ -101,7 +101,7 @@ Footnote[^with].
 ```
 
 
-## ???
+## Non ASCII characters in table? - Github Pages
 
 ||table|
 |---|---|

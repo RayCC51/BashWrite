@@ -45,7 +45,6 @@ jobs:
           
       - name: Build
         run: |
-          sed --version
           chmod +x bw.sh
           ./bw.sh b
 
