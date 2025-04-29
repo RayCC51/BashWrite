@@ -2,9 +2,9 @@
 
 ![screenshot](screenshot.png)
 
-Single, pure bash script for make your blog. 
+Single, pure bash script to make your blog. 
 
-You can find more information in [demo](https://raycc51.github.io/BashWrite/) site. 
+You can find more information on the [demo](https://raycc51.github.io/BashWrite/) site. 
 
 Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 
@@ -17,7 +17,7 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 - Recent posts
 - Pinned posts
 - RSS
-- Github pages
+- Github Pages
 
 ### Limits
 
@@ -55,24 +55,25 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 
 1. Remove a markdown file in *write/*
 2. Run `./bw.sh b`
-3. Then the script will delete files and links.
+3. The script will delete files and links.
 
 ## Commands
 
 - `./bw.sh h` : Show help dialog.   
-- `./bw.sh b` : Build blog. 
+- `./bw.sh b` : Build the blog. 
+- `./bw.sh r` : Force a rebuild.
 
 ## About directory structure
 
 ### Download from repo
 
 - bw.sh
-- .github/ - Download this folder if you want to use github pages.
+- .github/ - Download this folder if you want to use Github Pages.
 
 ### Automatically generated: Do not edit these files
 
 - backup/
-- checksum/ - Checksum list for compare the diffrence of files.
+- checksum/ - Checksum list to compare the diffrence of files.
 - posts/
 - tags/
 - 404.html

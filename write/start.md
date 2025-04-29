@@ -8,7 +8,7 @@ pin: 1
 
 ## About BashWrite
 
-Single, pure bash script for make your blog. 
+Single, pure bash script to make your blog. 
 
 - No dependencies
 - Support extended Markdown with [mattcone/markdown-guide](https://github.com/mattcone/markdown-guide)
@@ -36,7 +36,7 @@ Single, pure bash script for make your blog.
 2. The markdown file should starts with [frontmatter](https://raycc51.github.io/BashWrite/posts/frontmatter.html)
 3. Save your file and run `./bw.sh b`
 
-### [Frontmatter](https://raycc51.github.io/BashWrite/posts/frontmatter.html)
+#### [Frontmatter](https://raycc51.github.io/BashWrite/posts/frontmatter.html)
 
 ```
 ---
@@ -55,7 +55,7 @@ banner: image.png
 
 1. Remove a markdown file in *write/*
 2. Run `./bw.sh b`
-3. Then the script will delete files and links.
+3. The script will delete files and links.
 
 ---
 
@@ -69,7 +69,7 @@ banner: image.png
 ### Automatically generated: Do not edit these files
 
 - backup/
-- checksum/ - Checksum list for compare the diffrence of files.
+- checksum/ - Checksum list to compare the diffrence of files.
 - posts/
 - tags/
 - 404.html

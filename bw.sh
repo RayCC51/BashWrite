@@ -802,7 +802,7 @@ update_tags_list() {
   
   # Make taglist.txt
   if [ ! -f "$file" ]; then
-    touch "taglist"
+    touch "$taglist"
   fi
 
   # Remove useless whitespace. Change to lowercase 
@@ -1370,11 +1370,13 @@ make_backup() {
 # Check build or rebuild
 #
 # Rebuild if this script is modified
+#
+# $1: ARG, argumen(b* or r*)
 build_rebuild() {
   local old='./checksum/cksum_script.txt'
   local new=$(cksum "$_SCRIPT_FILE_NAME")
   
-  if [ ! -e $old ] || [[ "$new" != $(cat $old) ]]; then
+  if [[ "$1" == r* || "$1" == R* ]] || [ ! -e $old ] || [[ "$new" != $(cat $old) ]]; then
     echo "$new" > $old
     echo -n > ./temp_taglist.txt
     echo 'rebuild'
@@ -1394,6 +1396,8 @@ Commands:
       (h)elp. Show this dialog.
   $YELLOW./$_SCRIPT_FILE_NAME b$RESET
       (b)uild. Build the blog. It automatically decides whether to update the post or create all files anew.
+  $YELLOW./$_SCRIPT_FILE_NAME r$RESET
+      (r)ebuild. The command to force a rebuild. Use it when something isn't working properly.
 
 First to do:
   ${BLUE}1.$RESET Open $YELLOW$_SCRIPT_FILE_NAME$RESET and edit settings. 
@@ -1421,12 +1425,12 @@ banner: image.png
 ARG="$1"
 if [[ "$#" -eq 0 || "$ARG" == h* || "$ARG" == H* ]]; then
   show_help
-elif [[ "$ARG" == b* || "$ARG" == B* ]]; then
+elif [[ "$ARG" == b* || "$ARG" == B* || "$ARG" == r* || "$ARG" == R* ]]; then
   fix_setting
   make_directory
 
   # Check this script is modified. 
-  ARG=$(build_rebuild)
+  ARG=$(build_rebuild "$ARG")
 
   echo -e "Run $GREEN$_SCRIPT_NAME$RESET $_SCRIPT_VERSION [$ARG]"
   
@@ -1478,31 +1482,41 @@ elif [[ "$ARG" == b* || "$ARG" == B* ]]; then
 
   if [[ "$COUNT_CHANGE" == 0 ]];then
     echo -e "  $BLUE*$RESET There is no changes!"
-  else
-    # Update cksum_md.txt
-    grep -v '^000 ' ./temp_cksum_md.txt > ./checksum/cksum_md.txt
-    rm ./temp_cksum_md.txt
+  fi
+  
+  # Update cksum_md.txt
+  grep -v '^000 ' ./temp_cksum_md.txt > ./checksum/cksum_md.txt
+  rm ./temp_cksum_md.txt
 
-    # Sort posts by reverse chronical
-    ALL_POSTS=$(echo "$ALL_POSTS" | sort -r)
+  # Sort posts by reverse chronical
+  ALL_POSTS=$(echo "$ALL_POSTS" | sort -r)
     
-    echo -e "$BLUE*$RESET Make resources..."
+  echo -e "$BLUE*$RESET Make resources..."
+  if [[ ! -e index.html || "$ARG" == r* || "$COUNT_CHANGE" != 0 ]]; then
     make_index_html
-    if [[ ! -e 404.html || "$ARG" == r* ]]; then
-      make_404_html
-    fi
-    if [[ ! -e style.css || "$ARG" == r* ]]; then
-      make_style_css
-    fi
-    if [[ ! -e robots.txt || "$ARG" == r* ]]; then
-      make_robots_txt
-    fi
+  fi
+  if [[ ! -e 404.html || "$ARG" == r* ]]; then
+    make_404_html
+  fi
+  if [[ ! -e style.css || "$ARG" == r* ]]; then
+    make_style_css
+  fi
+  if [[ ! -e robots.txt || "$ARG" == r* ]]; then
+    make_robots_txt
+  fi
+  if [[ ! -e rss.xml || "$ARG" == r* || "$COUNT_CHANGE" != 0 ]]; then
     make_rss_xml
-    if [[ ! -e sitemap.xml || "$ARG" == r* ]]; then
-      make_sitemap_xml
-    fi
+  fi
+  if [[ ! -e sitemap.xml || "$ARG" == r* ]]; then
+    make_sitemap_xml
+  fi
+  if [[ ! -e all-posts.html || "$ARG" == r* || "$COUNT_CHANGE" != 0 ]]; then
     make_all_posts_html
+  fi
+  if [[ ! -e all-tags.html || "$ARG" == r* || "$COUNT_CHANGE" != 0 ]]; then
     make_all_tags_html
+  fi
+  if [[ "$ARG" == r* || "$COUNT_CHANGE" != 0 ]]; then
     make_tag_pages 
   fi
 

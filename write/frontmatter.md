@@ -37,7 +37,7 @@ banner: image.png
 
 This is a yaml-like syntax. 
 
-There must always be a **space** after the ***colon(:)***. 
+There must always be a **space** after the **colon(:)**. 
 
 The `title` and `date` are required, while the rest are optional. But I would like to include a `description` as much as possible.
 
@@ -47,6 +47,6 @@ The `title` and `date` are required, while the rest are optional. But I would li
 
 `tags` are separated by spaces. Tags must only use alphabets, numbers, dashes(-), and underscores(_). Duplicate tags will be ignored.
 
-If you want to pin a post, you need to enter a **natural number** in the `pin`. The smaller the number, the higher it will appear in the *pinned posts list*. For example, `pin: 1` will be at the top. If you do not want to pin a post, you can either leave it blank or delete the line.
+If you want to pin a post, you need to enter a **natural number** in the `pin`. The smaller the number, the higher it will appear in the *Pinned posts*. For example, `pin: 1` will be at the top. If you do not want to pin a post, you can either leave it blank or delete the line.
 
 The `banner` image can use relative paths, absolute paths, or external links. 

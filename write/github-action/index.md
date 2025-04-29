@@ -1,5 +1,5 @@
 ---
-title: Publish on Gihub Pages with github actions
+title: Publish to Gihub Pages using Github Actions
 description: How to publish the blog on Github Pages
 date: 2025-04-17
 lastmod: 2025-04-21
