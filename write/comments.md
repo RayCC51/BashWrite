@@ -78,4 +78,6 @@ You need to escape the `"`. That is, you should change `"` to `\"`.
 
 ## 5. Save and run `./bw.sh b`
 
-Now there are comments on your blog post.
+Now there are comments on your blog post. 
+
+👇👇👇
