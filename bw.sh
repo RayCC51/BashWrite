@@ -802,7 +802,7 @@ update_tags_list() {
   
   # Make taglist.txt
   if [ ! -f "$file" ]; then
-    touch "taglist"
+    touch "$taglist"
   fi
 
   # Remove useless whitespace. Change to lowercase 
@@ -1478,31 +1478,41 @@ elif [[ "$ARG" == b* || "$ARG" == B* ]]; then
 
   if [[ "$COUNT_CHANGE" == 0 ]];then
     echo -e "  $BLUE*$RESET There is no changes!"
-  else
-    # Update cksum_md.txt
-    grep -v '^000 ' ./temp_cksum_md.txt > ./checksum/cksum_md.txt
-    rm ./temp_cksum_md.txt
+  fi
+  
+  # Update cksum_md.txt
+  grep -v '^000 ' ./temp_cksum_md.txt > ./checksum/cksum_md.txt
+  rm ./temp_cksum_md.txt
 
-    # Sort posts by reverse chronical
-    ALL_POSTS=$(echo "$ALL_POSTS" | sort -r)
+  # Sort posts by reverse chronical
+  ALL_POSTS=$(echo "$ALL_POSTS" | sort -r)
     
-    echo -e "$BLUE*$RESET Make resources..."
+  echo -e "$BLUE*$RESET Make resources..."
+  if [[ ! -e index.html || "$ARG" == r* || "$COUNT_CHANGE" != 0 ]]; then
     make_index_html
-    if [[ ! -e 404.html || "$ARG" == r* ]]; then
-      make_404_html
-    fi
-    if [[ ! -e style.css || "$ARG" == r* ]]; then
-      make_style_css
-    fi
-    if [[ ! -e robots.txt || "$ARG" == r* ]]; then
-      make_robots_txt
-    fi
+  fi
+  if [[ ! -e 404.html || "$ARG" == r* ]]; then
+    make_404_html
+  fi
+  if [[ ! -e style.css || "$ARG" == r* ]]; then
+    make_style_css
+  fi
+  if [[ ! -e robots.txt || "$ARG" == r* ]]; then
+    make_robots_txt
+  fi
+  if [[ ! -e rss.xml || "$ARG" == r* || "$COUNT_CHANGE" != 0 ]]; then
     make_rss_xml
-    if [[ ! -e sitemap.xml || "$ARG" == r* ]]; then
-      make_sitemap_xml
-    fi
+  fi
+  if [[ ! -e sitemap.xml || "$ARG" == r* ]]; then
+    make_sitemap_xml
+  fi
+  if [[ ! -e all-posts.html || "$ARG" == r* || "$COUNT_CHANGE" != 0 ]]; then
     make_all_posts_html
+  fi
+  if [[ ! -e all-tags.html || "$ARG" == r* || "$COUNT_CHANGE" != 0 ]]; then
     make_all_tags_html
+  fi
+  if [[ "$ARG" == r* || "$COUNT_CHANGE" != 0 ]]; then
     make_tag_pages 
   fi
 
