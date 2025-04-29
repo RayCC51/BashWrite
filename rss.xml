@@ -6,7 +6,7 @@
   <link>https://raycc51.github.io/BashWrite</link>
   <description>raycc's blog</description>
   <language>en</language>
-  <pubDate>Tue, 29 Apr 2025 02:21:06 +0000</pubDate>
+  <pubDate>Tue, 29 Apr 2025 02:29:32 +0000</pubDate>
   <copyright>© 2025 raycc</copyright>
   <atom:link href="https://raycc51.github.io/BashWrite/rss.xml" rel="self" type="application/rss+xml" />
 
@@ -502,7 +502,7 @@ Footnote[^with].
 </div>
 
 
-<h2>???</h2>
+<h2>Non ASCII characters in table? - Github Pages</h2>
 
 <table>
   <thead>
