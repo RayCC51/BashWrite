@@ -1370,11 +1370,13 @@ make_backup() {
 # Check build or rebuild
 #
 # Rebuild if this script is modified
+#
+# $1: ARG, argumen(b* or r*)
 build_rebuild() {
   local old='./checksum/cksum_script.txt'
   local new=$(cksum "$_SCRIPT_FILE_NAME")
   
-  if [ ! -e $old ] || [[ "$new" != $(cat $old) ]]; then
+  if [[ "$1" == r* || "$1" == R* ]] || [ ! -e $old ] || [[ "$new" != $(cat $old) ]]; then
     echo "$new" > $old
     echo -n > ./temp_taglist.txt
     echo 'rebuild'
@@ -1394,6 +1396,8 @@ Commands:
       (h)elp. Show this dialog.
   $YELLOW./$_SCRIPT_FILE_NAME b$RESET
       (b)uild. Build the blog. It automatically decides whether to update the post or create all files anew.
+  $YELLOW./$_SCRIPT_FILE_NAME r$RESET
+      (r)ebuild. The command to force a rebuild. Use it when something isn't working properly.
 
 First to do:
   ${BLUE}1.$RESET Open $YELLOW$_SCRIPT_FILE_NAME$RESET and edit settings. 
@@ -1421,12 +1425,12 @@ banner: image.png
 ARG="$1"
 if [[ "$#" -eq 0 || "$ARG" == h* || "$ARG" == H* ]]; then
   show_help
-elif [[ "$ARG" == b* || "$ARG" == B* ]]; then
+elif [[ "$ARG" == b* || "$ARG" == B* || "$ARG" == r* || "$ARG" == R* ]]; then
   fix_setting
   make_directory
 
   # Check this script is modified. 
-  ARG=$(build_rebuild)
+  ARG=$(build_rebuild "$ARG")
 
   echo -e "Run $GREEN$_SCRIPT_NAME$RESET $_SCRIPT_VERSION [$ARG]"
   
