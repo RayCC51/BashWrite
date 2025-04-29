@@ -6,7 +6,7 @@
   <link>https://raycc51.github.io/BashWrite</link>
   <description>raycc's blog</description>
   <language>en</language>
-  <pubDate>Tue, 29 Apr 2025 02:13:58 +0000</pubDate>
+  <pubDate>Tue, 29 Apr 2025 02:16:16 +0000</pubDate>
   <copyright>© 2025 raycc</copyright>
   <atom:link href="https://raycc51.github.io/BashWrite/rss.xml" rel="self" type="application/rss+xml" />
 
@@ -508,7 +508,7 @@ Footnote[^with].
   <thead>
 <tr>
 <th></th>
-<th>head</th>
+<th>table</th>
 </tr>
   </thead>
   <tbody>
@@ -530,6 +530,17 @@ Footnote[^with].
 </tr>
   </tbody>
 </table>
+
+<div class="code-container">
+<pre><code class="language-md">
+||table|
+|---|---|
+|q|@|
+|π|©|
+|∆|•|
+|ä|❓|
+</code></pre>
+</div>
 
     </main>
   ]]></description>
