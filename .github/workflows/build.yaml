@@ -31,6 +31,7 @@ jobs:
               checksum/
               posts/
               tags/
+              backup/
               all-posts.html
               all-tags.html
             )
