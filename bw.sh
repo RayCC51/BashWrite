@@ -28,7 +28,7 @@ You can find the source of this blog in the [Github](https://github.com/RayCC51/
 "
 
 ### Write your own HTML code. 
-### This variable will be includes inside the 
+### This variable will be included inside the 
 # <html>
 #   <head>
 #     Here!
