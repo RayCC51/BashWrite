@@ -27,15 +27,15 @@ PROFILE="
 You can find the source of this blog in the [Github](https://github.com/RayCC51/BashWrite/tree/gh-pages)
 "
 
-### Write your own HTML code. 
-### This variable will be includes inside the 
+### Write your own HTML code.
+### This variable will be includes inside the
 # <html>
 #   <head>
 #     Here!
 #   </head>
-# </html> 
+# </html>
 ### in every html files.
-### You can add your css, js, or favicon. 
+### You can add your css, js, or favicon.
 ### Be careful! You need to escape some letters: \\ \' \" \$
 CUSTOM_HTML_HEAD="
 <link rel=\"apple-touch-icon\" sizes=\"180x180\" href=\"$BASE_URL/assets/favicon_io/apple-touch-icon.png\">
@@ -47,7 +47,7 @@ CUSTOM_HTML_HEAD="
 "
 
 ### Write your own HTML code.
-### This will be includes inside the 
+### This will be includes inside the
 # <body>
 #   <header></header>
 #   <article>
@@ -61,21 +61,21 @@ CUSTOM_HTML_HEAD="
 ### You can add comments, banner, footer, or js.
 ### Be careful! You need to escape some letters: \\ \' \" \$
 CUSTOM_HTML_ARTICLE_FOOTER="
-<script src=\"https://giscus.app/client.js\" 
-  data-repo=\"RayCC51/BashWrite\" 
-  data-repo-id=\"R_kgDOOQp0-w\" 
-  data-category=\"Announcements\" 
-  data-category-id=\"DIC_kwDOOQp0-84CpMGk\" 
-  data-mapping=\"pathname\" 
-  data-strict=\"0\" 
-  data-reactions-enabled=\"1\" 
-  data-emit-metadata=\"0\" 
-  data-input-position=\"top\" 
-  data-theme=\"preferred_color_scheme\" 
-  data-lang=\"en\" 
-  data-loading=\"lazy\" 
-  crossorigin=\"anonymous\" 
-  async> 
+<script src=\"https://giscus.app/client.js\"
+  data-repo=\"RayCC51/BashWrite\"
+  data-repo-id=\"R_kgDOOQp0-w\"
+  data-category=\"Announcements\"
+  data-category-id=\"DIC_kwDOOQp0-84CpMGk\"
+  data-mapping=\"pathname\"
+  data-strict=\"0\"
+  data-reactions-enabled=\"1\"
+  data-emit-metadata=\"0\"
+  data-input-position=\"top\"
+  data-theme=\"preferred_color_scheme\"
+  data-lang=\"en\"
+  data-loading=\"lazy\"
+  crossorigin=\"anonymous\"
+  async>
 </script>
 "
 
@@ -196,7 +196,7 @@ make_before() {
   <meta name=\"twitter:card\" content=\"summary\">
   <meta name=\"twitter:title\" content=\"$TITLE\">
   <meta name=\"twitter:description\" content=\"$DESCRIPTION\">
-  
+
   <title>$TITLE</title>
   <link rel=\"stylesheet\" href=\"$BASE_URL/style.css\">
 
@@ -226,7 +226,7 @@ make_before() {
     output+="
     <img id=\"banner\" alt=\"banner image\" src=\"$BANNER\">"
   fi
-  
+
   output+="
       <h1 id=\"meta-title\">$TITLE</h1>"
 
@@ -239,18 +239,18 @@ make_before() {
     output+="
       <p id=\"meta-lastmod\">Updated in <time>$LASTMOD</time></p>"
   fi
-  
+
   if [ -n "$TAGS" ]; then
     local tags_html=""
 
     for tag in $TAGS; do
         tags_html+="<a href=\"$BASE_URL/tags/${tag}.html\">${tag}</a> "
     done
-    
+
     output+="
       <p id=\"meta-tags\">Tags: $tags_html</p>"
   fi
-  
+
   output+="
     </header>
     <main>"
@@ -263,13 +263,13 @@ make_before() {
 # $1 : If it is not empty, make_after includes the CUSTOM_HTML_ARTICLE_FOOTET variable.
 make_after() {
   local html_footer=''
-  
+
   if [ -n "$1" ]; then
     html_footer="<footer id=\"custom-html\">
       $CUSTOM_HTML_ARTICLE_FOOTER
     </footer>"
   fi
-  
+
   echo "
     </main>
     $html_footer
@@ -290,7 +290,7 @@ fix_setting() {
     echo -e "$RED!$RESET ${YELLOW}THEME_COLOR$RESET should be hex code color [line:12]"
     MAIN_COLOR="#CAD926"
   fi
-  
+
   # Remove last slash in BASE_URL
   if [[ "$BASE_URL" == */ ]]; then
     BASE_URL="${BASE_URL%/}"
@@ -304,7 +304,7 @@ fix_setting() {
   # Fixing file/folder name with whitespace
   find . -depth -name "* *" | while IFS= read -r _file; do
     new_name=$(echo "$_file" | tr ' ' '_')
-      
+
     mv "$_file" "$new_name"
   done
 }
@@ -331,10 +331,10 @@ MOD=$(echo "$MOD" | sed -E '
     :a
     N
     /```$/!ba
-    
+
     s/</\&lt;/g
     s/>/\&gt;/g
-    
+
     s/```([a-zA-Z0-9_]+)?\n/<div class="code-container">\n<pre><code class="language-\1">\n/
     s/```/<\/code><\/pre>\n<\/div>/
     s/(<pre><code class="language-)">/\1plaintext">/
@@ -361,7 +361,7 @@ MOD=$(echo "$MOD" | sed -E '
     s/\*/\\\*/g
     s/-/\\-/g
     s/_/\\_/g
-    
+
     s/\(/\\\(/g
     s/\)/\\\)/g
     s/\{/\\\{/g
@@ -559,9 +559,9 @@ MOD=$(echo "$MOD" | sed -E '
 # footnote
 MOD=$(echo "$MOD" | sed -E '
   s/^\[\^(.*)\]: /[<a class="footnote" id="footnote-\1" href="#fn-\1">\1<\/a>]: /
-  
+
   s/\[\^([^]]+)\]/<sup><a class="footnote" id="fn-\1" href="#footnote-\1">\1<\/a><\/sup>/g
-')  
+')
 
 MOD=$(echo "$MOD" | sed -E '
 # heading
@@ -612,7 +612,7 @@ MOD=$(echo "$MOD" | sed -E '
 # p
   s/^( *)([^< ].*)$/<p>\1\2<\/p>/
   s/^(.*[^>])$/<p>\1<\/p>/
-  
+
   s/^(<(em|strong|code|del|sup|sub|mark).*)$/<p>\1<\/p>/
 
   /<p> *<\/p>/d
@@ -680,13 +680,13 @@ make_directory() {
     fi
   done
 
-  # Copy taglist.txt for find diffrence. 
+  # Copy taglist.txt for find diffrence.
   if [[ -e ./checksum/taglist.txt ]]; then
     cp ./checksum/taglist.txt temp_taglist.txt
   else
     touch ./checksum/taglist.txt
     touch temp_taglist.txt
-  fi  
+  fi
 }
 
 # Make robots.txt
@@ -759,7 +759,7 @@ make_404_html() {
 }
 
 # Make markdown file list
-# 
+#
 # Each lines has
 #   checksum file_size file_path
 # For removed files, set checksum as 000 temparaly
@@ -773,13 +773,13 @@ make_list() {
     touch $old
   else
     local temp_removed=''
-    
+
     while IFS=' ' read -r _c _s _file; do
       if [ -n "$_file" ] && ! grep -qF $_file $new; then
         temp_removed+="000 000 $_file"$'\n'
       fi
     done < $old
-    
+
     if [ -n "$temp_removed" ]; then
       echo "$temp_removed" >> $new
     fi
@@ -793,29 +793,29 @@ make_list() {
 # Each lines start with tag name.
 # Each links are seperated by whitespace.
 # Tags are all lowercase
-# 
+#
 # $1: TAGS(tags are seperated by whitespce)
 update_tags_list() {
   local tags="$1"
   local taglist="./checksum/taglist.txt"
   local tag_line=""
-  
+
   # Make taglist.txt
   if [ ! -f "$file" ]; then
     touch "$taglist"
   fi
 
-  # Remove useless whitespace. Change to lowercase 
+  # Remove useless whitespace. Change to lowercase
   tags=$(echo "$tags" | xargs | tr '[:upper:]' '[:lower:]')
-  
-  for tag in $tags; do 
+
+  for tag in $tags; do
     tag_line=$(grep "^$tag " "$taglist")
 
     if [ -z "$tag_line" ]; then
-      # Add a new tag. 
+      # Add a new tag.
       echo "$tag $NEW_PATH" >> "$taglist"
     elif [[ "$tag_line" != *"$NEW_PATH"* ]]; then
-      # Add a path in existing tag. 
+      # Add a path in existing tag.
       if [[ "$OSTYPE" == "darwin"* ]]; then
         # mac os
         sed -i '' "/^$tag / s|$| $NEW_PATH|" "$taglist"
@@ -826,7 +826,7 @@ update_tags_list() {
     fi
   done
 
-  # Remove old tag. 
+  # Remove old tag.
   local pattern='^'
   pattern+=$(echo "$tags" | sed 's/ /\\|^/g')
 
@@ -834,7 +834,7 @@ update_tags_list() {
     # mac os
     # Remove old tag
     sed -i '' "/$pattern /! s| $NEW_PATH||g" "$taglist"
-    # Remove empty tag. 
+    # Remove empty tag.
     sed -i '' '/^[^ ]*$/d' "$taglist"
   else
     # linux
@@ -847,7 +847,7 @@ update_tags_list() {
 #
 # Status: "U"pdated, "N"ew, "R"emoved,  no "C"hange
 # ckum_md.txt has previous file list
-# 
+#
 # $1: a file path
 # $2: checksum of $1
 # return: FILESTATUS
@@ -870,13 +870,13 @@ get_file_stat() {
 
 # Remove file
 #
-# Remove html file and file path in taglist.txt. 
+# Remove html file and file path in taglist.txt.
 #
 # $1: Removed file path .html
 remove_file() {
   local file_path="$1"
   local taglist='./checksum/taglist.txt'
-  
+
   rm "$file_path"
 
   # Remove tags
@@ -898,7 +898,7 @@ remove_file() {
 # $1: markdown file path
 frontmatter() {
   local file_path="$1"
-  
+
   local frontmatter=$(awk '
     BEGIN { part=0 }
     /^---/{ part++ }
@@ -942,7 +942,7 @@ frontmatter() {
       LASTMOD=''
     fi
   fi
-  
+
   if [ -z "$TITLE" ]; then
     TITLE="New post $DATE"
   else
@@ -956,7 +956,7 @@ frontmatter() {
     DESCRIPTION=${DESCRIPTION//</\&lt;}
     DESCRIPTION=${DESCRIPTION//>/\&gt;}
   fi
-  
+
   if [ -n "$TAGS" ];then
     # Only allow alphabets, numbers and dash underscore in tags
     TAGS=$(echo "$TAGS" | sed 's/[^ a-zA-Z0-9_-]//g')
@@ -1003,7 +1003,7 @@ converting() {
       status='Rebuild'
       ;;
   esac
-  
+
   echo -e "  $BLUE+[$status]$RESET $file_path"
 }
 
@@ -1016,7 +1016,7 @@ group_list() {
   local origin="$1"
   local result=""
   local temp_date=""
-  
+
   # Group the posts by year-month
   while IFS='<' read -r _date _url _title _d; do
     if [ -z "$_date" ]; then
@@ -1024,17 +1024,17 @@ group_list() {
     fi
 
     _url=$(echo "${_url}" | sed 's/index.html$//')
-    
+
     if [ -z "$temp_date" ]; then
       temp_date="${_date:0:7}"
     elif [ "$temp_date" != "${_date:0:7}" ]; then
       result+=$'\n'
       temp_date="${_date:0:7}"
     fi
-    
+
     result+="$_date $_url $_title"$'\n'
   done <<< "$origin"
-    
+
   # Wraping with html tag
   result=$(echo "$result" | sed -E '
     s/^([0-9]{4}-[0-9]{2})(-[0-9]{2}) ([^ ]*) (.*)$/<li><time>\1<\/time><ul>\n<li><time>\1\2<\/time> <a href="\3">\4<\/a><\/li>\n<\/ul><\/li>/
@@ -1050,7 +1050,7 @@ group_list() {
   result=$(echo "$result" | sed -E '
     s/(href=".*\/)index.html">/\1">/
   ')
-    
+
   echo "$result"
 }
 
@@ -1067,7 +1067,7 @@ make_all_posts_html() {
     make_before
     echo "<ul>"
     group_list "$ALL_POSTS"
-    echo "</ul>" 
+    echo "</ul>"
     make_after
   } > all-posts.html
 
@@ -1084,7 +1084,7 @@ make_all_tags_html() {
   while IFS= read -r _line; do
     tag=$(echo "$_line" | awk '{print $1}')
     count=$(( $(echo "$_line" | wc -w) - 1 ))
-      
+
     html_all_tags+="$tag $count\n"
   done < ./checksum/taglist.txt
 
@@ -1105,7 +1105,7 @@ make_all_tags_html() {
     make_before
     echo "<ul>"
     echo "$html_all_tags"
-    echo "</ul>" 
+    echo "</ul>"
     make_after
   } > all-tags.html
 
@@ -1122,7 +1122,7 @@ make_tag_pages() {
   # Find removed tag
   local removed_tag=$(grep -Fxv -f $old $new)
   local remove_lines=''
-  
+
   if [ -n "$removed_tag" ]; then
     while IFS=' ' read -r _tag _r; do
       rm "./tags/$_tag.html"
@@ -1161,16 +1161,16 @@ make_tag_pages() {
       TITLE="$tag"
       DESCRIPTION="$tag tag in $BLOG_NAME"
       NEW_PATH="./tags/$tag.html"
-  
+
       {
         make_before
         echo "<ul>"
         group_list "$html_all_posts"
-        echo "</ul>" 
+        echo "</ul>"
         make_after
       } > "$NEW_PATH"
     done <<< "$updated_tag"
-  
+
     echo -e "  $BLUE+$RESET tags/*.html"
   fi
 }
@@ -1285,7 +1285,7 @@ class=\"pinned-description\">$_description</p>
       html_recent_posts+="</li>
 "
     done <<< "$PINNED_POSTS"
-    
+
     html_pinned_posts+="
   </ul>
 </div>
@@ -1305,7 +1305,7 @@ class=\"pinned-description\">$_description</p>
     echo "</div>"
     echo "$html_pinned_posts"
     echo "$html_recent_posts"
-    make_after 
+    make_after
   } > "$NEW_PATH"
 
   echo -e "  $BLUE+$RESET index.html"
@@ -1375,7 +1375,7 @@ make_backup() {
 build_rebuild() {
   local old='./checksum/cksum_script.txt'
   local new=$(cksum "$_SCRIPT_FILE_NAME")
-  
+
   if [[ "$1" == r* || "$1" == R* ]] || [ ! -e $old ] || [[ "$new" != $(cat $old) ]]; then
     echo "$new" > $old
     echo -n > ./temp_taglist.txt
@@ -1391,7 +1391,7 @@ show_help() {
 ${BLUE}version$RESET: $_SCRIPT_VERSION
 ${BLUE}site$RESET: $_SCRIPT_SITE
 
-Commands: 
+Commands:
   $YELLOW./$_SCRIPT_FILE_NAME h$RESET
       (h)elp. Show this dialog.
   $YELLOW./$_SCRIPT_FILE_NAME b$RESET
@@ -1400,9 +1400,9 @@ Commands:
       (r)ebuild. The command to force a rebuild. Use it when something isn't working properly.
 
 First to do:
-  ${BLUE}1.$RESET Open $YELLOW$_SCRIPT_FILE_NAME$RESET and edit settings. 
+  ${BLUE}1.$RESET Open $YELLOW$_SCRIPT_FILE_NAME$RESET and edit settings.
   ${BLUE}2.$RESET Create a markdown file in $YELLOW./write/$RESET
-    - Markdown files should starts with frontmatter. 
+    - Markdown files should start with frontmatter.
 $YELLOW---
 title: New post
 description: Description of this post.
@@ -1413,9 +1413,9 @@ draft: false
 pin: 3
 banner: image.png
 ---$RESET
-    - [date] and [lastmod](last modified date) should be yyyy-mm-dd format. 
-    - [tags] are seperated with whitespace. 
-    - [description], [lastmod], [tags] [draft], [pin] and [banner] are option.
+    - [date] and [lastmod](last modified date) should be in yyyy-mm-dd format.
+    - [tags] are separated with whitespace.
+    - [description], [lastmod], [tags] [draft], [pin] and [banner] are optional.
   ${BLUE}3.$RESET Run ${YELLOW}./$_SCRIPT_FILE_NAME b$RESET
   ${BLUE}4.$RESET Now your posts are in ${YELLOW}./posts/$RESET
 "
@@ -1429,11 +1429,11 @@ elif [[ "$ARG" == b* || "$ARG" == B* || "$ARG" == r* || "$ARG" == R* ]]; then
   fix_setting
   make_directory
 
-  # Check this script is modified. 
+  # Check this script is modified.
   ARG=$(build_rebuild "$ARG")
 
   echo -e "Run $GREEN$_SCRIPT_NAME$RESET $_SCRIPT_VERSION [$ARG]"
-  
+
   make_list
 
   echo -e "$BLUE*$RESET Converting..."
@@ -1442,13 +1442,13 @@ elif [[ "$ARG" == b* || "$ARG" == B* || "$ARG" == r* || "$ARG" == R* ]]; then
     if [ -z $_file ]; then
       continue
     fi
-    
+
     reset_var
     FILESTATUS=$(get_file_stat "$_file" "$_checksum")
 
     NEW_PATH=${_file/write/posts}
     NEW_PATH=${NEW_PATH/.md/.html}
-    
+
     if [ "$FILESTATUS" = "R" ]; then
       remove_file "$NEW_PATH"
       COUNT_CHANGE=1
@@ -1469,7 +1469,7 @@ elif [[ "$ARG" == b* || "$ARG" == B* || "$ARG" == r* || "$ARG" == R* ]]; then
         if [ -n "$TAGS" ]; then
           update_tags_list "$TAGS"
         fi
-        
+
         # Build new or updated posts
         # Or rebuild every posts
         if [[ ! ("$FILESTATUS" == "C" && "$ARG" == b*)  ]]; then
@@ -1483,14 +1483,14 @@ elif [[ "$ARG" == b* || "$ARG" == B* || "$ARG" == r* || "$ARG" == R* ]]; then
   if [[ "$COUNT_CHANGE" == 0 ]];then
     echo -e "  $BLUE*$RESET There is no changes!"
   fi
-  
+
   # Update cksum_md.txt
   grep -v '^000 ' ./temp_cksum_md.txt > ./checksum/cksum_md.txt
   rm ./temp_cksum_md.txt
 
   # Sort posts by reverse chronical
   ALL_POSTS=$(echo "$ALL_POSTS" | sort -r)
-    
+
   echo -e "$BLUE*$RESET Make resources..."
   if [[ ! -e index.html || "$ARG" == r* || "$COUNT_CHANGE" != 0 ]]; then
     make_index_html
@@ -1517,7 +1517,7 @@ elif [[ "$ARG" == b* || "$ARG" == B* || "$ARG" == r* || "$ARG" == R* ]]; then
     make_all_tags_html
   fi
   if [[ "$ARG" == r* || "$COUNT_CHANGE" != 0 ]]; then
-    make_tag_pages 
+    make_tag_pages
   fi
 
   copy_assets
@@ -1526,7 +1526,7 @@ elif [[ "$ARG" == b* || "$ARG" == B* || "$ARG" == r* || "$ARG" == R* ]]; then
 
   # Remove empty folders
   find ./posts -type d -empty -delete
-  
+
   echo -e "Done in $YELLOW$(( ($(date +%s%N) - start_time) / 1000000 ))${RESET}ms!"
 else
   echo -e "$RED! Invaild argument$RESET
