@@ -2,9 +2,9 @@
 
 ![screenshot](screenshot.png)
 
-Single, pure bash script to make your blog. 
+Single, pure bash script to make your blog.
 
-You can find more information on the [demo](https://raycc51.github.io/BashWrite/) site. 
+You can find more information on the [demo](https://raycc51.github.io/BashWrite/) site.
 
 Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 
@@ -21,7 +21,7 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 
 ### Limits
 
-- Hard to customizing
+- Hard to customize
 - [Markdown to html converter](https://github.com/RayCC51/md2html) is not perfect - [bug list](https://raycc51.github.io/BashWrite/posts/markdown/md4html-bug.html)
 
 ## Quick start
@@ -36,11 +36,11 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 ### Write new posts
 
 1. Write a markdown file in *write/*.
-2. The markdown file should starts with [frontmatter](https://raycc51.github.io/BashWrite/posts/frontmatter.html)
+2. The markdown file should start with [frontmatter](https://raycc51.github.io/BashWrite/posts/frontmatter.html)
     ```
     ---
     title: My new post
-    description: Write description of this post. 
+    description: Write description of this post.
     date: 2025-02-05
     lastmod: 2025-05-02
     tags: tags seperated by a whitespace
@@ -59,8 +59,8 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 
 ## Commands
 
-- `./bw.sh h` : Show help dialog.   
-- `./bw.sh b` : Build the blog. 
+- `./bw.sh h` : Show help dialog.
+- `./bw.sh b` : Build the blog.
 - `./bw.sh r` : Force a rebuild.
 
 ## About directory structure
@@ -88,9 +88,9 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 ### Create these folders yourself, and work only within these folders
 
 - write/ - Write your markdowns in this folder. You can also add assets needed for the posting.
-- assets/ - Add any assets in this folder. 
+- assets/ - Add any assets in this folder.
 
 ## Contributing
 
-1. I am always welcome to any issues pointing out my English spelling or grammar since I am not very good at English. 
+1. I am always welcome to any issues pointing out my English spelling or grammar since I am not very good at English.
 2. There are no specific contributing rules. Feel free to leave issues or send pull requests, and I will handle them accordingly.
