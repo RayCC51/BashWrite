@@ -1,11 +1,12 @@
 #!/bin/bash
-start_time=$(date +%s%N)
+start_time=$(date +%s)
 
 # Find comments that start with ### and modify the variables below them.
 
 ### Default settings
 BLOG_NAME="bashwrite blog"
 AUTHOR_NAME="raycc"
+# BASE_URL="http://localhost:8080/"
 BASE_URL="https://raycc51.github.io/BashWrite/"
 
 ### Your blog's main theme color. Write in hex code #rrggbb
@@ -1552,7 +1553,7 @@ elif [[ "$ARG" == b* || "$ARG" == B* || "$ARG" == r* || "$ARG" == R* ]]; then
   # Remove empty folders
   find ./posts -type d -empty -delete
 
-  echo -e "Done in $YELLOW$(( ($(date +%s%N) - start_time) / 1000000 ))${RESET}ms!"
+  echo -e "Done in $YELLOW$(( $(date +%s) - start_time ))${RESET}s!"
 else
   echo -e "$RED! Invaild argument$RESET
 If you need help, $YELLOW./$_SCRIPT_FILE_NAME help$RESET "
