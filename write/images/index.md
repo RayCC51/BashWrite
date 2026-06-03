@@ -5,7 +5,7 @@ date: 2025-04-20
 tags: sample blog image tutorial
 draft: false
 pin: 5
-banner: https://place-hold.it/100x400
+banner: https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/250px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg
 ---
 
 ## Include images in posts
@@ -56,7 +56,7 @@ Also, include any images you want to put in this folder.
 title: ...
 description: ...
 date: ...
-banner: https://place-hold.it/100x400
+banner: https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/250px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg
 ```
 
 Put your image path or image url in `banner`. 

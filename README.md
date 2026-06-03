@@ -17,12 +17,12 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 - Recent posts
 - Pinned posts
 - RSS
-- Github Pages
+- Github Pages [option]
 
 ### Limits
 
 - Hard to customize
-- [Markdown to html converter](https://github.com/RayCC51/md2html) is not perfect - [bug list](https://raycc51.github.io/BashWrite/posts/markdown/md4html-bug.html)
+- Markdown to html converter is not perfect - [bug list](https://raycc51.github.io/BashWrite/posts/markdown/md2html-bug.html)
 
 ## Quick start
 
@@ -60,6 +60,7 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 ## Commands
 
 - `./bw.sh h` : Show help dialog.
+- `./bw.sh n` : Create an empty Markdown file with front matter.
 - `./bw.sh b` : Build the blog.
 - `./bw.sh r` : Force a rebuild.
 
@@ -89,8 +90,3 @@ Inspired by [bashblog](https://github.com/cfenollosa/bashblog)
 
 - write/ - Write your markdowns in this folder. You can also add assets needed for the posting.
 - assets/ - Add any assets in this folder.
-
-## Contributing
-
-1. I am always welcome to any issues pointing out my English spelling or grammar since I am not very good at English.
-2. There are no specific contributing rules. Feel free to leave issues or send pull requests, and I will handle them accordingly.
