@@ -1394,6 +1394,8 @@ ${BLUE}site$RESET: $_SCRIPT_SITE
 Commands:
   $YELLOW./$_SCRIPT_FILE_NAME h$RESET
       (h)elp. Show this dialog.
+  $YELLOW./$_SCRIPT_FILE_NAME n$RESET
+      (n)ew. Create an empty Markdown file with front matter.
   $YELLOW./$_SCRIPT_FILE_NAME b$RESET
       (b)uild. Build the blog. It automatically decides whether to update the post or create all files anew.
   $YELLOW./$_SCRIPT_FILE_NAME r$RESET
@@ -1414,17 +1416,40 @@ pin: 3
 banner: image.png
 ---$RESET
     - [date] and [lastmod](last modified date) should be in yyyy-mm-dd format.
-    - [tags] are separated with whitespace.
+    - [tags] are separated with whitespace. Tags must only use alphabets, numbers, dashes(-), and underscores(_). Duplicate tags will be ignored.
+    - [draft] can only be true or false.
+    - [pin] can only be a number. Smaller numbers go to the top.
     - [description], [lastmod], [tags] [draft], [pin] and [banner] are optional.
   ${BLUE}3.$RESET Run ${YELLOW}./$_SCRIPT_FILE_NAME b$RESET
   ${BLUE}4.$RESET Now your posts are in ${YELLOW}./posts/$RESET
 "
 }
 
+new_empty_md() {
+  cat << 'EOF' > example.md
+---
+title: 
+description: 
+date: 
+lastmod: 
+tags: 
+draft: true
+pin: 1
+banner: image.png
+---
+
+You can erase unused frontmatters.
+EOF
+
+  echo -e "Rename the created ${YELLOW}./example.md${RESET} file and move it into the ${YELLOW}./write/${RESET} folder."
+}
+
 # Main code
 ARG="$1"
 if [[ "$#" -eq 0 || "$ARG" == h* || "$ARG" == H* ]]; then
   show_help
+elif [[ "$ARG" == n* || "$ARG" == N* ]]; then
+  new_empty_md
 elif [[ "$ARG" == b* || "$ARG" == B* || "$ARG" == r* || "$ARG" == R* ]]; then
   fix_setting
   make_directory
