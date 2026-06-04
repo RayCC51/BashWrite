@@ -579,20 +579,7 @@ MOD=$(echo "$MOD" | sed -E '
 # hr
   s/^[-*_]{3,}$/<hr>/
 
-# em strong
-   s/[_*]{3}([^_*]+)[_*]{3}/<strong><em>\1<\/em><\/strong>/g
-  s/[_*]{2}([^_*]+)[_*]{2}/<strong>\1<\/strong>/g
-  s/(^|[^_*])[_*]([^_*]+)[_*]([^_*]|$)/\1<em>\2<\/em>\3/g
-   s/[_*]{3}([^_*]+)[_*]{3}/<strong><em>\1<\/em><\/strong>/g
-  s/[_*]{2}([^_*]+)[_*]{2}/<strong>\1<\/strong>/g
-
-# del mark sup sub
-  s/~~(.*)~~/<del>\1<\/del>/g
-  s/==(.*)==/<mark>\1<\/mark>/g
-  s/\^(.*)\^/<sup>\1<\/sup>/g
-  s/~(.*)~/<sub>\1<\/sub>/g
-
-# a
+# a <link>
   s/<((https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))>/<a href=\"\1\">\1<\/a>/
 
 # auto detect link
@@ -602,9 +589,22 @@ MOD=$(echo "$MOD" | sed -E '
   s/!\[(.*)\]\((.*) "(.*)"\)/<figure>\n  <img src="\2" alt="\1" title="\3" loading="lazy">\n  <figcaption>\1<\/figcaption>\n<\/figure>/g
   s/!\[(.*)\]\((.*)\)/<figure>\n  <img src="\2" alt="\1" loading="lazy">\n  <figcaption>\1<\/figcaption>\n<\/figure>/g
 
-# a
+# a [title](link)
   s/\[(.*)\]\((.*) "(.*)"\)/<a href="\2" title="\3">\1<\/a>/g
   s/\[(.*)\]\((.*)\)/<a href="\2">\1<\/a>/g
+
+# em strong
+  s/[_*]{3}([^_*]+)[_*]{3}/<strong><em>\1<\/em><\/strong>/g
+  s/[_*]{2}([^_*]+)[_*]{2}/<strong>\1<\/strong>/g
+  s/(^|[^_*])[_*]([^_*]+)[_*]([^_*]|$)/\1<em>\2<\/em>\3/g
+  s/[_*]{3}([^_*]+)[_*]{3}/<strong><em>\1<\/em><\/strong>/g
+  s/[_*]{2}([^_*]+)[_*]{2}/<strong>\1<\/strong>/g
+
+# del mark sup sub
+  s/~~(.*)~~/<del>\1<\/del>/g
+  s/==(.*)==/<mark>\1<\/mark>/g
+  s/\^(.*)\^/<sup>\1<\/sup>/g
+  s/~(.*)~/<sub>\1<\/sub>/g
 
 # checkbox
   s/^<li>\[ \]/<li><input type="checkbox" disabled>/
@@ -637,6 +637,15 @@ MOD=$(echo "$MOD" | sed -E '
 MOD=$(echo "$MOD" | sed -E '
   /^<<<pre>/,/<\/pre>>>$/ {
     s/^<<(.*)>>$/\1/
+  }
+')
+
+# fixing urls <em> -> underscore
+MOD=$(echo "$MOD" | sed -E '
+  /((href|src)="[^"]*)<\/?em>/ {
+    :a
+    s/((href|src)="[^"]*)<\/?em>([^"]*")/\1_\3/g
+    t a
   }
 ')
 
