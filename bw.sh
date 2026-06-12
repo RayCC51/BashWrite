@@ -157,6 +157,7 @@ body > header ul {display: flex;}
 body > header li {list-style: none; margin-left: 1em;}
 body > header a {text-decoration: none; color: var(--font-color) !important;}
 body > footer {border-top: 1px solid var(--main-theme);}
+article {overflow-wrap: break-word;}
 article > header {border-bottom: 2px solid var(--main-theme);}
 #meta-date, #meta-lastmod {color: var(--gray);}
 pre {background-color: var(--code-bg); overflow-x: auto; padding: 0 0 1em 1em;}
