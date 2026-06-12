@@ -28,7 +28,9 @@ If you don't understand something, follow the settings below.
 - Theme
     - -> Preferred color scheme
 
-## 3. Copy script html code
+## 3. Copy html code
+
+The code below is my own example. Make sure to copy your own from the official giscus website.
 
 ```html
 <script 

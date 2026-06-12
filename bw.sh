@@ -1,11 +1,12 @@
 #!/bin/bash
-start_time=$(date +%s%N)
+start_time=$(date +%s)
 
 # Find comments that start with ### and modify the variables below them.
 
 ### Default settings
 BLOG_NAME="bashwrite blog"
 AUTHOR_NAME="raycc"
+# BASE_URL="http://localhost:8080/"
 BASE_URL="https://raycc51.github.io/BashWrite/"
 
 ### Your blog's main theme color. Write in hex code #rrggbb
@@ -156,6 +157,7 @@ body > header ul {display: flex;}
 body > header li {list-style: none; margin-left: 1em;}
 body > header a {text-decoration: none; color: var(--font-color) !important;}
 body > footer {border-top: 1px solid var(--main-theme);}
+article {overflow-wrap: break-word;}
 article > header {border-bottom: 2px solid var(--main-theme);}
 #meta-date, #meta-lastmod {color: var(--gray);}
 pre {background-color: var(--code-bg); overflow-x: auto; padding: 0 0 1em 1em;}
@@ -379,6 +381,16 @@ MOD=$(echo "$MOD" | sed -E '
   }
 ')
 
+# escaping underscore in url <>, [](), ![]()
+MOD=$(echo "$MOD" | sed -E '
+  :a
+  s/(<https?:\/\/[^>_]*)_([^>]*>)/\1\&underscore;\2/g
+  t a
+  :b
+  s/(\]\(https?:\/\/[^)_]*)_([^)]*\))/\1\&underscore;\2/g
+  t b
+')
+
 # escaping
 MOD=$(echo "$MOD" | sed -E '
   s/\\\\/\&backslash;/g
@@ -388,7 +400,7 @@ MOD=$(echo "$MOD" | sed -E '
   s/\\\+/\&plus;/g
 
   s/\\`/\&backtick;/g
-  s/\\_/\&undnerscore;/g
+  s/\\_/\&underscore;/g
   s/\\#/\&sharp;/g
   s/\\-/\&hyphen;/g
   s/\\!/\&exclamation;/g
@@ -578,21 +590,8 @@ MOD=$(echo "$MOD" | sed -E '
 # hr
   s/^[-*_]{3,}$/<hr>/
 
-# em strong
-   s/[_*]{3}([^_*]+)[_*]{3}/<strong><em>\1<\/em><\/strong>/g
-  s/[_*]{2}([^_*]+)[_*]{2}/<strong>\1<\/strong>/g
-  s/(^|[^_*])[_*]([^_*]+)[_*]([^_*]|$)/\1<em>\2<\/em>\3/g
-   s/[_*]{3}([^_*]+)[_*]{3}/<strong><em>\1<\/em><\/strong>/g
-  s/[_*]{2}([^_*]+)[_*]{2}/<strong>\1<\/strong>/g
-
-# del mark sup sub
-  s/~~(.*)~~/<del>\1<\/del>/g
-  s/==(.*)==/<mark>\1<\/mark>/g
-  s/\^(.*)\^/<sup>\1<\/sup>/g
-  s/~(.*)~/<sub>\1<\/sub>/g
-
-# a
-  s/<((https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))>/<a href=\"\1\">\1<\/a>/
+# a <link>
+  s/<((https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=&;]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=;]*))>/<a href=\"\1\">\1<\/a>/
 
 # auto detect link
   s/(^|[^\(">])(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))/\1<a href=\"\2\">\2<\/a>/
@@ -601,9 +600,22 @@ MOD=$(echo "$MOD" | sed -E '
   s/!\[(.*)\]\((.*) "(.*)"\)/<figure>\n  <img src="\2" alt="\1" title="\3" loading="lazy">\n  <figcaption>\1<\/figcaption>\n<\/figure>/g
   s/!\[(.*)\]\((.*)\)/<figure>\n  <img src="\2" alt="\1" loading="lazy">\n  <figcaption>\1<\/figcaption>\n<\/figure>/g
 
-# a
+# a [title](link)
   s/\[(.*)\]\((.*) "(.*)"\)/<a href="\2" title="\3">\1<\/a>/g
   s/\[(.*)\]\((.*)\)/<a href="\2">\1<\/a>/g
+
+# em strong
+  s/[_*]{3}([^_*]+)[_*]{3}/<strong><em>\1<\/em><\/strong>/g
+  s/[_*]{2}([^_*]+)[_*]{2}/<strong>\1<\/strong>/g
+  s/(^|[^_*])[_*]([^_*]+)[_*]([^_*]|$)/\1<em>\2<\/em>\3/g
+  s/[_*]{3}([^_*]+)[_*]{3}/<strong><em>\1<\/em><\/strong>/g
+  s/[_*]{2}([^_*]+)[_*]{2}/<strong>\1<\/strong>/g
+
+# del mark sup sub
+  s/~~(.*)~~/<del>\1<\/del>/g
+  s/==(.*)==/<mark>\1<\/mark>/g
+  s/\^(.*)\^/<sup>\1<\/sup>/g
+  s/~(.*)~/<sub>\1<\/sub>/g
 
 # checkbox
   s/^<li>\[ \]/<li><input type="checkbox" disabled>/
@@ -647,7 +659,7 @@ MOD=$(echo "$MOD" | sed -E '
   s/\&pipe;/\|/g
 
   s/\&backtick;/`/g
-  s/\&undnerscore;/_/g
+  s/\&underscore;/_/g
   s/\&sharp;/#/g
   s/\&hyphen;/-/g
   s/\&exclamation;/!/g
@@ -1394,37 +1406,60 @@ ${BLUE}site$RESET: $_SCRIPT_SITE
 Commands:
   $YELLOW./$_SCRIPT_FILE_NAME h$RESET
       (h)elp. Show this dialog.
+  $YELLOW./$_SCRIPT_FILE_NAME n$RESET
+      (n)ew. Create an empty Markdown file with front matter.
   $YELLOW./$_SCRIPT_FILE_NAME b$RESET
-      (b)uild. Build the blog. It automatically decides whether to update the post or create all files anew.
+      (b)uild. Build the blog. It automatically decides whether to update the post or rebuild all files.
   $YELLOW./$_SCRIPT_FILE_NAME r$RESET
-      (r)ebuild. The command to force a rebuild. Use it when something isn't working properly.
+      (r)ebuild. Force a full rebuild. Use it when something isn't working properly.
 
-First to do:
-  ${BLUE}1.$RESET Open $YELLOW$_SCRIPT_FILE_NAME$RESET and edit settings.
-  ${BLUE}2.$RESET Create a markdown file in $YELLOW./write/$RESET
-    - Markdown files should start with frontmatter.
-$YELLOW---
-title: New post
-description: Description of this post.
-date: 2025-02-05
-lastmod: 2025-05-02
-tags: tag1 tag2
-draft: false
-pin: 3
-banner: image.png
----$RESET
-    - [date] and [lastmod](last modified date) should be in yyyy-mm-dd format.
-    - [tags] are separated with whitespace.
-    - [description], [lastmod], [tags] [draft], [pin] and [banner] are optional.
-  ${BLUE}3.$RESET Run ${YELLOW}./$_SCRIPT_FILE_NAME b$RESET
-  ${BLUE}4.$RESET Now your posts are in ${YELLOW}./posts/$RESET
+Getting Started:
+  ${BLUE}1.$RESET Configure settings in $YELLOW$_SCRIPT_FILE_NAME$RESET.
+  ${BLUE}2.$RESET Run ${YELLOW}./$_SCRIPT_FILE_NAME n$RESET to create a blank markdown file that includes front matter.
+  ${BLUE}3.$RESET Modify the filename and content, then place the file into the $YELLOW./write/$RESET folder.
+  ${BLUE}4.$RESET Run ${YELLOW}./$_SCRIPT_FILE_NAME b$RESET.
+  ${BLUE}5.$RESET Generated posts will be in ${YELLOW}./posts/$RESET.
 "
+}
+
+new_empty_md() {
+  TODAY=$(date +%Y-%m-%d)
+  cat << EOF > new-post-$TODAY.md
+---
+title: 
+description: 
+date: $TODAY
+lastmod: 
+tags: 
+draft: true
+pin: 
+banner: 
+---
+
+
+Frontmatter guide
+- You can erase unused frontmatters.
+- A space is REQUIRED after every colon(:).
+
+- "title": REQUIRED (Default='New post yyyy-mm-dd')
+- "description": Recommended
+- "date": REQUIRED (Format='yyyy-mm-dd', Default=Post build date)
+- "lastmod": Last modified date (Format='yyyy-mm-dd')
+- "tags": Space-separated (Alphanumeric, -, _ only)
+- "draft": 'true' or 'false' (Default='false')
+- "pin": Natural number (Lower numbers are higher priority)
+- "banner": Relative/absolute path or external URL
+
+EOF
+
 }
 
 # Main code
 ARG="$1"
 if [[ "$#" -eq 0 || "$ARG" == h* || "$ARG" == H* ]]; then
   show_help
+elif [[ "$ARG" == n* || "$ARG" == N* ]]; then
+  new_empty_md
 elif [[ "$ARG" == b* || "$ARG" == B* || "$ARG" == r* || "$ARG" == R* ]]; then
   fix_setting
   make_directory
@@ -1527,7 +1562,7 @@ elif [[ "$ARG" == b* || "$ARG" == B* || "$ARG" == r* || "$ARG" == R* ]]; then
   # Remove empty folders
   find ./posts -type d -empty -delete
 
-  echo -e "Done in $YELLOW$(( ($(date +%s%N) - start_time) / 1000000 ))${RESET}ms!"
+  echo -e "Done in $YELLOW$(( $(date +%s) - start_time ))${RESET}s!"
 else
   echo -e "$RED! Invaild argument$RESET
 If you need help, $YELLOW./$_SCRIPT_FILE_NAME help$RESET "

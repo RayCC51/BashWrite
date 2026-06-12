@@ -6,7 +6,7 @@
   <link>https://raycc51.github.io/BashWrite</link>
   <description>raycc's blog</description>
   <language>en</language>
-  <pubDate>Tue, 02 Jun 2026 05:33:10 +0000</pubDate>
+  <pubDate>Fri, 12 Jun 2026 01:26:14 +0000</pubDate>
   <copyright>© 2026 raycc</copyright>
   <atom:link href="https://raycc51.github.io/BashWrite/rss.xml" rel="self" type="application/rss+xml" />
 
@@ -245,7 +245,9 @@ banner: image.png
 </li>
 </ul>
 
-<h2>3. Copy script html code</h2>
+<h2>3. Copy html code</h2>
+
+<p>The code below is my own example. Make sure to copy your own from the official giscus website.</p>
 
 <div class="code-container">
 <pre><code class="language-html">
@@ -374,7 +376,7 @@ your-blog-directory/
 title: ...
 description: ...
 date: ...
-banner: https://place-hold.it/100x400
+banner: https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/250px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg
 </code></pre>
 </div>
 
@@ -784,24 +786,24 @@ ___
 </div>
 
 <figure>
-  <img src="https://place-hold.it/100x100" alt="img" loading="lazy">
+  <img src="https://placehold.co/600x400" alt="img" loading="lazy">
   <figcaption>img</figcaption>
 </figure>
 
 <div class="code-container">
 <pre><code class="language-md">
-![img](https://place-hold.it/100x100)
+![img](https://placehold.co/600x400)
 </code></pre>
 </div>
 
 <figure>
-  <img src="https://place-hold.it/100x100" alt="img alt" title="title" loading="lazy">
+  <img src="https://placehold.co/600x400" alt="img alt" title="title" loading="lazy">
   <figcaption>img alt</figcaption>
 </figure>
 
 <div class="code-container">
 <pre><code class="language-md">
-![img alt](https://place-hold.it/100x100 "title")
+![img alt](https://placehold.co/600x400 "title")
 </code></pre>
 </div>
 
@@ -1081,7 +1083,7 @@ your_blog/
 </ul>
 </li>
 <li>Save the settings.</li>
-<li>Your site is live at <em>https://YOUR-NAME.github.io/</em> or <em>https://YOUR-NAME.github.io/REPO-NAME/</em></li>
+<li>Your site is live at <em><a href="https://YOUR-NAME.github.io/">https://YOUR-NAME.github.io/</a></em> or <em>https://YOUR-NAME.github.io/REPO-NAME/</em></li>
 </ol>
 
     </main>

@@ -172,16 +172,16 @@ ___
 <https://example.com>
 ```
 
-![img](https://place-hold.it/100x100)
+![img](https://placehold.co/600x400)
 
 ```md
-![img](https://place-hold.it/100x100)
+![img](https://placehold.co/600x400)
 ```
 
-![img alt](https://place-hold.it/100x100 "title")
+![img alt](https://placehold.co/600x400 "title")
 
 ```md
-![img alt](https://place-hold.it/100x100 "title")
+![img alt](https://placehold.co/600x400 "title")
 ```
 
 inline `code`
