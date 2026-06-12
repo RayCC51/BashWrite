@@ -1409,51 +1409,49 @@ Commands:
   $YELLOW./$_SCRIPT_FILE_NAME n$RESET
       (n)ew. Create an empty Markdown file with front matter.
   $YELLOW./$_SCRIPT_FILE_NAME b$RESET
-      (b)uild. Build the blog. It automatically decides whether to update the post or create all files anew.
+      (b)uild. Build the blog. It automatically decides whether to update the post or rebuild all files.
   $YELLOW./$_SCRIPT_FILE_NAME r$RESET
-      (r)ebuild. The command to force a rebuild. Use it when something isn't working properly.
+      (r)ebuild. Force a full rebuild. Use it when something isn't working properly.
 
-First to do:
-  ${BLUE}1.$RESET Open $YELLOW$_SCRIPT_FILE_NAME$RESET and edit settings.
-  ${BLUE}2.$RESET Create a markdown file in $YELLOW./write/$RESET
-    - Markdown files should start with frontmatter.
-$YELLOW---
-title: New post
-description: Description of this post.
-date: 2025-02-05
-lastmod: 2025-05-02
-tags: tag1 tag2
-draft: false
-pin: 3
-banner: image.png
----$RESET
-    - [date] and [lastmod](last modified date) should be in yyyy-mm-dd format.
-    - [tags] are separated with whitespace. Tags must only use alphabets, numbers, dashes(-), and underscores(_). Duplicate tags will be ignored.
-    - [draft] can only be true or false.
-    - [pin] can only be a number. Smaller numbers go to the top.
-    - [description], [lastmod], [tags] [draft], [pin] and [banner] are optional.
-  ${BLUE}3.$RESET Run ${YELLOW}./$_SCRIPT_FILE_NAME b$RESET
-  ${BLUE}4.$RESET Now your posts are in ${YELLOW}./posts/$RESET
+Getting Started:
+  ${BLUE}1.$RESET Configure settings in $YELLOW$_SCRIPT_FILE_NAME$RESET.
+  ${BLUE}2.$RESET Run ${YELLOW}./$_SCRIPT_FILE_NAME n$RESET to create a blank markdown file that includes front matter.
+  ${BLUE}3.$RESET Modify the filename and content, then place the file into the $YELLOW./write/$RESET folder.
+  ${BLUE}4.$RESET Run ${YELLOW}./$_SCRIPT_FILE_NAME b$RESET.
+  ${BLUE}5.$RESET Generated posts will be in ${YELLOW}./posts/$RESET.
 "
 }
 
 new_empty_md() {
-  cat << 'EOF' > example.md
+  TODAY=$(date +%Y-%m-%d)
+  cat << EOF > new-post-$TODAY.md
 ---
 title: 
 description: 
-date: 
+date: $TODAY
 lastmod: 
 tags: 
 draft: true
-pin: 1
-banner: image.png
+pin: 
+banner: 
 ---
 
-You can erase unused frontmatters.
+
+Frontmatter guide
+- You can erase unused frontmatters.
+- A space is REQUIRED after every colon(:).
+
+- "title": REQUIRED (Default='New post yyyy-mm-dd')
+- "description": Recommended
+- "date": REQUIRED (Format='yyyy-mm-dd', Default=Post build date)
+- "lastmod": Last modified date (Format='yyyy-mm-dd')
+- "tags": Space-separated (Alphanumeric, -, _ only)
+- "draft": 'true' or 'false' (Default='false')
+- "pin": Natural number (Lower numbers are higher priority)
+- "banner": Relative/absolute path or external URL
+
 EOF
 
-  echo -e "Rename the created ${YELLOW}./example.md${RESET} file and move it into the ${YELLOW}./write/${RESET} folder."
 }
 
 # Main code
