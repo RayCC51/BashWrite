@@ -380,6 +380,16 @@ MOD=$(echo "$MOD" | sed -E '
   }
 ')
 
+# escaping underscore in url <>, [](), ![]()
+MOD=$(echo "$MOD" | sed -E '
+  :a
+  s/(<https?:\/\/[^>_]*)_([^>]*>)/\1\&underscore;\2/g
+  t a
+  :b
+  s/(\]\(https?:\/\/[^)_]*)_([^)]*\))/\1\&underscore;\2/g
+  t b
+')
+
 # escaping
 MOD=$(echo "$MOD" | sed -E '
   s/\\\\/\&backslash;/g
@@ -389,7 +399,7 @@ MOD=$(echo "$MOD" | sed -E '
   s/\\\+/\&plus;/g
 
   s/\\`/\&backtick;/g
-  s/\\_/\&undnerscore;/g
+  s/\\_/\&underscore;/g
   s/\\#/\&sharp;/g
   s/\\-/\&hyphen;/g
   s/\\!/\&exclamation;/g
@@ -580,7 +590,7 @@ MOD=$(echo "$MOD" | sed -E '
   s/^[-*_]{3,}$/<hr>/
 
 # a <link>
-  s/<((https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))>/<a href=\"\1\">\1<\/a>/
+  s/<((https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=&;]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=;]*))>/<a href=\"\1\">\1<\/a>/
 
 # auto detect link
   s/(^|[^\(">])(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))/\1<a href=\"\2\">\2<\/a>/
@@ -640,15 +650,6 @@ MOD=$(echo "$MOD" | sed -E '
   }
 ')
 
-# fixing urls <em> -> underscore
-MOD=$(echo "$MOD" | sed -E '
-  /((href|src)="[^"]*)<\/?em>/ {
-    :a
-    s/((href|src)="[^"]*)<\/?em>([^"]*")/\1_\3/g
-    t a
-  }
-')
-
 # return escaping
 MOD=$(echo "$MOD" | sed -E '
   s/\&backslash;/\\/g
@@ -657,7 +658,7 @@ MOD=$(echo "$MOD" | sed -E '
   s/\&pipe;/\|/g
 
   s/\&backtick;/`/g
-  s/\&undnerscore;/_/g
+  s/\&underscore;/_/g
   s/\&sharp;/#/g
   s/\&hyphen;/-/g
   s/\&exclamation;/!/g
